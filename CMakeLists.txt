@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 3.0)
-project(GLOW Fortran)
+project(GLOW
+  LANGUAGES Fortran
+  VERSION 0.981)
 
-add_library(cglow 
-  glow.f90 cglow.f90 
+add_library(cglow
+  glow.f90 cglow.f90
   fieldm.f solzen.f90 ssflux.f90
   rcolum.f90 qback.f90
   etrans.f90 exsect.f
