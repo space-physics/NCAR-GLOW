@@ -24,7 +24,7 @@
 
 use, intrinsic :: iso_fortran_env, only: stdout=>output_unit
 
-use cglow,only: jmax,nbins,lmax,nmaj,nei,nex,nw,nc,nst
+use cglow,only: jmax,nbins,nex
 use cglow,only: idate,utsec=>ut,glat,glong,f107a,f107,f107p,ap,ef,ec
 use cglow,only: iscale,jlocal,kchem,xuvfac
 use cglow,only: zz,zo,zn2,zo2,zns,znd,zno,ztn,ze,zti,zte
@@ -33,13 +33,13 @@ use cglow,only: tir,ecalc,zxden,zeta
 use cglow,only: cglow_init
 use cglow,only: data_dir
 ! aglw, dflx, dip, efrac,,pespec ,tei,tpi, uflx,wave1,wave2,zceta,zlbh, photoi,photod,phono
-! sflux, sion, sza,sespec
+! sflux, sion, sza,sespec, lmax,nei,nc,nmaj,,nst,nw
 
 implicit none
 
 character(:), allocatable :: iri90_dir
 
-character(8) :: buf
+character(1024) :: buf
 
 real,allocatable :: z(:)                    ! glow height coordinate in km (jmax)
 real,allocatable :: zun(:), zvn(:)          ! neutral wind components (not in use)
@@ -60,13 +60,11 @@ itail=0
 fmono=0.
 emono=0.
 
-#ifndef DATADIR
-#define DATADIR '../data/'
-#endif
 
 !> Set data directories:
-data_dir = DATADIR
-iri90_dir = DATADIR // 'iri90/'
+call get_command_argument(0, buf)
+data_dir = dirname(buf, '/'//char(92)) // '/../data/'
+iri90_dir = data_dir // 'iri90/'
 
 !> Set number of altitude levels:
 jmax = 102
@@ -180,5 +178,19 @@ write(stdout,"('   Z      3371    4278    5200    5577    6300    7320   10400  
   "3644    7774    8446    3726    LBH     1356    1493    1304')")
 write(stdout,"(1x,f5.1,15f8.2)")(z(j),(zeta(ii,j),ii=1,15),j=1,jmax)
 
+
+contains
+
+pure function dirname(instr,  delm)
+
+character(*), intent(in) :: instr
+character(*), intent(in) :: delm
+character(:),allocatable :: dirname
+integer :: idx
+
+idx = scan(instr, delm, back=.true.)
+dirname = instr(1:idx-1)
+
+end function dirname
 
 end program

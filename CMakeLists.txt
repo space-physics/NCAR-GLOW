@@ -3,7 +3,7 @@ project(GLOW
   LANGUAGES Fortran
   VERSION 0.981)
 
-
+add_compile_options(-O3)
 if(CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL 8)
   list(APPEND old -std=legacy -w)
   list(APPEND new -std=f2018)
@@ -18,6 +18,6 @@ set(utils_src mzgrid.f90 conduct.f90 nrlmsise00.f iri90.f)
 add_library(cglow ${cglow_src} ${snoem_src} ${utils_src})
 target_compile_options(cglow PRIVATE ${old})
 
-add_executable(glow.bin glowpython.F90)
+add_executable(glow.bin glowpython.f90)
 target_link_libraries(glow.bin cglow)
 target_compile_options(glow.bin PRIVATE ${new})
