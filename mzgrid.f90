@@ -14,7 +14,7 @@
 ! Inputs:
 !         jmax   Number of altitude levels used by GLOW (should = 102 for MSIS/IRI/NOEM runs)
 !         nex    Number of ionized/excited species (for array zxden)
-!         idate  Nate in yyyyddd or yyddd format
+!         idate  Date in yyyyddd or yyddd format
 !         ut     Universal time, seconds)
 !         glat   Latitude, degrees
 !         glong  Longitude, degrees
