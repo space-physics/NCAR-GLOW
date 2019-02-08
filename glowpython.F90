@@ -93,7 +93,7 @@ call egrid (ener, del, nbins)
 ! date, UTsec, lat, lon, F107a, F107, F107p, Ap, Ef, Ec
 ! idate  Date in yyyyddd or yyddd format
 
-if (command_argument_count() /= 10) error stop "yyyyddd, UT, glat, glon, F107a, F107, F107p, Ap, Ef, Ec"
+if (command_argument_count() /= 10) error stop "yyyyddd UTsec glat glon F107a F107 F107p Ap Ef Ec"
 
 call get_command_argument(1, buf)
 read(buf, *) idate
@@ -126,11 +126,10 @@ call get_command_argument(10, buf)
 read(buf, *) ec
 
 ! Calculate local solar time:
-!
+
 stl = utsec/3600. + glong/15.
-if (stl < 0.) stl = stl + 24.
-if (stl >= 24.) stl = stl - 24.
-!
+stl = modulo(stl, 24.)
+
 ! Call MZGRID to use MSIS/NOEM/IRI inputs
 
 z =[80.,  81.,  82.,  83.,  84.,  85.,  86.,  87.,  88.,  89., &

@@ -31,4 +31,3 @@ LIBS       = -L /usr/lib64 -lcurl -L$(LIB_NETCDF) -lnetcdf
 
 clean:
 	rm -f *.o *.mod $(EXEC)
-

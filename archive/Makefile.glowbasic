@@ -27,4 +27,3 @@ $(EXEC): $(OBJS)
 
 clean:
 	rm -f *.o *.mod $(EXEC)
-
