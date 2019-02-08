@@ -37,7 +37,7 @@ use cglow,only: data_dir
 
 implicit none
 
-character(*), parameter :: iri90_dir = 'data/iri90/'
+character(:), allocatable :: iri90_dir
 
 character(8) :: buf
 
@@ -66,6 +66,7 @@ emono=0.
 
 !> Set data directories:
 data_dir = DATADIR
+iri90_dir = DATADIR // 'iri90/'
 
 !> Set number of altitude levels:
 jmax = 102

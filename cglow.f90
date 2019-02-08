@@ -68,7 +68,7 @@ module cglow
 
 ! Directory containing data files needed by glow subroutines:
 
-  character(len=1024) :: data_dir
+  character(:), allocatable :: data_dir
 
   integer :: idate,iscale,jlocal,kchem,ierr
   real    :: ut,glat,glong,f107,f107a,f107p,ap,ef,ec

@@ -162,7 +162,7 @@ C
        SUBROUTINE IRI90(JF,JMAG,ALATI,ALONG,RZ12,MMDD,DHOUR,
      &                  ZKM,NZ,DIRECT,OUTF,OARR)
       dimension zkm(nz), outf(11,nz), oarr(30)
-      character*(*) direct
+      character(*), intent(in) :: direct
       character*50 path
       character*10 filename
       INTEGER 		EGNR,AGNR,DAYNR,DDO,DO2,SEASON,SEADAY
@@ -438,10 +438,9 @@ C
         MONTHO=MONTH
 	GOTO 4291
 
-8448	write(monito,8449) path
-8449	format(' IRI90: File ',A50,'not found')
-	stop
-C
+8448	error stop path // ' IRI90: File not found'
+
+
 C LINEAR INTERPOLATION IN SOLAR ACTIVITY
 C
 4291    RR2=RG/100.
