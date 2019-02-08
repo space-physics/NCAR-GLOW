@@ -40,5 +40,9 @@ ylabel(ax, 'altitude [km]')
 
 grid(ax, 'on')
 legend(ax, 'show','location','northeast')
-
+%%
+figure
+plot(iono.energy_bin_centers)
+title('Energy Flux')
+ylabel('energy bin centers [eV]')
 end

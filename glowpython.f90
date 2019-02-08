@@ -145,7 +145,7 @@ z =[80.,  81.,  82.,  83.,  84.,  85.,  86.,  87.,  88.,  89., &
 call mzgrid (jmax,nex,idate,utsec,glat,glong,stl,f107a,f107,f107p,ap,iri90_dir, &
              z,zo,zo2,zn2,zns,znd,zno,ztn,zun,zvn,ze,zti,zte,zxden)
 !
-! Call MAXT to put auroral electron flux specified by namelist input into phitop array:
+! Call MAXT to put auroral electron flux specified into phitop array:
 !
 phitop(:) = 0.
 if (ef>.001 .and. ec>1.) call maxt (ef,ec,ener,del,nbins,itail,fmono,emono,phitop)
@@ -174,9 +174,14 @@ write(stdout,"('   Z     Tn       O        N2        NO      Ne(in)    Ne(out)  
   "      O+       O2+      NO+       N(2D)    Pederson   Hall')")
 write(stdout,"(1x,0p,f5.1,f6.0,1p,12e10.2)") (z(j),ztn(j),zo(j),zn2(j),zno(j),ze(j), &
   ecalc(j),tir(j),zxden(3,j),zxden(6,j),zxden(7,j),zxden(10,j),pedcond(j),hallcond(j),j=1,jmax)
+
+!> Optical emissions  (Rayleighs)
 write(stdout,"('   Z      3371    4278    5200    5577    6300    7320   10400    " //&
   "3644    7774    8446    3726    LBH     1356    1493    1304')")
 write(stdout,"(1x,f5.1,15f8.2)")(z(j),(zeta(ii,j),ii=1,15),j=1,jmax)
+
+!> energy bins
+write(stdout,'(1000f15.1)') ener
 
 
 contains

@@ -1,5 +1,8 @@
 function iono = glow(time, glat, glon, f107a, f107, f107p, Ap, Q, Echar)
 
+Nalt = 102;  % jmax in Fortran
+Nbins = 290;
+
 validateattributes(glat, {'numeric'}, {'scalar'})
 validateattributes(glon, {'numeric'}, {'scalar'})
 validateattributes(f107, {'numeric'}, {'positive', 'scalar'})
@@ -23,7 +26,6 @@ cmd = [exe, ' ', idate,' ',utsec,...
 [status,dat] = system(cmd);
 if status ~= 0, error(dat), end
 
-Nalt = 102;  % jmax in Fortran
 arr = cell2mat(textscan(dat, '%f %f %f %f %f %f %f %f %f %f %f %f %f %f', Nalt, ...
   'ReturnOnError', false, 'HeaderLines', 2));
 
@@ -41,7 +43,7 @@ iono.NOplus = arr(:,11);
 iono.N2D = arr(:,12);
 iono.pederson = arr(:,13);
 iono.hall = arr(:,14);
-
+%% optical emissions (Rayleighs)
 arr = cell2mat(textscan(dat, '%f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f', Nalt, ...
   'ReturnOnError', false, 'HeaderLines',Nalt+3));
 
@@ -62,5 +64,7 @@ iono.LBH = arr(:,13);
 iono.A1356 = arr(:,14);
 iono.A1493 = arr(:,15);
 iono.A1304 = arr(:,16);
+%% energy grid (eV)
+iono.energy_bin_centers = cell2mat(textscan(dat, '%f',Nbins, 'HeaderLines',Nalt+3+Nalt));
 
 end
