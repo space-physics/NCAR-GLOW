@@ -1,7 +1,9 @@
 ! Basic single-processor driver for the GLOW model.
 ! Uses MSIS/IRI for input.
 ! Runs GLOW for designated inputs once, or multiple times.
-! MPI and netCDF libraries not required.
+! MPI and netCDF libraries NOT required.
+
+! Example: ./glow.bin 16355 0 80 0 70 70 70 4 1 2000
 
 
 ! Other definitions:
@@ -58,8 +60,12 @@ itail=0
 fmono=0.
 emono=0.
 
+#ifndef DATADIR
+#define DATADIR '../data/'
+#endif
+
 !> Set data directories:
-data_dir = 'data/'
+data_dir = DATADIR
 
 !> Set number of altitude levels:
 jmax = 102
@@ -86,7 +92,7 @@ call egrid (ener, del, nbins)
 ! date, UTsec, lat, lon, F107a, F107, F107p, Ap, Ef, Ec
 ! idate  Date in yyyyddd or yyddd format
 
-if (command_argument_count() /= 10) error stop "yyyymmdd, UT, glat, glon, F107a, F107, F107p, Ap, Ef, Ec"
+if (command_argument_count() /= 10) error stop "yyyyddd, UT, glat, glon, F107a, F107, F107p, Ap, Ef, Ec"
 
 call get_command_argument(1, buf)
 read(buf, *) idate
@@ -124,8 +130,20 @@ stl = utsec/3600. + glong/15.
 if (stl < 0.) stl = stl + 24.
 if (stl >= 24.) stl = stl - 24.
 !
-! Call MZGRID to use MSIS/NOEM/IRI inputs on default altitude grid:
-!
+! Call MZGRID to use MSIS/NOEM/IRI inputs
+
+z =[80.,  81.,  82.,  83.,  84.,  85.,  86.,  87.,  88.,  89., &
+    90.,  91.,  92.,  93.,  94.,  95.,  96.,  97.,  98.,  99., &
+   100., 101., 102., 103., 104., 105., 106., 107., 108., 109., &
+   110.,111.5, 113.,114.5, 116., 118., 120., 122., 124., 126., &
+   128., 130., 132., 134., 137., 140., 144., 148., 153., 158., &
+   164., 170., 176., 183., 190., 197., 205., 213., 221., 229., &
+   237., 245., 254., 263., 272., 281., 290., 300., 310., 320., &
+   330., 340., 350., 360., 370., 380., 390., 400., 410., 420., &
+   430., 440., 450., 460., 470., 480., 490., 500., 510., 520., &
+   530., 540., 550., 560., 570., 580., 590., 600., 610., 620., &
+   630., 640. ]
+
 call mzgrid (jmax,nex,idate,utsec,glat,glong,stl,f107a,f107,f107p,ap,iri90_dir, &
              z,zo,zo2,zn2,zns,znd,zno,ztn,zun,zvn,ze,zti,zte,zxden)
 !
@@ -150,9 +168,9 @@ do j=1,jmax
                 zxden(3,j), zxden(6,j), zxden(7,j), ztn(j), zti(j), zte(j), &
                 pedcond(j), hallcond(j))
 enddo
-!
-! Output section:
-!
+
+!! Output
+
 write(stdout,"(1x,i7,9f8.1)") idate,utsec,glat,glong,f107a,f107,f107p,ap,ef,ec
 write(stdout,"('   Z     Tn       O        N2        NO      Ne(in)    Ne(out)  Ionrate" //&
   "      O+       O2+      NO+       N(2D)    Pederson   Hall')")

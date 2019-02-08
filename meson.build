@@ -9,5 +9,5 @@ utils_src = files('mzgrid.f90', 'conduct.f90', 'nrlmsise00.f', 'iri90.f')
 
 cglow = library('cglow', cglow_src, snoem_src, utils_src, fortran_args : '-w')
 
-glowexe = executable('glow.exe', 'glowpython.f90',
+glowexe = executable('glow.bin', 'glowpython.F90',
   link_with : cglow)
