@@ -6,7 +6,7 @@ Ap = 4;
 f107 = 100;
 f107a = 100;
 f107p = 100;
-%% Particle flux [erg cm-2 s-1 == mW m-2 s-1]
+%% flux [erg cm-2 s-1 == mW m-2 s-1]
 Q = 1;
 %% characteristic energy [eV]
 Echar = 100e3;

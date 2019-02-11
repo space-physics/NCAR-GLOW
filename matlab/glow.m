@@ -68,5 +68,5 @@ iono.A1304 = arr(:,16);
 Nbins = cell2mat(textscan(dat, '%d',1, 'HeaderLines',Nalt+3+Nalt));
 iono.energy_bin_centers = cell2mat(textscan(dat, '%f',Nbins, 'HeaderLines',Nalt+3+Nalt+1));
 
-iono.Eflux = cell2mat(textscan(dat, '%f',Nbins, 'HeaderLines',Nalt+3+Nalt+1+Nbins));
+iono.Eflux = cell2mat(textscan(dat, '%f',Nbins, 'HeaderLines',Nalt+3+Nalt+1+1));
 end
