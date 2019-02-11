@@ -59,11 +59,6 @@ subroutine mzgrid (jmax,nex,idate,ut,glat,glong,stl,f107a,f107,f107p,ap,iri90_di
   real,allocatable :: outf(:,:)              ! iri output (11,jmax)
   data sw/25*1./
 
-  if (jmax /= 102) then
-    write(stderr,*) "mzgrid: unknown JMAX =", jmax
-    error stop 'mzgrid JMAX'
-  endif
-
   allocate(outf(11,jmax))
 
 ! Call MSIS-2K to get neutral densities and temperature:

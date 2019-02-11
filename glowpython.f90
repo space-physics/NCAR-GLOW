@@ -23,6 +23,8 @@
 ! nc      number of component production terms for each emission
 
 use, intrinsic :: iso_fortran_env, only: stdout=>output_unit
+use fsutils, only: dirname
+use utils, only: alt_grid
 
 use cglow,only: jmax,nbins,nex
 use cglow,only: idate,utsec=>ut,glat,glong,f107a,f107,f107p,ap,ef,ec
@@ -67,7 +69,7 @@ data_dir = dirname(buf, '/'//char(92)) // '/../data/'
 iri90_dir = data_dir // 'iri90/'
 
 !> Set number of altitude levels:
-jmax = 102
+jmax = 250
 
 !> Allocate local arrays:
 allocate(z(jmax))
@@ -130,17 +132,19 @@ stl = modulo(stl, 24.)
 
 ! Call MZGRID to use MSIS/NOEM/IRI inputs
 
-z =[80.,  81.,  82.,  83.,  84.,  85.,  86.,  87.,  88.,  89., &
-    90.,  91.,  92.,  93.,  94.,  95.,  96.,  97.,  98.,  99., &
-   100., 101., 102., 103., 104., 105., 106., 107., 108., 109., &
-   110.,111.5, 113.,114.5, 116., 118., 120., 122., 124., 126., &
-   128., 130., 132., 134., 137., 140., 144., 148., 153., 158., &
-   164., 170., 176., 183., 190., 197., 205., 213., 221., 229., &
-   237., 245., 254., 263., 272., 281., 290., 300., 310., 320., &
-   330., 340., 350., 360., 370., 380., 390., 400., 410., 420., &
-   430., 440., 450., 460., 470., 480., 490., 500., 510., 520., &
-   530., 540., 550., 560., 570., 580., 590., 600., 610., 620., &
-   630., 640. ]
+!z =[80.,  81.,  82.,  83.,  84.,  85.,  86.,  87.,  88.,  89., &
+!    90.,  91.,  92.,  93.,  94.,  95.,  96.,  97.,  98.,  99., &
+!   100., 101., 102., 103., 104., 105., 106., 107., 108., 109., &
+!   110.,111.5, 113.,114.5, 116., 118., 120., 122., 124., 126., &
+!   128., 130., 132., 134., 137., 140., 144., 148., 153., 158., &
+!   164., 170., 176., 183., 190., 197., 205., 213., 221., 229., &
+!   237., 245., 254., 263., 272., 281., 290., 300., 310., 320., &
+!   330., 340., 350., 360., 370., 380., 390., 400., 410., 420., &
+!   430., 440., 450., 460., 470., 480., 490., 500., 510., 520., &
+!   530., 540., 550., 560., 570., 580., 590., 600., 610., 620., &
+!   630., 640. ]
+
+z = alt_grid(250, 60., 0.5, 4.)
 
 call mzgrid (jmax,nex,idate,utsec,glat,glong,stl,f107a,f107,f107p,ap,iri90_dir, &
              z,zo,zo2,zn2,zns,znd,zno,ztn,zun,zvn,ze,zti,zte,zxden)
@@ -181,21 +185,10 @@ write(stdout,"('   Z      3371    4278    5200    5577    6300    7320   10400  
 write(stdout,"(1x,f5.1,15f8.2)")(z(j),(zeta(ii,j),ii=1,15),j=1,jmax)
 
 !> energy bins
+write(stdout, '(i4)') Nbins
 write(stdout,'(1000f15.1)') ener
 
+write(stdout,'(1000f15.1)') phitop
 
-contains
-
-pure function dirname(instr,  delm)
-
-character(*), intent(in) :: instr
-character(*), intent(in) :: delm
-character(:),allocatable :: dirname
-integer :: idx
-
-idx = scan(instr, delm, back=.true.)
-dirname = instr(1:idx-1)
-
-end function dirname
 
 end program

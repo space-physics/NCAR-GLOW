@@ -1,4 +1,5 @@
-
+fort.12
+__pycache__/
 bin/
 build/
 # Compiled Dynamic libraries

@@ -1,7 +1,6 @@
 function iono = glow(time, glat, glon, f107a, f107, f107p, Ap, Q, Echar)
 
-Nalt = 102;  % jmax in Fortran
-Nbins = 290;
+Nalt = 250;  % jmax in Fortran
 
 validateattributes(glat, {'numeric'}, {'scalar'})
 validateattributes(glon, {'numeric'}, {'scalar'})
@@ -64,7 +63,10 @@ iono.LBH = arr(:,13);
 iono.A1356 = arr(:,14);
 iono.A1493 = arr(:,15);
 iono.A1304 = arr(:,16);
-%% energy grid (eV)
-iono.energy_bin_centers = cell2mat(textscan(dat, '%f',Nbins, 'HeaderLines',Nalt+3+Nalt));
 
+%% energy grid (eV)
+Nbins = cell2mat(textscan(dat, '%d',1, 'HeaderLines',Nalt+3+Nalt));
+iono.energy_bin_centers = cell2mat(textscan(dat, '%f',Nbins, 'HeaderLines',Nalt+3+Nalt+1));
+
+iono.Eflux = cell2mat(textscan(dat, '%f',Nbins, 'HeaderLines',Nalt+3+Nalt+1+Nbins));
 end

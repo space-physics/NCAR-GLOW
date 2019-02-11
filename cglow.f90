@@ -57,7 +57,7 @@ module cglow
 
 ! Array dimensions, non-configurable:
 
-  integer,parameter :: nbins=290 ! number of energetic electron energy bins
+  integer,parameter :: nbins=260 ! number of energetic electron energy bins
   integer,parameter :: lmax=123  ! number of wavelength intervals for solar flux
   integer,parameter :: nmaj=3    ! number of major species
   integer,parameter :: nst=6     ! number of states produced by photoionization/dissociation
