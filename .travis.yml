@@ -1,4 +1,5 @@
-language: c
+# OSX and Windows work, just commented to save Travis resources
+language: minimal
 group: travis_latest
 dist: xenial
 
@@ -10,25 +11,29 @@ env: FC=gfortran
 
 addons:
   apt:
-#    sources: ubuntu-toolchain-r-test
-    packages: gfortran
+    sources: ubuntu-toolchain-r-test
+    packages:
+    - gfortran-6
+    - octave
 
 matrix:
   include:
   - os: linux
-  - os: osx 
-    before_install: 
-    - brew update
-    - brew install gcc
-  - os: windows
-    install: 
-    - cd build
-    - cmake -G "MinGW Makefiles" -DCMAKE_SH="CMAKE_SH-NOTFOUND" ..
-    - cmake --build .
+    env: FC=gfortran-6
+#  - os: osx
+#    before_install:
+#    - brew update > /dev/null
+#    - brew install gcc > /dev/null
+#  - os: windows
+#    install:
+#    - cd build
+#    - cmake -G "MinGW Makefiles" -DCMAKE_SH="CMAKE_SH-NOTFOUND" ..
+#    - cmake --build .
 
 install:
-  - cd build
-  - cmake ..
-  - cmake --build .
+- cmake -B build -S .
+- cmake --build build -j
 
-script: ctest --output-on-failure
+script:
+- cd $TRAVIS_BUILD_DIR/build
+- ctest --output-on-failure
