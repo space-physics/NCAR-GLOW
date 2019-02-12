@@ -1,5 +1,5 @@
 module output
-
+  use, intrinsic :: iso_fortran_env, only: stderr=>error_unit, stdout=>output_unit
 ! This software is part of the GLOW model.  Use is governed by the Open Source
 ! Academic Research License Agreement contained in the file glowlicense.txt.
 ! For more information see the file glow.txt.
@@ -9,7 +9,7 @@ module output
 
 ! Handles output from the GLOW model to netCDF files.
 ! For usage, see program glowdriver.f90.
- 
+
 ! The GLOW grid dimensions and coordinates must be set before
 ! any routines in this module are called. They are currently
 ! set by the main driver (glowdriver.f90) and module cglow.f90.
@@ -24,7 +24,7 @@ module output
   implicit none
 
   integer :: nlon,nlat,nlev                       ! dimensions
-  real,allocatable,save :: lon(:),lat(:),lev(:)   ! coordinates 
+  real,allocatable,save :: lon(:),lat(:),lev(:)   ! coordinates
   logical :: writelbh,writered                    ! switches
 !
 ! Output arrays:
@@ -92,8 +92,8 @@ module output
 
   subroutine create_ncfile(ncfile,tgcm_ncfile)
 !
-! Create and define a netcdf glow output file, with dimensions, attributes, 
-! variables, etc., but do not write data yet. 
+! Create and define a netcdf glow output file, with dimensions, attributes,
+! variables, etc., but do not write data yet.
 !
 ! Args:
   character(len=*),intent(in) :: ncfile,tgcm_ncfile
@@ -108,12 +108,12 @@ module output
   character(len=24) :: create_date,create_time
   character(len=64) :: create_datetime
 
-  istat = nf90_create(ncfile,NF90_CLOBBER,ncid) 
+  istat = nf90_create(ncfile,NF90_CLOBBER,ncid)
   if (istat /= NF90_NOERR) then
-    write(6,"('>>> Error creating netcdf output file ',a)") trim(ncfile)
+    write(stderr,"('>>> Error creating netcdf output file ',a)") trim(ncfile)
     call handle_ncerr(istat,'Error from nf90_create',1)
   endif
-  write(6,"('Created netcdf dataset ',a)") trim(ncfile)
+  write(stdout,"('Created netcdf dataset ',a)") trim(ncfile)
 !
 ! Define dimensions:
 !
@@ -315,7 +315,7 @@ module output
 
   subroutine write_ncfile(ncfile)
 !
-! Write data to netcdf glow output file at current time. The file has 
+! Write data to netcdf glow output file at current time. The file has
 ! already been created w/ dimensions by sub create_ncfile.
 !
 ! Args:
@@ -326,7 +326,7 @@ module output
 
   istat = nf90_open(ncfile,NF90_WRITE,ncid)
   if (istat /= NF90_NOERR) then
-    write(6,"('>>> Error opening file for writing: ncfile=',a)") trim(ncfile)
+    write(stderr,"('>>> Error opening file for writing: ncfile=',a)") trim(ncfile)
     call handle_ncerr(istat,'Error from nf90_open',1)
   endif
 
@@ -397,9 +397,9 @@ module output
       curtime = ' '
       call date_and_time(date,time,zone,values)
 !
-!     write(6,"('datetime: date=',a,' time=',a,' zone=',a)")
+!     write(stdout,"('datetime: date=',a,' time=',a,' zone=',a)")
 !    |  date,time,zone
-!     write(6,"('datetime: values=',8i8)") values
+!     write(stdout,"('datetime: values=',8i8)") values
 !
       curdate(1:2) = date(5:6)
       curdate(3:3) = '/'
@@ -424,13 +424,13 @@ module output
     integer,intent(in) :: istat,ifatal
     character(len=*),intent(in) :: msg
 !
-    write(6,"(/72('-'))")
-    write(6,"('>>> Error from netcdf library:')")
-    write(6,"(a)") trim(msg)
-    write(6,"('istat=',i5)") istat
-    write(6,"(a)") nf90_strerror(istat)
-    write(6,"(72('-')/)")
-    if (ifatal > 0) stop('Fatal netcdf error')
+    write(stderr,"(/72('-'))")
+    write(stderr,"('>>> Error from netcdf library:')")
+    write(stderr,"(a)") trim(msg)
+    write(stderr,"('istat=',i5)") istat
+    write(stderr,"(a)") nf90_strerror(istat)
+    write(stderr,"(72('-')/)")
+    if (ifatal > 0) error stop 'Fatal netcdf error'
   end subroutine handle_ncerr
 
 !-----------------------------------------------------------------------

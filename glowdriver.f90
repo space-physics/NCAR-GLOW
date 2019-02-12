@@ -33,7 +33,7 @@ program glowdriver
 ! nex     number of ionized/excited species
 ! nw      number of airglow emission wavelengths
 ! nc      number of component production terms for each emission
-
+  use, intrinsic :: iso_fortran_env, only: stderr=>error_unit, stdout=>output_unit
   use mpi
 
   use cglow,only: cglow_init      ! subroutine to allocate use-associated variables
@@ -110,12 +110,12 @@ program glowdriver
   call mpi_comm_size(MPI_COMM_WORLD,nproc,mpierr)
 !
 ! Initialize tgcm_ncfile and start/stop times:
-! If start_mtime and/or stop_mtime are not read from namelist, model days of -999 
+! If start_mtime and/or stop_mtime are not read from namelist, model days of -999
 ! will flag find_mtimes to find the first and/or last histories on the file.
 !
   tgcm_ncfile = ' '
-  start_mtime = (/-999,0,0/) 
-  stop_mtime  = (/-999,0,0/) 
+  start_mtime = (/-999,0,0/)
+  stop_mtime  = (/-999,0,0/)
 !
 ! Root task only:  Read namelist inputs from input file.
 ! Read times, coordinates, 1D vars, from tgcm history file (tiegcm or timegcm), if provided.
@@ -130,7 +130,7 @@ program glowdriver
     else
       tgcm = .false.
       ntimes = ifix((utstop-utstart)/utstep) + 1
-      write(6,"('glow_drv: tgcm_ncfile not provided, will use MSIS/IRI')")
+      write(stderr,"('glow_drv: tgcm_ncfile not provided, will use MSIS/IRI')")
     endif
   endif
 !
@@ -204,10 +204,10 @@ program glowdriver
 !
 ! Assign latitude bands to processors:
 !
-  if (itask == 0 .and. (nlat/nproc)*nproc /= nlat) then 
-    write(6,"('glow_drv: number of latitudes must be an integer multiple of number of processors')")
-    write(6,"('NLAT =',i3,'   NPROC =',i3)") nlat,nproc
-    stop
+  if (itask == 0 .and. (nlat/nproc)*nproc /= nlat) then
+    write(stderr,"('glow_drv: number of latitudes must be an integer multiple of number of processors')")
+    write(stderr,"('NLAT =',i3,'   NPROC =',i3)") nlat,nproc
+    error stop
   endif
   size2d=nlon*nlat
   size3d=nlon*nlat*nlev
@@ -236,7 +236,7 @@ program glowdriver
 ! Get input fields if this is a tgcm run, otherwise use namelist inputs to MSIS/IRI/NOEM.
 ! Only do this section if this is the root task:
 !
-  if (itask == 0) then 
+  if (itask == 0) then
     if (tgcm) then
       call read_tgcm(tgcm_ncfile,itimes(itime))
       idate=iyear_tgcm*1000+iday_tgcm
@@ -250,8 +250,8 @@ program glowdriver
       idate=indate
       ut   =utstart+(itime-1)*utstep
     endif
-    write(6,"('glow_drv: idate=',i7,' ut=',f7.1)") idate,ut
-    write(6,"('glow_drv: F107=',f5.1,' F107a=',f5.1,' F107p=',f5.1,' Ap=',f5.1)")f107,f107a,f107p,ap
+    write(stdout,"('glow_drv: idate=',i7,' ut=',f7.1)") idate,ut
+    write(stdout,"('glow_drv: F107=',f5.1,' F107a=',f5.1,' F107p=',f5.1,' Ap=',f5.1)")f107,f107a,f107p,ap
 !
 ! Loop over latitude and longitude to interpolate input fields:
 !
@@ -271,7 +271,7 @@ program glowdriver
           if (stl >= 24.) stl = stl - 24.
           call mzgrid (jmax,nex,idate,ut,glat,glong,stl,f107a,f107,f107p,ap,iri90_dir, &
                      z,zo,zo2,zn2,zns,znd,zno,ztn,zun,zvn,ze,zti,zte,zxden)
-        endif 
+        endif
 !
 ! Fill global arrays:
 !
@@ -333,7 +333,7 @@ program glowdriver
         if (ef>.001 .and. ec>1.) call maxt(ef,ec,ener,del,nbins,itail,fmono,emono,phitop)
       else
         if (ef>.001 .and. ec>1.) call maxt (ef,ec,ener,del,nbins,itail,fmono,emono,phitop)
-      endif 
+      endif
 !
 ! Transfer global fields back to altitude arrays at specific lat/lon:
 !
@@ -355,11 +355,11 @@ program glowdriver
 !
       call glow
 !
-! Write error code and energy conservation to standard output if it is out of range:
+! Write error code and energy conservation to standard error if it is out of range:
 !
-      if (ierr > 0) write(6,"('glow_drv: IERR = ',i1)") ierr
+      if (ierr > 0) write(stderr,"('glow_drv: IERR = ',i1)") ierr
       if (abs(efrac) > 0.2) &
-        write(6,"('glow_drv:  EFRAC =',f5.2,'  SZA =',f5.2,'  DIP=',f5.2)") efrac,sza,dip
+        write(stderr,"('glow_drv:  EFRAC =',f5.2,'  SZA =',f5.2,'  DIP=',f5.2)") efrac,sza,dip
 !
 ! Call CONDUCT to calculate Pederson and Hall conductivities:
 !
@@ -424,8 +424,8 @@ program glowdriver
 ! Output section:
 ! Create and define a new netCDF output file for each time (root task only):
 !
-  if (itask == 0) then 
-    write (ifile,"('.',i3.3,'.nc')"),itime
+  if (itask == 0) then
+    write (ifile,"('.',i3.3,'.nc')") itime
     glow_ncfileit = trim(glow_ncfile) // ifile
     call create_ncfile(glow_ncfileit,tgcm_ncfile)
     call write_ncfile(glow_ncfileit)

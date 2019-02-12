@@ -113,7 +113,7 @@ C              OARR(21) = TI-MOD(430KM)  OARR(22) = X/KM, WHERE TE=TI
 C              OARR(23) = SOLAR ZENITH ANGLE/DEG
 C              OARR(24) = SUN DECLINATION/DEG
 C              OARR(25) = DIP
-C        OARR(26) = DIP LATITUDE
+C	       OARR(26) = DIP LATITUDE
 C              OARR(27) = MODIFIED DIP LATITUDE
 C              OARR(28:30) FREE
 C-------------------------------------------------------------------
@@ -165,9 +165,9 @@ C
       character(*), intent(in) :: direct
       character(1024) :: path
       character(10) filename
-      INTEGER     EGNR,AGNR,DAYNR,DDO,DO2,SEASON,SEADAY
-      REAL    LATI,LONGI,MO2,MO,MODIP,NMF2,MAGBR
-      REAL      NMF1,NME,NMD,NEI,MM,MLAT,MLONG,NOBO2
+      INTEGER 		EGNR,AGNR,DAYNR,DDO,DO2,SEASON,SEADAY
+      REAL 		LATI,LONGI,MO2,MO,MODIP,NMF2,MAGBR
+      REAL  		NMF1,NME,NMD,NEI,MM,MLAT,MLONG,NOBO2
       DIMENSION  F(3),RIF(4),E(4),XDELS(4),DNDS(4)
       DIMENSION  FF0(988),XM0(441),F2(13,76,2),FM3(9,49,2)
       DIMENSION  AMP(4),HXL(4),SCL(4),B0B1(5)
@@ -175,21 +175,21 @@ C
       DIMENSION  AHH(7),STTE(6),DTE(5),ATE(7),TEA(6),HOA(3),XNAR(3)
       DIMENSION  PG1O(80),PG2O(32),PG3O(80),PF1O(12),PF2O(4),PF3O(12)
       DIMENSION  HO(4),MO(5),DDO(4),HO2(2),MO2(3),DO2(2),DION(7)
-      LOGICAL   EXT,SCHALT,NIGHT,TCON(3)
-      LOGICAL   F1REG,FOF2IN,HMF2IN,URSIF2,LAYVER,DY,GULB0
-      LOGICAL   NODEN,NOTEM,NOION,TENEOP
+      LOGICAL		EXT,SCHALT,NIGHT,TCON(3)
+      LOGICAL		F1REG,FOF2IN,HMF2IN,URSIF2,LAYVER,DY,GULB0
+      LOGICAL		NODEN,NOTEM,NOION,TENEOP
       LOGICAL           OLD79,TOPSI,BOTTO,BELOWE,JF(12),URSIFO
-      COMMON  /BLOCK1/HMF2,NMF2,HMF1           /CONST/UMR
-     &    /BLOCK2/B0,B1,C1      /BLOCK3/HZ,T,HST,STR
-     &    /BLOCK4/HME,NME,HEF   /BLOCK5/NIGHT,E
-     &    /BLOCK6/HMD,NMD,HDX   /BLOCK7/D1,XKK,FP30,FP3U,FP1,FP2
-     &    /BLOCK8/HS,TNHS,XSM,MM,DTI,MXSM
-     &    /BLOTN/XSM1,TEXOS,TLBDH,SIGMA /BLOTE/AHH,ATE1,STTE,DTE
-     &    /BLO10/BETA,ETA,DELTA,ZETA   /ARGEXP/ARGMAX
-      EXTERNAL    XE1,XE2,XE3,XE4,XE5,XE6,TEDER
+      COMMON	/BLOCK1/HMF2,NMF2,HMF1	         /CONST/UMR
+     &		/BLOCK2/B0,B1,C1      /BLOCK3/HZ,T,HST,STR
+     &  	/BLOCK4/HME,NME,HEF   /BLOCK5/NIGHT,E
+     &		/BLOCK6/HMD,NMD,HDX   /BLOCK7/D1,XKK,FP30,FP3U,FP1,FP2
+     &  	/BLOCK8/HS,TNHS,XSM,MM,DTI,MXSM
+     &  	/BLOTN/XSM1,TEXOS,TLBDH,SIGMA /BLOTE/AHH,ATE1,STTE,DTE
+     &		/BLO10/BETA,ETA,DELTA,ZETA	 /ARGEXP/ARGMAX
+      EXTERNAL 		XE1,XE2,XE3,XE4,XE5,XE6,TEDER
       DATA  HOA  /300.,400.,600./,   XNAR       /3*0.0/,
      &      XDELS   /3*5.,10./,      DNDS   /.016,.01,2*.016/,
-     &      DDO   /9,5,5,25/,        DO2        /5,5/,
+     &      DDO	  /9,5,5,25/,        DO2        /5,5/,
      &      B0B1  /.755566,.778596,.797332,.812928,.826146/
       data icalls/0/
 C
@@ -204,7 +204,7 @@ C
 C
 C PROGAM CONSTANTS
 C
-  icalls=icalls+1
+	icalls=icalls+1
         HHALF = 0.
 
 !       write(6,"('Enter iri90: icalls=',i4,' jf=',12l2,' jmax=',i4,
@@ -215,11 +215,11 @@ C
 !       write(6,"('DIRECT (file path)=',a)") direct
 !       write(6,"('zkm=',/,(8f9.2))") zkm
 
-  ARGMAX=88.0
-      UMR=ATAN(1.0)*4./180.
-        ALOG2=ALOG(2.)
-  ALG100=ALOG(100.)
-  ISTART=1
+	ARGMAX=88.0
+     	UMR=ATAN(1.0)*4./180.
+      	ALOG2=ALOG(2.)
+	ALG100=ALOG(100.)
+ 	ISTART=1
         heibeg=zkm(1)
         heiend=zkm(nz)
 C
@@ -284,34 +284,34 @@ C
         IF(TENEOP) THEN
            DO 8154 JXNAR=1,3
               XNAR(JXNAR)=OARR(JXNAR+2)
-        TCON(JXNAR)=.FALSE.
-8154        IF(XNAR(JXNAR).GT.0.) TCON(JXNAR)=.TRUE.
+	      TCON(JXNAR)=.FALSE.
+8154	      IF(XNAR(JXNAR).GT.0.) TCON(JXNAR)=.TRUE.
            ENDIF
 
       if(icalls.gt.1) goto 8201
-  write(konsol,*) '*** IRI parameters are being calculated ***'
+	write(konsol,*) '*** IRI parameters are being calculated ***'
       if(NODEN) goto 2889
-  if(LAYVER) write(konsol,*) 'Ne, E-F: The LAY-Version is ',
-     &    'prelimenary. Erroneous profile features can occur.'
-  if(GULB0) write(konsol,*) 'Ne, B0: Bottomside thickness is ',
-     &    'obtained with Gulyaeva-1987 model.'
-  if(OLD79) write(konsol,*) 'Ne: Using IRI-79. Correction',
-     &    ' of equatorial topside is not included.'
-  if(HMF2IN) write(konsol,*) 'Ne, hmF2: Input values are used.'
-  if(FOF2IN) then
-    write(konsol,*) 'Ne, foF2: Input values are used.'
-    goto 2889
-    endif
-  if(URSIF2) then
-    write(konsol,*) 'Ne, foF2: URSI model is used.'
-  else
-    write(konsol,*) 'Ne, foF2: CCIR model is used.'
-  endif
+	if(LAYVER) write(konsol,*) 'Ne, E-F: The LAY-Version is ',
+     &	  'prelimenary. Erroneous profile features can occur.'
+	if(GULB0) write(konsol,*) 'Ne, B0: Bottomside thickness is ',
+     &	  'obtained with Gulyaeva-1987 model.'
+	if(OLD79) write(konsol,*) 'Ne: Using IRI-79. Correction',
+     &	  ' of equatorial topside is not included.'
+	if(HMF2IN) write(konsol,*) 'Ne, hmF2: Input values are used.'
+	if(FOF2IN) then
+	  write(konsol,*) 'Ne, foF2: Input values are used.'
+	  goto 2889
+	  endif
+	if(URSIF2) then
+	  write(konsol,*) 'Ne, foF2: URSI model is used.'
+	else
+	  write(konsol,*) 'Ne, foF2: CCIR model is used.'
+	endif
 2889  if((.not.NOION).and.(DY))
-     &     write(konsol,*) 'Ion Com.: Using Danilov-Yaichnikov-1985.'
+     &	   write(konsol,*) 'Ion Com.: Using Danilov-Yaichnikov-1985.'
       if((.not.NOTEM).and.(TENEOP))
      &     write(konsol,*) 'Te: Temperature-density correlation is used'
-8201  continue
+8201	continue
 C
 C CALCULATION OF MEAN F10.7CM SOLAR RADIO FLUX (COV)................
 C CALCULATION OF RESTRICTED SOLAR ACTIVITIES (RG,COVG)..............
@@ -345,56 +345,56 @@ C
         ABSLAT=ABS(LATI)
         CALL FIELDG(LATI,LONGI,300.0,XMA,YMA,ZMA,BET,DIP,DEC,MODIP)
         MAGBR=ATAN(0.5*TAN(DIP*UMR))/UMR
-  ABSMLT=ABS(MLAT)
-  ABSMDP=ABS(MODIP)
-  ABSMBR=ABS(MAGBR)
+	ABSMLT=ABS(MLAT)
+	ABSMDP=ABS(MODIP)
+	ABSMBR=ABS(MAGBR)
 C
 C CALCULATION OF SEASON (SUMMER=2, WINTER=4)..........................
 C CALCULATION OF DAY OF YEAR AND SUN DECLINATION......................
 C
-    if(MMDD.lt.0) then
-    DAYNR=-MMDD
-    call MODA(1,MONTH,IDAY,DAYNR)
-  else
-    MONTH=MMDD/100
-    IDAY=MMDD-MONTH*100
-    call MODA(0,MONTH,IDAY,DAYNR)
-  endif
+  	if(MMDD.lt.0) then
+		DAYNR=-MMDD
+		call MODA(1,MONTH,IDAY,DAYNR)
+	else
+		MONTH=MMDD/100
+		IDAY=MMDD-MONTH*100
+		call MODA(0,MONTH,IDAY,DAYNR)
+	endif
       SEASON=INT((DAYNR+45.0)/92.0)
       IF(SEASON.LT.1) SEASON=4
       NSESON=SEASON
       seaday=daynr
       IF(LATI.GT.0.0) GOTO 5592
-    SEASON=SEASON-2
-      IF(SEASON.LT.1) SEASON=SEASON+4
-  seaday=daynr+183
-  if(seaday.gt.366) seaday=seaday-366
+   	SEASON=SEASON-2
+    	IF(SEASON.LT.1) SEASON=SEASON+4
+	seaday=daynr+183
+	if(seaday.gt.366) seaday=seaday-366
 C
 C CALCULATION OF SOLAR ZENITH ANGLE (XHI/DEG).........................
 C NOON VALUE (XHINON).................................................
 C
 5592  IF(DHOUR.GT.24.1) THEN
-  UT=DHOUR-25.
-  HOUR=UT+LONGI/15.
-  IF(HOUR.GT.24.) HOUR=HOUR-24.
+	UT=DHOUR-25.
+	HOUR=UT+LONGI/15.
+	IF(HOUR.GT.24.) HOUR=HOUR-24.
       ELSE
-  HOUR=DHOUR
+	HOUR=DHOUR
         UT=HOUR-LONGI/15.
         IF(UT.LT.0.) UT=UT+24.
       ENDIF
 
-  CALL SOCO(DAYNR,HOUR,LATI,LONGI,SUNDEC,XHI,SAX,SUX)
-  CALL SOCO(DAYNR,12.0,LATI,LONGI,SUNDE1,XHINON,SAXNON,SUXNON)
+	CALL SOCO(DAYNR,HOUR,LATI,LONGI,SUNDEC,XHI,SAX,SUX)
+	CALL SOCO(DAYNR,12.0,LATI,LONGI,SUNDE1,XHINON,SAXNON,SUXNON)
 
-          NIGHT=.FALSE.
-  if(abs(sax).gt.25.0) then
+	        NIGHT=.FALSE.
+	if(abs(sax).gt.25.0) then
                 if(sax.lt.0.0) NIGHT=.TRUE.
-    goto 1334
-    endif
-        if(SAX.le.SUX) goto 1386
-  if((hour.gt.sux).and.(hour.lt.sax)) night=.true.
-  goto 1334
-1386    IF((HOUR.GT.SUX).OR.(HOUR.LT.SAX)) NIGHT=.TRUE.
+		goto 1334
+		endif
+      	if(SAX.le.SUX) goto 1386
+	if((hour.gt.sux).and.(hour.lt.sax)) night=.true.
+	goto 1334
+1386  	IF((HOUR.GT.SUX).OR.(HOUR.LT.SAX)) NIGHT=.TRUE.
 C
 C CALCULATION OF ELECTRON DENSITY PARAMETERS................
 C
@@ -426,19 +426,19 @@ C
 C
 C READ URSI COEFFICIENT SET FOR CHOSEN MONTH....................
 C
-  if (URSIF2) then
-    WRITE(filename,1144) MONTH+10
+	if (URSIF2) then
+	  WRITE(filename,1144) MONTH+10
 1144      FORMAT('ursi',I2,'.asc')
           call dfp(direct,filename,path)
           OPEN(IUCCIR,FILE=path,STATUS='OLD',ERR=8448)
           READ(IUCCIR,4689) F2
           CLOSE(IUCCIR)
-  endif
+	endif
         URSIFO=URSIF2
         MONTHO=MONTH
-  GOTO 4291
+	GOTO 4291
 
-8448  error stop path // ' IRI90: File not found'
+8448	error stop path // ' IRI90: File not found'
 
 
 C LINEAR INTERPOLATION IN SOLAR ACTIVITY
@@ -453,30 +453,30 @@ C
         DO 30 J=1,9
         K=J+9*(I-1)
 30      XM0(K)=FM3(J,I,1)*RR1+FM3(J,I,2)*RR2
-  RGO=RG
+	RGO=RG
 
 4292  CALL F2OUT(MODIP,LATI,LONGI,FF0,XM0,UT,YFOF2,XM3000)
 
-501 IF(FOF2IN) THEN
-    FOF2=AFOF2
-  ELSE
+501	IF(FOF2IN) THEN
+	  FOF2=AFOF2
+	ELSE
           FOF2=YFOF2
-  ENDIF
-        NMF2=1.24E10*FOF2*FOF2
+	ENDIF
+      	NMF2=1.24E10*FOF2*FOF2
 
-  IF(HMF2IN) THEN
-    HMF2=AHMF2
-  ELSE
+	IF(HMF2IN) THEN
+	  HMF2=AHMF2
+	ELSE
           HMF2=HMF2ED(MAGBR,RG,FOF2/FOE,XM3000)
-  ENDIF
+	ENDIF
 
         TOPSI=(HEIEND.GT.HMF2)
-  BOTTO=((HEIEND.GE.HME).AND.(HEIBEG.LE.HMF2))
-  BELOWE=(HEIBEG.LT.HME)
+	BOTTO=((HEIEND.GE.HME).AND.(HEIBEG.LE.HMF2))
+	BELOWE=(HEIBEG.LT.HME)
 c
 c topside profile parameters .............................
 c
-  IF(.NOT.TOPSI) GOTO 1501
+	IF(.NOT.TOPSI) GOTO 1501
       COS2=COS(MLAT*UMR)
       COS2=COS2*COS2
       FLU=(COVG-40.0)/30.0
@@ -502,19 +502,19 @@ c
 c bottomside profile parameters .............................
 C
 1501    HMF1=HMF2
-  HZ=HMF2
-  HEF=HME
-  IF(.not.BOTTO) GOTO 2727
-  B1=3.0
+	HZ=HMF2
+	HEF=HME
+	IF(.not.BOTTO) GOTO 2727
+	B1=3.0
 C!!!!!!! INTERPOLATION FOR B0 OUT OF ARRAY B0F !!!!!!!!!!!!!!!!!!!!!
-  if(GULB0) then
-    call ROGUL(SEADAY,XHI,SEAX,GRAT)
-    if(NIGHT) GRAT=0.91-HMF2/4000.
-    B0CNEW=HMF2*(1.-GRAT)
-    B0=B0CNEW/B0B1(1)
-  else
+	if(GULB0) then
+	  call ROGUL(SEADAY,XHI,SEAX,GRAT)
+	  if(NIGHT) GRAT=0.91-HMF2/4000.
+	  B0CNEW=HMF2*(1.-GRAT)
+	  B0=B0CNEW/B0B1(1)
+	else
           B0 = B0POL(HOUR,SAX,SUX,SEASON,RG,DELA)
-  endif
+	endif
 C!!!!!!! F1-REGION PARAMETERS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       F1REG=.FALSE.
       HMF1=0.
@@ -535,18 +535,18 @@ C!!!!!!! PARAMETER FOR E AND VALLEY-REGION !!!!!!!!!!!!!!!!!!!!!
       DEPTH=HPOL(HOUR,XDEL,81.,SAX,SUX,1.,1.)
       DLNDH=HPOL(HOUR,DNDHBR,.06,SAX,SUX,1.,1.)
       IF(DEPTH.LT.1.0) GOTO 600
-  IF(NIGHT) DEPTH=-DEPTH
-        CALL TAL(HDEEP,DEPTH,WIDTH,DLNDH,EXT,E)
-        IF(.NOT.EXT) GOTO 667
-          WRITE(KONSOL,650)
+	IF(NIGHT) DEPTH=-DEPTH
+      	CALL TAL(HDEEP,DEPTH,WIDTH,DLNDH,EXT,E)
+      	IF(.NOT.EXT) GOTO 667
+      	  WRITE(KONSOL,650)
 650   FORMAT(1X,'*NE* E-REGION VALLEY CAN NOT BE MODELLED')
-600       WIDTH=.0
+600   	  WIDTH=.0
 667   HEF=HME+WIDTH
       VNER = (1. - ABS(DEPTH) / 100.) * NME
 c
 c Parameters below E  .............................
 c
-2727  IF(.not.BELOWE) GOTO 2726
+2727	IF(.not.BELOWE) GOTO 2726
 C!!!!!!!D-REGION PARAMETER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       NMD=XMDED(XHI,R,4.0E8)
       HMD=HPOL(HOUR,81.0,88.0,SAX,SUX,1.,1.)
@@ -567,77 +567,77 @@ C!!!!!!!D-REGION PARAMETER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 C
 C SEARCH FOR HMF1 ..................................................
 C
-2726  IF(.not.BOTTO) GOTO 4933
-  if(LAYVER) goto 6153
-924 IF(.not.F1REG) GOTO 380
-  XE2H=XE2(HEF)
+2726	IF(.not.BOTTO) GOTO 4933
+	if(LAYVER) goto 6153
+924	IF(.not.F1REG) GOTO 380
+	XE2H=XE2(HEF)
       CALL REGFA1(HEF,HMF2,XE2H,NMF2,0.001,NMF1,XE2,SCHALT,HMF1)
-  IF(.not.SCHALT) GOTO 380
-    WRITE(KONSOL,11)
+	IF(.not.SCHALT) GOTO 380
+	  WRITE(KONSOL,11)
 11    FORMAT(1X,'*NE* HMF1 IS NOT EVALUATED BY THE FUNCTION XE2')
-  IREGFA=1
+	IREGFA=1
 c
 c change B1 and try again ..........................................
 c
-9244  IF(B1.GT.4.5) GOTO (7398,8922) IREGFA
-      B1=B1+0.5
-    WRITE(KONSOL,902) B1-0.5,B1
+9244 	IF(B1.GT.4.5) GOTO (7398,8922) IREGFA
+	   	B1=B1+0.5
+ 		WRITE(KONSOL,902) B1-0.5,B1
 902   FORMAT(6X,'CORR.: B1(OLD)=',F4.1,' B1(NEW)=',F4.1)
-    IF(GULB0) then
-      ib1=int(b1*2.-5.)
-      B0=B0CNEW/b0b1(ib1)
-      endif
-      GOTO 924
+		IF(GULB0) then
+			ib1=int(b1*2.-5.)
+			B0=B0CNEW/b0b1(ib1)
+			endif
+   		GOTO 924
 c
 c omit F1 feature ....................................................
 c
 7398  WRITE(KONSOL,9269)
 9269  FORMAT(1X,'CORR.: NO F1 REGION, B1=3, C1=0.0')
-        HMF1=0.
-        NMF1=0.
-        C1=0.0
-        B1=3.
-        F1REG=.FALSE.
+      	HMF1=0.
+      	NMF1=0.
+      	C1=0.0
+      	B1=3.
+      	F1REG=.FALSE.
 
 C
 C SEARCH FOR HST [NE3(HST)=NME] ..........................................
 C
-380 RRRR=0.5
-  IF(F1REG) then
-    hf1=hmf1
-    xf1=nmf1
-    GOTO 3972
-    ENDIF
-  RATHH=0.5
-3973  hf1=hef+(hmf2-hef)*RATHH
-  xf1=xe3(hf1)
-  IF(XF1.LT.NME) THEN
-    RATHH=RATHH+.1
-    GOTO 3973
-    ENDIF
-3972  h=hf1
-  deh=10.
-  XXMIN=XF1
-  HHMIN=HF1
+380	RRRR=0.5
+	IF(F1REG) then
+		hf1=hmf1
+		xf1=nmf1
+		GOTO 3972
+		ENDIF
+	RATHH=0.5
+3973	hf1=hef+(hmf2-hef)*RATHH
+	xf1=xe3(hf1)
+	IF(XF1.LT.NME) THEN
+		RATHH=RATHH+.1
+		GOTO 3973
+		ENDIF
+3972	h=hf1
+	deh=10.
+	XXMIN=XF1
+	HHMIN=HF1
 3895    h=h-deh
-  if(h.lt.HEF) then
-    h=h+2*deh
-    deh=deh/10.
-    if(deh.lt.1.) goto 3885
-    endif
-    XE3H=XE3(h)
-  IF(XE3H.LT.XXMIN) then
-    XXMIN=XE3H
-    HHMIN=h
-    endif
-  if(XE3H.gt.NME) goto 3895
+	if(h.lt.HEF) then
+	  h=h+2*deh
+	  deh=deh/10.
+	  if(deh.lt.1.) goto 3885
+	  endif
+   	XE3H=XE3(h)
+	IF(XE3H.LT.XXMIN) then
+	  XXMIN=XE3H
+	  HHMIN=h
+	  endif
+	if(XE3H.gt.NME) goto 3895
       CALL REGFA1(h,HF1,XE3H,XF1,0.001,NME,XE3,SCHALT,HST)
-  STR=HST
-  IF(.not.SCHALT) GOTO 360
-3885  WRITE(KONSOL,100)
+	STR=HST
+	IF(.not.SCHALT) GOTO 360
+3885	WRITE(KONSOL,100)
 100   FORMAT(1X,'*NE* HST IS NOT EVALUATED BY THE FUNCTION XE3')
-  IREGFA=2
-  IF(XXMIN/NME.LT.1.3) GOTO 9244
+	IREGFA=2
+	IF(XXMIN/NME.LT.1.3) GOTO 9244
 c
 c assume linear interpolation between HZ and HEF ..................
 c
@@ -656,36 +656,36 @@ c
 c
 c calculate HZ, D and T ............................................
 c
-360 HZ=(HST+HF1)/2.0
-      D=HZ-HST
-      T=D*D/(HZ-HEF-D)
-  GOTO 4933
+360	HZ=(HST+HF1)/2.0
+    	D=HZ-HST
+    	T=D*D/(HZ-HEF-D)
+	GOTO 4933
 C
 C LAY-functions for middle ionosphere
 C
-6153  HMF1M=165.+0.6428*XHI
-  HHALF = GRAT * HMF2
-  HV1R = HME + WIDTH
-  HV2R = HME + HDEEP
-  HHMF2 = HMF2
-  CALL INILAY(NIGHT,NMF2,NMF1,NME,VNER,HHMF2,HMF1M,HME,
-     &      HV1R,HV2R,HHALF,HXL,SCL,AMP,IIQU)
-  IF(IIQU.EQ.1) WRITE(KONSOL,7733)
-7733  FORMAT('*NE* LAY amplitudes found with 2nd choice of HXL(1).')
-  IF(IIQU.EQ.2) WRITE(KONSOL,7722)
-7722  FORMAT('*NE* LAY amplitudes could not be found.')
+6153	HMF1M=165.+0.6428*XHI
+	HHALF = GRAT * HMF2
+	HV1R = HME + WIDTH
+	HV2R = HME + HDEEP
+	HHMF2 = HMF2
+	CALL INILAY(NIGHT,NMF2,NMF1,NME,VNER,HHMF2,HMF1M,HME,
+     &			HV1R,HV2R,HHALF,HXL,SCL,AMP,IIQU)
+	IF(IIQU.EQ.1) WRITE(KONSOL,7733)
+7733	FORMAT('*NE* LAY amplitudes found with 2nd choice of HXL(1).')
+	IF(IIQU.EQ.2) WRITE(KONSOL,7722)
+7722	FORMAT('*NE* LAY amplitudes could not be found.')
 
 C---------- CALCULATION OF NEUTRAL TEMPERATURE PARAMETER-------
 
 4933  HTA=120.0
       HTE=3000.0
-  IF(NOTEM) GOTO 240
+	IF(NOTEM) GOTO 240
       SEC=UT*3600.
       CALL CIRA86(DAYNR,SEC,LATI,LONGI,HOUR,COV,TEXOS,TN120,SIGMA)
         IF(HOUR.NE.0.0) THEN
       SECNI=(24.-LONGI/15.)*3600.
       CALL CIRA86(DAYNR,SECNI,LATI,LONGI,0.,COV,TEXNI,TN1NI,SIGNI)
-  ELSE
+	ELSE
       TEXNI=TEXOS
       TN1NI=TN120
       SIGNI=SIGMA
@@ -710,7 +710,7 @@ C !!!!!!!!!! TE-MAXIMUM (JICAMARCA,ARECIBO) !!!!!!!!!!!!!!!!!!!!
 
 C !!!!!!!!!! TE(300,400KM)=TE-AE-C !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 C !!!!!!!!!! TE(1400,3000KM)=TE-ISIS !!!!!!!!!!!!!!!!!!!!!!!!!!!
-  DIPLAT=MAGBR
+	DIPLAT=MAGBR
       CALL TEBA(DIPLAT,HOUR,NSESON,TEA)
       ATE(3)=TEA(1)
       ATE(4)=TEA(2)
@@ -727,8 +727,8 @@ C !!!!!!!!!! OPTION TO USE TE-NE-RELATION !!!!!!!!!!!!!!!!!!!!!!
 C !!!!!!!!!! AT 300, 400 OR 600 KM  !!!!!!!!!!!!!!!!!!!!!!!!!!!!
       IF(TENEOP) THEN
         DO 3395 I=1,3
-3395    IF(TCON(I)) ATE(I+2)=TEDE(HOA(I),XNAR(I),-COV)
-  ENDIF
+3395	  IF(TCON(I)) ATE(I+2)=TEDE(HOA(I),XNAR(I),-COV)
+	ENDIF
 C !!!!!!!!!! TE'S ARE CORRECTED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 C !!!!!!!!!! ALSO TE > TN ENFORCED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       TNAHH2=TN(AHH(2),TEXOS,TLBDH,SIGMA)
@@ -767,18 +767,18 @@ C !!!!!!!!!! TI(430KM,NIGHT)=TI-AEROS !!!!!!!!!!!!!!!!!!!!!!!!!
       TIN1=1200.0-300.0*SIGN(1.0,Z3)*SQRT(ABS(Z3))
 C !!!!!!!!!! TN < TI < TE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         TEN1=TEA(5)
-  TNN1=TN(XSM1,TEXNI,TLBDN,SIGNI)
+	TNN1=TN(XSM1,TEXNI,TLBDN,SIGNI)
         IF(TEN1.LT.TNN1) TEN1=TNN1
         IF(TIN1.GT.TEN1) TIN1=TEN1
         IF(TIN1.LT.TNN1) TIN1=TNN1
 
 C !!!!!!!!!! TI(430KM,LT) FROM STEP FUNCTION !!!!!!!!!!!!!!!!!!
-  TI1=TIN1
-  IF(TID1.GT.TIN1) TI1=HPOL(HOUR,TID1,TIN1,SAX,SUX,1.,1.)
+	TI1=TIN1
+ 	IF(TID1.GT.TIN1) TI1=HPOL(HOUR,TID1,TIN1,SAX,SUX,1.,1.)
 
 C !!!!!!!!!! TANGENT ON TN DETERMINES HS !!!!!!!!!!!!!!!!!!!!!!
-  TI13=TEDER(130.)
-  TI50=TEDER(500.)
+	TI13=TEDER(130.)
+	TI50=TEDER(500.)
       CALL REGFA1(130.0,500.0,TI13,TI50,0.01,TI1,TEDER,SCHALT,HS)
       IF(SCHALT) HS=200.
       TNHS=TN(HS,TEXOS,TLBDH,SIGMA)
@@ -823,7 +823,7 @@ C
 240   IF(NOION) GOTO 141
       HNIA=100.
       HNIE=2000.
-  if(DY) goto 141
+	if(DY) goto 141
 C
 C INPUT OF THE ION DENSITY PARAMETER ARRAYS PF1O,PF2O AND PF3O......
 C
@@ -845,9 +845,9 @@ c
 c calculate O+ profile parameters
 c
       IF(ABS(XHI).LE.90.0) THEN
-  ZZZ1=COS(XHI*UMR)
+	ZZZ1=COS(XHI*UMR)
       ELSE
-  ZZZ1=0.0
+	ZZZ1=0.0
       ENDIF
       msumo=4
       RDOMAX=100.0
@@ -858,18 +858,18 @@ c
       HO(2)=290.0
       IF((RIF(2).EQ.2.).AND.(RIF(3).EQ.2.)) HO(2)=237.0
       HO(4)=PF2O(1)
-  ho05=pf2o(4)
+	ho05=pf2o(4)
       MO(4)=PF2O(2)
       MO(5)=PF2O(3)
 c
 c adjust gradient MO(4) of O+ profile segment above F peak
 c
-7100    HO(3)=(ALG100-MO(5)*(HO(4)-ho05))/MO(4)+HO(4)
-        IF(HO(3).LE.HO(2)+20.) THEN
-    MO(4)=MO(4)-0.001
-    GOTO 7100
-    endif
-  hfixo=(ho(2)+ho(3))/2.
+7100   	HO(3)=(ALG100-MO(5)*(HO(4)-ho05))/MO(4)+HO(4)
+      	IF(HO(3).LE.HO(2)+20.) THEN
+		MO(4)=MO(4)-0.001
+ 		GOTO 7100
+		endif
+	hfixo=(ho(2)+ho(3))/2.
 c
 c find height H0O of maximum O+ relative density
 c
@@ -879,54 +879,54 @@ c
 7102  X=X+DELX
       Y=RPID(X,HFIXO,RDOMAX,msumo,MO,DDO,HO)
       IF(Y.LE.YMAXX) then
-  if(delx.le.0.1) GOTO 7104
-  x=x-delx
-  delx=delx/5.
+	if(delx.le.0.1) GOTO 7104
+	x=x-delx
+	delx=delx/5.
       ELSE
-        YMAXX=Y
+      	YMAXX=Y
       ENDIF
       GOTO 7102
 7104  H0O=X-DELX/2.
-7101  if(y.lt.100.0) goto 7103
+7101	if(y.lt.100.0) goto 7103
           rdomax=rdomax-0.01
-  y=rpid(h0o,hfixo,rdomax,msumo,mo,ddo,ho)
-  goto 7101
-7103  yo2h0o=100.-y
-  yoh0o=y
+	y=rpid(h0o,hfixo,rdomax,msumo,mo,ddo,ho)
+	goto 7101
+7103	yo2h0o=100.-y
+	yoh0o=y
 c
 c calculate parameters for O2+ profile
 c
-  hfixo2  = pf3o(1)
-  rdo2mx = pf3o(2)
+	hfixo2  = pf3o(1)
+	rdo2mx = pf3o(2)
       DO 7105 L=1,2
-    I = L * 2
-          HO2(L)=PF3O(1+I)+PF3O(2+I)*ZZZ1
-7105      MO2(L+1)=PF3O(7+I)+PF3O(8+I)*ZZZ1
+		I = L * 2
+      		HO2(L)=PF3O(1+I)+PF3O(2+I)*ZZZ1
+7105  		MO2(L+1)=PF3O(7+I)+PF3O(8+I)*ZZZ1
       MO2(1)=PF3O(7)+PF3O(8)*ZZZ1
-  if(hfixo2.gt.ho2(1)) then
-     ymo2z=mo2(2)
-  else
-     ymo2z=mo2(1)
-  endif
-  aldo21=alog(rdo2mx)+ymo2z*(ho2(1)-hfixo2)
-  hfixo2=(ho2(2)+ho2(1))/2.
-  rdo2mx=exp(aldo21+mo2(2)*(hfixo2-ho2(1)))
+	if(hfixo2.gt.ho2(1)) then
+	   ymo2z=mo2(2)
+	else
+	   ymo2z=mo2(1)
+	endif
+	aldo21=alog(rdo2mx)+ymo2z*(ho2(1)-hfixo2)
+	hfixo2=(ho2(2)+ho2(1))/2.
+	rdo2mx=exp(aldo21+mo2(2)*(hfixo2-ho2(1)))
 c
 c make sure that rd(O2+) is less or equal 100-rd(O+) at O+ maximum
 c
 7106  Y=RPID(H0O,hfixo2,rdo2mx,2,MO2,DO2,HO2)
       IF(Y.GT.yo2h0o) then
-        MO2(3)=MO2(3)-0.02
-        GOTO 7106
-  endif
+      	MO2(3)=MO2(3)-0.02
+      	GOTO 7106
+	endif
 c
 C use ratio of NO+ to O2+ density at O+ maximum to calculate
 c NO+ density above the O+ maximum (H0O)
 c
       IF(y.LT.1.) then
-  NOBO2=0.0
+	NOBO2=0.0
       ELSE
-  NOBO2= (yo2h0o-y)/y
+	NOBO2= (yo2h0o-y)/y
       ENDIF
 C
 C CALCULATION FOR THE REQUIRED HEIGHT RANGE.......................
@@ -941,27 +941,27 @@ C
       height=zkm(kk)
 300   IF(NODEN) GOTO 330
       IF((HEIGHT.GT.HNEE).OR.(HEIGHT.LT.HNEA)) GOTO 330
-  IF(LAYVER) THEN
-    ELEDE=-9.
-    IF(IIQU.LT.2) ELEDE=XEN(HEIGHT,HMF2,NMF2,HME,4,HXL,SCL,AMP)
-  ELSE
-    ELEDE=XE(HEIGHT)
-  ENDIF
-        OUTF(1,KK)=ELEDE
+	IF(LAYVER) THEN
+	  ELEDE=-9.
+	  IF(IIQU.LT.2) ELEDE=XEN(HEIGHT,HMF2,NMF2,HME,4,HXL,SCL,AMP)
+	ELSE
+	  ELEDE=XE(HEIGHT)
+	ENDIF
+      	OUTF(1,KK)=ELEDE
 330   IF(NOTEM) GOTO 7108
       IF((HEIGHT.GT.HTE).OR.(HEIGHT.LT.HTA)) GOTO 7108
-        TNH=TN(HEIGHT,TEXOS,TLBDH,SIGMA)
-        TIH=TNH
-        IF(HEIGHT.GE.HS) TIH=TI(HEIGHT)
-        TEH=ELTE(HEIGHT)
-  IF(TIH.LT.TNH) TIH=TNH
-  IF(TEH.LT.TIH) TEH=TIH
-        OUTF(2,KK)=TNH
-        OUTF(3,KK)=TIH
-        OUTF(4,KK)=TEH
+      	TNH=TN(HEIGHT,TEXOS,TLBDH,SIGMA)
+      	TIH=TNH
+      	IF(HEIGHT.GE.HS) TIH=TI(HEIGHT)
+      	TEH=ELTE(HEIGHT)
+	IF(TIH.LT.TNH) TIH=TNH
+	IF(TEH.LT.TIH) TEH=TIH
+      	OUTF(2,KK)=TNH
+      	OUTF(3,KK)=TIH
+      	OUTF(4,KK)=TEH
 7108  IF(NOION) GOTO 7118
       IF((HEIGHT.GT.HNIE).OR.(HEIGHT.LT.HNIA)) GOTO 7118
-  if(DY) then
+	if(DY) then
       zmonth = month + iday / 30.0
       call IONCOM(HEIGHT,XHI*UMR,LATI*UMR,COV,ZMONTH,DION)
       ROX=DION(1)
@@ -971,14 +971,14 @@ C
       RNOX=DION(5)
       RO2X=DION(6)
       RCLUST=DION(7)
-  else
+	else
       ROX=RPID(HEIGHT,HFIXO,RDOMAX,msumo,MO,DDO,HO)
       RO2X=RPID(HEIGHT,HFIXO2,rdo2mx,2,MO2,DO2,HO2)
       CALL RDHHE(HEIGHT,H0O,ROX,RO2X,NOBO2,10.,RHX,RHEX)
       RNOX=RDNO(HEIGHT,H0O,RO2X,ROX,NOBO2)
       RNX=-1.
       RCLUST=-1.
-  endif
+	endif
       OUTF(5,KK)=ROX
       OUTF(6,KK)=RHX
       OUTF(7,KK)=RHEX
@@ -1059,35 +1059,35 @@ C IRIF12.FOR ------------------------------------- OCTOBER 1991
 C**************************************************************
 c changes from IRIFU9 to IRIF10:
 c       SOCO for solar zenith angle
-c ACOS and ASIN argument forced to be within -1 / +1
-c EPSTEIN functions corrected for large arguments
+c	ACOS and ASIN argument forced to be within -1 / +1
+c	EPSTEIN functions corrected for large arguments
 C**************************************************************
 c changes from IRIF10 to IRIF11:
-c LAY subroutines introduced
+c	LAY subroutines introduced
 c       TEBA corrected for 1400 km
 C**************************************************************
 c changes from IRIF11 to IRIF12:
 C       Neutral temperature subroutines now in CIRA86.FOR
 C       TEDER changed
 C       All names with 6 or more characters replaced
-C 10/29/91 XEN: 10^ in loop, instead of at the end
+C	10/29/91 XEN: 10^ in loop, instead of at the end
 C
 C**************************************************************
 C********** INTERNATIONAL REFERENCE IONOSPHERE ****************
 C**************************************************************
 C****************  FUNCTIONS,SUBROUTINES  *********************
 C**************************************************************
-C** NE:   XE1,DXE1N,XE2,XE3,XE4,XE5,XE6,XE
-C** TE/TI:  TEBA,SPHARM,ELTE,TEDE,TI,TEDER
-C** NI:   RPID,RDHHE,RDNO,KOEFP1,KOEFP2,KOEFP3,SUFE
-C** PEAKS:  F2OUT,HMF2ED,FOF1ED,FOEEDI,XMDED,GAMMA1
+C** NE: 	XE1,DXE1N,XE2,XE3,XE4,XE5,XE6,XE
+C** TE/TI: 	TEBA,SPHARM,ELTE,TEDE,TI,TEDER
+C** NI:		RPID,RDHHE,RDNO,KOEFP1,KOEFP2,KOEFP3,SUFE
+C** PEAKS:	F2OUT,HMF2ED,FOF1ED,FOEEDI,XMDED,GAMMA1
 C** MAG. FIELD: GGM,FIELDG
-C** FUNCTIONS:  REGFA1,TAL
-C** TIME: SOCO,HPOL,MODA
-C** INTERPOL.:  B0POL
-C** EPSTEIN:  RLAY,D1LAY,D2LAY,EPTR,EPST,EPSTEP,EPLA
-C** LAY:  XE2TO5,XEN,ROGUL,VALGUL,LNGLSN,LSKNM,INILAY
-C** NI-new: IONCOM, RPDA
+C** FUNCTIONS: 	REGFA1,TAL
+C** TIME:	SOCO,HPOL,MODA
+C** INTERPOL.:	B0POL
+C** EPSTEIN:	RLAY,D1LAY,D2LAY,EPTR,EPST,EPSTEP,EPLA
+C** LAY:	XE2TO5,XEN,ROGUL,VALGUL,LNGLSN,LSKNM,INILAY
+C** NI-new:	IONCOM, RPDA
 C**************************************************************
 C
 C**************************************************************
@@ -1114,21 +1114,21 @@ C GEOM. LATITUDE, SMOOTHED SOLAR FLUX AND CRITICAL FREQUENCY
 C (SEE MAIN PROGRAM).
 C [REF.:K.RAWER,S.RAMAKRISHNAN,1978]
 c----------------------------------------------------------------
-      COMMON  /BLOCK1/  HMF2,XNMF2,HMF1
-     &    /BLO10/   BETA,ETA,DELTA,ZETA
-     &    /ARGEXP/  ARGMAX
+      COMMON	/BLOCK1/	HMF2,XNMF2,HMF1
+     &		/BLO10/		BETA,ETA,DELTA,ZETA
+     &		/ARGEXP/	ARGMAX
 
       DXDH = (1000.-HMF2)/700.
-  x0 = 300. - delta
+	x0 = 300. - delta
       xmx0 = (H-HMF2)/DXDH
          x = xmx0 + x0
-  eptr1 = eptr(x,beta,394.5) - eptr(x0,beta,394.5)
-  eptr2 = eptr(x,100.,300.0) - eptr(x0,100.,300.0)
+	eptr1 = eptr(x,beta,394.5) - eptr(x0,beta,394.5)
+	eptr2 = eptr(x,100.,300.0) - eptr(x0,100.,300.0)
 
       y = BETA * ETA * eptr1 + ZETA * (100. * eptr2 - xmx0)
 
-  Y = y * dxdh
-  if(abs(Y).gt.argmax) Y = sign(argmax,Y)
+ 	Y = y * dxdh
+	if(abs(Y).gt.argmax) Y = sign(argmax,Y)
       XE1 = XNMF2 * EXP(-Y)
       RETURN
       END
@@ -1136,13 +1136,13 @@ C
 C
       FUNCTION DXE1N(H)
 C LOGARITHMIC DERIVATIVE OF FUNCTION XE1 (KM-1).
-      COMMON  /BLOCK1/  HMF2,XNMF2,HMF1
-     &    /BLO10/   BETA,ETA,DELTA,ZETA
+      COMMON	/BLOCK1/	HMF2,XNMF2,HMF1
+     &		/BLO10/		BETA,ETA,DELTA,ZETA
 
-  x0 = 300. - delta
+	x0 = 300. - delta
       X=(H-HMF2)/(1000.0-HMF2)*700.0 + x0
-  epst2 = epst(x,100.0,300.0)
-  epst1 = epst(x,beta ,394.5)
+	epst2 = epst(x,100.0,300.0)
+	epst1 = epst(x,beta ,394.5)
       DXE1N = - ETA * epst1 + ZETA * (1. - epst2)
       RETURN
       END
@@ -1150,11 +1150,11 @@ C
 C
       REAL FUNCTION XE2(H)
 C ELECTRON DENSITY FOR THE BOTTOMSIDE F-REGION (HMF1...HMF2).
-      COMMON  /BLOCK1/HMF2,XNMF2,HMF1
-     &    /BLOCK2/B0,B1,C1  /ARGEXP/ARGMAX
+      COMMON	/BLOCK1/HMF2,XNMF2,HMF1
+     &		/BLOCK2/B0,B1,C1	/ARGEXP/ARGMAX
       X=(HMF2-H)/B0
-  z=x**b1
-  if(z.gt.argmax) z=argmax
+	z=x**b1
+	if(z.gt.argmax) z=argmax
       XE2=XNMF2*EXP(-z)/COSH(X)
       RETURN
       END
@@ -1162,8 +1162,8 @@ C
 C
       REAL FUNCTION XE3(H)
 C ELECTRON DENSITY FOR THE F1-LAYER (HZ.....HMF1).
-      COMMON  /BLOCK1/  HMF2,XNMF2,HMF1
-     &    /BLOCK2/  B0,B1,C1
+      COMMON	/BLOCK1/	HMF2,XNMF2,HMF1
+     &		/BLOCK2/	B0,B1,C1
       XE3=XE2(H)+XNMF2*C1*SQRT(ABS(HMF1-H)/B0)
       RETURN
       END
@@ -1171,8 +1171,8 @@ C
 C
       REAL FUNCTION XE4(H)
 C ELECTRON DENSITY FOR THE INDERMEDIUM REGION (HEF..HZ).
-      COMMON  /BLOCK3/  HZ,T,HST,STR
-     &    /BLOCK4/  HME,XNME,HEF
+      COMMON	/BLOCK3/	HZ,T,HST,STR
+     &		/BLOCK4/	HME,XNME,HEF
       IF(HST.LT.0.) GOTO 100
       XE4=XE3(HZ+T/2.0-SIGN(1.0,T)*SQRT(T*(HZ-H+T/4.0)))
       RETURN
@@ -1184,8 +1184,8 @@ C
       REAL FUNCTION XE5(H)
 C ELECTRON DENSITY FOR THE E AND VALLEY REGION (HME..HEF).
       LOGICAL NIGHT
-      COMMON  /BLOCK4/  HME,XNME,HEF
-     &    /BLOCK5/  NIGHT,E(4)
+      COMMON	/BLOCK4/	HME,XNME,HEF
+     &  	/BLOCK5/	NIGHT,E(4)
       T3=H-HME
       T1=T3*T3*(E(1)+T3*(E(2)+T3*(E(3)+T3*E(4))))
       IF(NIGHT) GOTO 100
@@ -1198,9 +1198,9 @@ C
 C
       REAL FUNCTION XE6(H)
 C ELECTRON DENSITY FOR THE D REGION (HA...HME).
-      COMMON  /BLOCK4/  HME,XNME,HEF
-     &    /BLOCK6/  HMD,XNMD,HDX
-     &    /BLOCK7/  D1,XKK,FP30,FP3U,FP1,FP2
+      COMMON	/BLOCK4/	HME,XNME,HEF
+     &		/BLOCK6/	HMD,XNMD,HDX
+     &		/BLOCK7/	D1,XKK,FP30,FP3U,FP1,FP2
       IF(H.GT.HDX) GOTO 100
       Z=H-HMD
       FP3=FP3U
@@ -1216,9 +1216,9 @@ C
       REAL FUNCTION XE(H)
 C ELECTRON DENSITY BEETWEEN HA(KM) AND 1000 KM
 C SUMMARIZING PROCEDURES  NE1....6;
-      COMMON  /BLOCK1/HMF2,XNMF2,HMF1
-     &    /BLOCK3/HZ,T,HST,STR
-     &    /BLOCK4/HME,XNME,HEF
+      COMMON	/BLOCK1/HMF2,XNMF2,HMF1
+     &		/BLOCK3/HZ,T,HST,STR
+     &  	/BLOCK4/HME,XNME,HEF
       IF(H.LT.HMF2) GOTO 100
       XE=XE1(H)
       RETURN
@@ -1358,36 +1358,36 @@ C MIDNIGHT (TE(5)) AND NOON (TE(6)).
      &-.4645E-3,-.2481E-3,-.2251E-1,-.29E-2,-.3977E-3,-.516E-3,
      &-.8079E-2,-.1528E-2,.306E-3,-.1582E-1,-.8536E-3,.1565E-3,
      &-.1252E-1,.2319E-3,.4311E-2,.1024E-2,.1296E-5,.179E-1/
-  IF(NS.LT.3) THEN
-     IS=NS
-  ELSE IF(NS.GT.3) THEN
-     IS=2
-     DIPL=-DIPL
-  ELSE
-     IS=1
-  ENDIF
+	IF(NS.LT.3) THEN
+	   IS=NS
+	ELSE IF(NS.GT.3) THEN
+	   IS=2
+	   DIPL=-DIPL
+	ELSE
+	   IS=1
+	ENDIF
       COLAT=UMR*(90.-DIPL)
       AZ=.2618*SLT
       CALL SPHARM(A,8,8,COLAT,AZ)
-  IF(IS.EQ.2) THEN
-     KEND=3
-  ELSE
-     KEND=4
-  ENDIF
+	IF(IS.EQ.2) THEN
+	   KEND=3
+	ELSE
+	   KEND=4
+	ENDIF
       DO 2 K=1,KEND
       STE=0.
       DO 1 I=1,81
 1       STE=STE+A(I)*C(K,IS,I)
 2     TE(K)=10.**STE
-  IF(IS.EQ.2) THEN
-     DIPL=-DIPL
-     COLAT=UMR*(90.-DIPL)
+	IF(IS.EQ.2) THEN
+	   DIPL=-DIPL
+	   COLAT=UMR*(90.-DIPL)
            CALL SPHARM(A,8,8,COLAT,AZ)
            STE=0.
            DO 11 I=1,81
 11            STE=STE+A(I)*C(4,2,I)
            TE(4)=10.**STE
-      ENDIF
+    	ENDIF
 
 C---------- TEMPERATURE AT 400KM AT MIDNIGHT AND NOON
       DO 4 J=1,2
@@ -1446,8 +1446,8 @@ c----------------------------------------------------------------
 C
       SUM=ATE1+ST(1)*(H-AH(1))
       DO 1 I=1,5
-  aa = eptr(h    ,d(i),ah(i+1))
-  bb = eptr(ah(1),d(i),ah(i+1))
+	aa = eptr(h    ,d(i),ah(i+1))
+	bb = eptr(ah(1),d(i),ah(i+1))
 1     SUM=SUM+(ST(I+1)-ST(I))*(AA-BB)*D(I)
       ELTE=SUM
       RETURN
@@ -1479,14 +1479,14 @@ c----------------------------------------------------------------
 C ION TEMPERATURE FOR HEIGHTS NOT GREATER 1000 KM AND NOT LESS HS
 C EXPLANATION SEE FUNCTION RPID.
 c----------------------------------------------------------------
-      REAL    MM
+      REAL 		MM
       COMMON  /BLOCK8/  HS,TNHS,XSM(4),MM(5),G(4),M
 
       SUM=MM(1)*(H-HS)+TNHS
       DO 100 I=1,M-1
-  aa = eptr(h ,g(i),xsm(i))
-  bb = eptr(hs,g(i),xsm(i))
-100     SUM=SUM+(MM(I+1)-MM(I))*(AA-BB)*G(I)
+	aa = eptr(h ,g(i),xsm(i))
+	bb = eptr(hs,g(i),xsm(i))
+100   	SUM=SUM+(MM(I+1)-MM(I))*(AA-BB)*G(I)
       TI=SUM
       RETURN
       END
@@ -1495,7 +1495,7 @@ C
       REAL FUNCTION TEDER(H)
 C THIS FUNCTION ALONG WITH PROCEDURE REGFA1 ALLOWS TO FIND
 C THE  HEIGHT ABOVE WHICH TN BEGINS TO BE DIFFERENT FROM TI
-      COMMON  /BLOTN/XSM1,TEX,TLBD,SIG
+      COMMON	/BLOTN/XSM1,TEX,TLBD,SIG
       TNH = TN(H,TEX,TLBD,SIG)
       DTDX = DTNDH(H,TEX,TLBD,SIG)
       TEDER = DTDX * ( XSM1 - H ) + TNH
@@ -1517,22 +1517,22 @@ C STEP-FUNCTIONS AT THE STEP HEIGHTS XS(M) WITH TRANSITION
 C THICKNESSES ID(M). RPID(H0,H0,N0,....)=N0.
 C ARGMAX is the highest allowed argument for EXP in your system.
 c------------------------------------------------------------------
-      REAL    N0
-      DIMENSION   ID(*), ST(*), XS(*)
-      COMMON  /ARGEXP/  ARGMAX
+      REAL 		N0
+      DIMENSION 	ID(*), ST(*), XS(*)
+      COMMON  /ARGEXP/	ARGMAX
 
       SUM=(H-H0)*ST(1)
       DO 100  I=1,M
-        XI=ID(I)
-    aa = eptr(h ,xi,xs(i))
-    bb = eptr(h0,xi,xs(i))
-100       SUM=SUM+(ST(I+1)-ST(I))*(AA-BB)*XI
+	      XI=ID(I)
+		aa = eptr(h ,xi,xs(i))
+		bb = eptr(h0,xi,xs(i))
+100	      SUM=SUM+(ST(I+1)-ST(I))*(AA-BB)*XI
       IF(ABS(SUM).LT.ARGMAX) then
-  SM=EXP(SUM)
+	SM=EXP(SUM)
       else IF(SUM.Gt.0.0) then
-  SM=EXP(ARGMAX)
+	SM=EXP(ARGMAX)
       else
-  SM=0.0
+	SM=0.0
       endif
       RPID= n0 * SM
       RETURN
@@ -1696,30 +1696,30 @@ C
       REAL FUNCTION FOF1ED(YLATI,R,CHI)
 c--------------------------------------------------------------
 C CALCULATES THE F1 PEAK PLASMA FREQUENCY (FOF1/MHZ)
-C FOR   DIP-LATITUDE (YLATI/DEGREE)
-c SMOOTHED ZURICH SUNSPOT NUMBER (R)
-c SOLAR ZENITH ANGLE (CHI/DEGREE)
+C FOR 	DIP-LATITUDE (YLATI/DEGREE)
+c	SMOOTHED ZURICH SUNSPOT NUMBER (R)
+c	SOLAR ZENITH ANGLE (CHI/DEGREE)
 C REFERENCE:
-c E.D.DUCHARME ET AL., RADIO SCIENCE 6, 369-378, 1971
-C                AND 8, 837-839, 1973
-c HOWEVER WITH MAGNETIC DIP LATITUDE INSTEAD OF GEOMAGNETIC
-c DIPOLE LATITUDE, EYFRIG, 1979
+c	E.D.DUCHARME ET AL., RADIO SCIENCE 6, 369-378, 1971
+C 				       AND 8, 837-839, 1973
+c	HOWEVER WITH MAGNETIC DIP LATITUDE INSTEAD OF GEOMAGNETIC
+c	DIPOLE LATITUDE, EYFRIG, 1979
 C--------------------------------------------- D. BILITZA, 1988.
-  COMMON/CONST/UMR
-  FOF1 = 0.0
-  DLA =  YLATI
-    CHI0 = 49.84733 + 0.349504 * DLA
-    CHI100 = 38.96113 + 0.509932 * DLA
-    CHIM = ( CHI0 + ( CHI100 - CHI0 ) * R / 100. )
-    IF(CHI.GT.CHIM) GOTO 1
-    F0 = 4.35 + DLA * ( 0.0058 - 1.2E-4 * DLA )
-  F100 = 5.348 + DLA * ( 0.011 - 2.3E-4 * DLA )
-  FS = F0 + ( F100 - F0 ) * R / 100.0
-  XMUE = 0.093 + DLA * ( 0.0046 - 5.4E-5 * DLA ) + 3.0E-4 * R
-  FOF1 = FS * COS( CHI * UMR ) ** XMUE
-1 FOF1ED = FOF1
-  RETURN
-  END
+	COMMON/CONST/UMR
+	FOF1 = 0.0
+	DLA =  YLATI
+		CHI0 = 49.84733 + 0.349504 * DLA
+		CHI100 = 38.96113 + 0.509932 * DLA
+		CHIM = ( CHI0 + ( CHI100 - CHI0 ) * R / 100. )
+		IF(CHI.GT.CHIM) GOTO 1
+  	F0 = 4.35 + DLA * ( 0.0058 - 1.2E-4 * DLA )
+	F100 = 5.348 + DLA * ( 0.011 - 2.3E-4 * DLA )
+	FS = F0 + ( F100 - F0 ) * R / 100.0
+	XMUE = 0.093 + DLA * ( 0.0046 - 5.4E-5 * DLA ) + 3.0E-4 * R
+	FOF1 = FS * COS( CHI * UMR ) ** XMUE
+1	FOF1ED = FOF1
+	RETURN
+	END
 C
 C
       REAL FUNCTION FOEEDI(COV,XHI,XHIM,XLATI)
@@ -1729,30 +1729,30 @@ C INPUT: MEAN 10.7CM SOLAR RADIO FLUX (COV), GEOGRAPHIC
 C LATITUDE (XLATI/DEG), SOLAR ZENITH ANGLE (XHI/DEG AND
 C XHIM/DEG AT NOON).
 C REFERENCE:
-C   KOURIS-MUGGELETON, CCIR DOC. 6/3/07, 1973
-C   TROST, J. GEOPHYS. RES. 84, 2736, 1979 (was used
-C   to improve the nighttime varition)
+C 	KOURIS-MUGGELETON, CCIR DOC. 6/3/07, 1973
+C 	TROST, J. GEOPHYS. RES. 84, 2736, 1979 (was used
+C		to improve the nighttime varition)
 C D.BILITZA--------------------------------- AUGUST 1986.
       COMMON/CONST/UMR
 C variation with solar activity (factor A) ...............
       A=1.0+0.0094*(COV-66.0)
 C variation with noon solar zenith angle (B) and with latitude (C)
       SL=COS(XLATI*UMR)
-  IF(XLATI.LT.32.0) THEN
-    SM=-1.93+1.92*SL
-    C=23.0+116.0*SL
-  ELSE
-    SM=0.11-0.49*SL
-    C=92.0+35.0*SL
-    ENDIF
-  if(XHIM.ge.90.) XHIM=89.999
-  B = COS(XHIM*UMR) ** SM
+	IF(XLATI.LT.32.0) THEN
+		SM=-1.93+1.92*SL
+		C=23.0+116.0*SL
+ 	ELSE
+	 	SM=0.11-0.49*SL
+	 	C=92.0+35.0*SL
+  	ENDIF
+	if(XHIM.ge.90.) XHIM=89.999
+	B = COS(XHIM*UMR) ** SM
 C variation with solar zenith angle (D) ..........................
-  IF(XLATI.GT.12.0) THEN
-    SP=1.2
-  ELSE
-    SP=1.31
-  ENDIF
+ 	IF(XLATI.GT.12.0) THEN
+		SP=1.2
+	ELSE
+		SP=1.31
+	ENDIF
 C adjusted solar zenith angle during nighttime (XHIC) .............
       XHIC=XHI-3.*ALOG(1.+EXP((XHI-89.98)/3.))
       D=COS(XHIC*UMR)**SP
@@ -1776,7 +1776,7 @@ C       BOULDER,1981]
       COMMON/CONST/UMR
       Y=6.05E8+0.088E8*R
       Z=(-0.1/(ALOG(YW/Y)))**0.3704
-  if(abs(z).gt.1.) z=sign(1.,z)
+	if(abs(z).gt.1.) z=sign(1.,z)
       SUXHI=ACOS(Z)
       IF (SUXHI.LT.1.0472) SUXHI=1.0472
       XXHI=XHI*UMR
@@ -1790,7 +1790,7 @@ C       BOULDER,1981]
 C
 C
       REAL FUNCTION GAMMA1(SMODIP,SLAT,SLONG,HOUR,IHARM,NQ,
-     &        K1,M,MM,M3,SFE)
+     &  			K1,M,MM,M3,SFE)
 C CALCULATES GAMMA1=FOF2 OR M3000 USING CCIR NUMERICAL MAP
 C COEFFICIENTS SFE(M3) FOR MODIFIED DIP LATITUDE (SMODIP/DEG)
 C GEOGRAPHIC LATITUDE (SLAT/DEG) AND LONGITUDE (SLONG/DEG)
@@ -2003,13 +2003,13 @@ C SHEIK,1977.
       Y=Y*CP-X*SP
       X=Z*ST-BRH0*CT
       Z=-Z*CT-BRH0*ST
-  zdivf=z/f
+	zdivf=z/f
         IF(ABS(zdivf).GT.1.) zdivf=SIGN(1.,zdivf)
       DIP=ASIN(zdivf)
-  ydivs=y/sqrt(x*x+y*y)
+	ydivs=y/sqrt(x*x+y*y)
         IF(ABS(ydivs).GT.1.) ydivs=SIGN(1.,ydivs)
       DEC=ASIN(ydivs)
-  dipdiv=DIP/SQRT(DIP*DIP+ST)
+	dipdiv=DIP/SQRT(DIP*DIP+ST)
         IF(ABS(dipdiv).GT.1.) dipdiv=SIGN(1.,dipdiv)
       SMODIP=ASIN(dipdiv)
       DIP=DIP/UMR
@@ -2040,29 +2040,29 @@ C THEN SCHALT=.TRUE.
       NG=2
       LFD=0
       IF(F1*F2.LE.0.0) GOTO 200
-    X=0.0
-      SCHALT=.TRUE.
-        RETURN
+   	X=0.0
+    	SCHALT=.TRUE.
+      	RETURN
 200   X=(X1*F2-X2*F1)/(F2-F1)
       GOTO 400
-300     L1=LINKS
-  DX=(X2-X1)/NG
-      IF(.NOT.LINKS) DX=DX*(NG-1)
-      X=X1+DX
+300   	L1=LINKS
+	DX=(X2-X1)/NG
+     	IF(.NOT.LINKS) DX=DX*(NG-1)
+     	X=X1+DX
 400   FX=F(X)-FW
       LFD=LFD+1
       IF(LFD.GT.20) THEN
-  EP=EP*10.
-  LFD=0
+	EP=EP*10.
+	LFD=0
       ENDIF
       LINKS=(F1*FX.GT.0.0)
       K=.NOT.K
       IF(LINKS) THEN
-  X1=X
-  F1=FX
+	X1=X
+ 	F1=FX
       ELSE
-  X2=X
-  F2=FX
+	X2=X
+	F2=FX
       ENDIF
       IF(ABS(X2-X1).LE.EP) GOTO 800
       IF(K) GOTO 300
@@ -2121,90 +2121,90 @@ C********** ZENITH ANGLE, DAY OF YEAR, TIME ***********************
 C******************************************************************
 C
 C
-  subroutine soco (ld,t,flat,Elon,
-     &    DECLIN, ZENITH, SUNRSE, SUNSET)
+	subroutine soco (ld,t,flat,Elon,
+     &		DECLIN, ZENITH, SUNRSE, SUNSET)
 c--------------------------------------------------------------------
-c s/r to calculate the solar declination, zenith angle, and
-c sunrise & sunset times  - based on Newbern Smith's algorithm
-c [leo mcnamara, 1-sep-86, last modified 16-jun-87]
-c {dieter bilitza, 30-oct-89, modified for IRI application}
+c	s/r to calculate the solar declination, zenith angle, and
+c	sunrise & sunset times  - based on Newbern Smith's algorithm
+c	[leo mcnamara, 1-sep-86, last modified 16-jun-87]
+c	{dieter bilitza, 30-oct-89, modified for IRI application}
 c
-c in: ld  local day of year
-c t local hour (decimal)
-c flat  northern latitude in degrees
-c elon  east longitude in degrees
+c in:	ld	local day of year
+c	t	local hour (decimal)
+c	flat	northern latitude in degrees
+c	elon	east longitude in degrees
 c
-c out:  declin      declination of the sun in degrees
-c zenith      zenith angle of the sun in degrees
-c sunrse      local time of sunrise in hours
-c sunset      local time of sunset in hours
+c out:	declin      declination of the sun in degrees
+c	zenith	    zenith angle of the sun in degrees
+c	sunrse	    local time of sunrise in hours
+c	sunset	    local time of sunset in hours
 c-------------------------------------------------------------------
 c
-  common/const/ dtr
+	common/const/	dtr
 c amplitudes of Fourier coefficients  --  1955 epoch.................
-  data    p1,p2,p3,p4,p6 /
-     &  0.017203534,0.034407068,0.051610602,0.068814136,0.103221204 /
+	data  	p1,p2,p3,p4,p6 /
+     & 	0.017203534,0.034407068,0.051610602,0.068814136,0.103221204 /
 c
 c s/r is formulated in terms of WEST longitude.......................
-  wlon = 360. - Elon
+	wlon = 360. - Elon
 c
 c time of equinox for 1980...........................................
-  td = ld + (t + Wlon/15.) / 24.
-  te = td + 0.9369
+	td = ld + (t + Wlon/15.) / 24.
+	te = td + 0.9369
 c
 c declination of the sun..............................................
-  dcl = 23.256 * sin(p1*(te-82.242)) + 0.381 * sin(p2*(te-44.855))
+	dcl = 23.256 * sin(p1*(te-82.242)) + 0.381 * sin(p2*(te-44.855))
      &      + 0.167 * sin(p3*(te-23.355)) - 0.013 * sin(p4*(te+11.97))
      &      + 0.011 * sin(p6*(te-10.41)) + 0.339137
-  DECLIN = dcl
-  dc = dcl * dtr
+	DECLIN = dcl
+	dc = dcl * dtr
 c
 c the equation of time................................................
-  tf = te - 0.5
-  eqt = -7.38*sin(p1*(tf-4.)) - 9.87*sin(p2*(tf+9.))
+	tf = te - 0.5
+	eqt = -7.38*sin(p1*(tf-4.)) - 9.87*sin(p2*(tf+9.))
      &      + 0.27*sin(p3*(tf-53.)) - 0.2*cos(p4*(tf-17.))
-  et = eqt * dtr / 4.
+	et = eqt * dtr / 4.
 c
-  fa = flat * dtr
-  phi = 0.26179939 * ( t - 12.) + et
+	fa = flat * dtr
+	phi = 0.26179939 * ( t - 12.) + et
 c
-  a = sin(fa) * sin(dc)
-  b = cos(fa) * cos(dc)
-  cosx = a + b * cos(phi)
-  if(abs(cosx).gt.1.) cosx=sign(1.,cosx)
-  zenith = acos(cosx) / dtr
+	a = sin(fa) * sin(dc)
+	b = cos(fa) * cos(dc)
+	cosx = a + b * cos(phi)
+	if(abs(cosx).gt.1.) cosx=sign(1.,cosx)
+	zenith = acos(cosx) / dtr
 c
 c calculate sunrise and sunset times --  at the ground...........
 c see Explanatory Supplement to the Ephemeris (1961) pg 401......
 c sunrise at height h metres is at...............................
-c chi(h) = 90.83 + 0.0347 * sqrt(h)........................
+c	chi(h) = 90.83 + 0.0347 * sqrt(h)........................
 c this includes corrections for horizontal refraction and........
 c semi-diameter of the solar disk................................
-  ch = cos(90.83 * dtr)
-  cosphi = (ch -a ) / b
+	ch = cos(90.83 * dtr)
+	cosphi = (ch -a ) / b
 c if abs(secphi) > 1., sun does not rise/set.....................
 c allow for sun never setting - high latitude summer.............
-  secphi = 999999.
-  if(cosphi.ne.0.) secphi = 1./cosphi
-  sunset = 99.
-  sunrse = 99.
-  if(secphi.gt.-1.0.and.secphi.le.0.) return
+	secphi = 999999.
+	if(cosphi.ne.0.) secphi = 1./cosphi
+	sunset = 99.
+	sunrse = 99.
+	if(secphi.gt.-1.0.and.secphi.le.0.) return
 c allow for sun never rising - high latitude winter..............
-  sunset = -99.
-  sunrse = -99.
-  if(secphi.gt.0.0.and.secphi.lt.1.) return
+	sunset = -99.
+	sunrse = -99.
+	if(secphi.gt.0.0.and.secphi.lt.1.) return
 c
-  if(cosphi.gt.1.) cosphi=sign(1.,cosphi)
-  phi = acos(cosphi)
-  et = et / 0.26179939
-  phi = phi / 0.26179939
-  sunrse = 12. - phi - et
-  sunset = 12. + phi - et
-  if(sunrse.lt.0.) sunrse = sunrse + 24.
-  if(sunset.ge.24.) sunset = sunset - 24.
+	if(cosphi.gt.1.) cosphi=sign(1.,cosphi)
+	phi = acos(cosphi)
+	et = et / 0.26179939
+	phi = phi / 0.26179939
+	sunrse = 12. - phi - et
+	sunset = 12. + phi - et
+	if(sunrse.lt.0.) sunrse = sunrse + 24.
+	if(sunset.ge.24.) sunset = sunset - 24.
 c
-  return
-  end
+	return
+	end
 c
 C
       FUNCTION HPOL(HOUR,TW,XNW,SA,SU,DSA,DSU)
@@ -2216,45 +2216,45 @@ C TW,NW ARE THE DAY AND NIGHT VALUE OF THE PARAMETER TO
 C BE INTERPOLATED. SA AND SU ARE TIME OF SUNRIES AND
 C SUNSET IN DECIMAL HOURS.
 C BILITZA----------------------------------------- 1979.
-  IF(ABS(SU).GT.25.) THEN
-    IF(SU.GT.0.0) THEN
-      HPOL=TW
-    ELSE
-      HPOL=XNW
-    ENDIF
-    RETURN
-  ENDIF
+	IF(ABS(SU).GT.25.) THEN
+		IF(SU.GT.0.0) THEN
+			HPOL=TW
+		ELSE
+			HPOL=XNW
+		ENDIF
+		RETURN
+	ENDIF
       HPOL=XNW+(TW-XNW)*EPST(HOUR,DSA,SA)+
-     &  (XNW-TW)*EPST(HOUR,DSU,SU)
+     &	(XNW-TW)*EPST(HOUR,DSU,SU)
       RETURN
       END
 C
 C
-  SUBROUTINE MODA(IN,MONTH,IDAY,IDOY)
+	SUBROUTINE MODA(IN,MONTH,IDAY,IDOY)
 C-------------------------------------------------------------------
 C CALCULATES DAY OF YEAR (IDOY) FROM MONTH (MONTH) AND DAY (IDAY)
 C IF IN=0, OR MONTH (MONTH) AND DAY (IDAY) FROM DAY OF
 C YEAR (IDOY), IF IN=1.
 C-------------------------------------------------------------------
-  DIMENSION MO(12)
-  DATA    MO/0,31,59,90,120,151,181,212,243,273,304,334/
-  IMO=0
-  MOBE=0
-  IF(IN.GT.0) GOTO 5
-    IDOY=MO(MONTH)+IDAY
-    RETURN
-5 IMO=IMO+1
-    MOOLD=MOBE
-    IF(IMO.GT.12) GOTO 55
-    MOBE=MO(IMO)
-    IF(MOBE.LT.IDOY) GOTO 5
-55    MONTH=IMO-1
-    IDAY=IDOY-MOOLD
-  RETURN
-  END
+	DIMENSION	MO(12)
+	DATA		MO/0,31,59,90,120,151,181,212,243,273,304,334/
+	IMO=0
+	MOBE=0
+	IF(IN.GT.0) GOTO 5
+		IDOY=MO(MONTH)+IDAY
+		RETURN
+5	IMO=IMO+1
+		MOOLD=MOBE
+		IF(IMO.GT.12) GOTO 55
+		MOBE=MO(IMO)
+		IF(MOBE.LT.IDOY) GOTO 5
+55		MONTH=IMO-1
+		IDAY=IDOY-MOOLD
+	RETURN
+	END
 c
 C
-  REAL FUNCTION B0POL ( HOUR, SAX, SUX, ISEASON, R, DELA)
+	REAL FUNCTION B0POL ( HOUR, SAX, SUX, ISEASON, R, DELA)
 C-----------------------------------------------------------------
 C Interpolation procedure for bottomside thickness parameter B0.
 C Array B0F(ILT,ISEASON,IR,ILATI) distinguishes between day and
@@ -2265,551 +2265,551 @@ C corresponds to B0F(1,1,1,1), the second to B0F(2,1,1,1), the
 C third to B0F(1,2,1,1) and so on.
 C JUNE 1989 --------------------------------------- Dieter Bilitza
 C
-      REAL    NITVAL
-      DIMENSION   B0F(2,4,2,2),SIPH(2),SIPL(2)
-      DATA  B0F/114.,64.0,134.,77.0,128.,66.0,75.,73.0,
-     &        113.,115.,150.,116.,138.,123.,94.,132.,
-     &        72.0,84.0,83.0,89.0,75.0,85.0,57.,76.0,
-     &        102.,100.,120.,110.,107.,103.,76.,86.0/
+      REAL		NITVAL
+      DIMENSION 	B0F(2,4,2,2),SIPH(2),SIPL(2)
+      DATA 	B0F/114.,64.0,134.,77.0,128.,66.0,75.,73.0,
+     &		    113.,115.,150.,116.,138.,123.,94.,132.,
+     &		    72.0,84.0,83.0,89.0,75.0,85.0,57.,76.0,
+     &		    102.,100.,120.,110.,107.,103.,76.,86.0/
 
-    DO 7033 ISR=1,2
-    DO 7034 ISL=1,2
-      DAYVAL   = B0F(1,ISEASON,ISR,ISL)
-      NITVAL = B0F(2,ISEASON,ISR,ISL)
+  	DO 7033 ISR=1,2
+ 		DO 7034 ISL=1,2
+			DAYVAL   = B0F(1,ISEASON,ISR,ISL)
+			NITVAL = B0F(2,ISEASON,ISR,ISL)
 
 C Interpolation day/night with transitions at SAX (sunrise) and SUX (sunset)
-7034        SIPH(ISL) = HPOL(HOUR,DAYVAL,NITVAL,
-     &        SAX,SUX,1.,1.)
+7034  			SIPH(ISL) = HPOL(HOUR,DAYVAL,NITVAL,
+     &				SAX,SUX,1.,1.)
 
 C Interpolation low/middle modip with transition at 30 degrees modip
-7033    SIPL(ISR) = SIPH(1) + (SIPH(2) - SIPH(1)) / DELA
+7033		SIPL(ISR) = SIPH(1) + (SIPH(2) - SIPH(1)) / DELA
 
 C Interpolation low/high Rz12: linear from 10 to 100
-  B0POL=SIPL(1)+(SIPL(2)-SIPL(1))/90.*(R-10.)
-  RETURN
-  END
+	B0POL=SIPL(1)+(SIPL(2)-SIPL(1))/90.*(R-10.)
+	RETURN
+	END
 c
 C
 C *********************************************************************
 C ************************ EPSTEIN FUNCTIONS **************************
 C *********************************************************************
-C REF:  H. G. BOOKER, J. ATMOS. TERR. PHYS. 39, 619-623, 1977
-C   K. RAWER, ADV. SPACE RES. 4, #1, 11-15, 1984
+C REF:	H. G. BOOKER, J. ATMOS. TERR. PHYS. 39, 619-623, 1977
+C 	K. RAWER, ADV. SPACE RES. 4, #1, 11-15, 1984
 C *********************************************************************
 C
 C
-  REAL FUNCTION  RLAY ( X, XM, SC, HX )
+	REAL FUNCTION  RLAY ( X, XM, SC, HX )
 C -------------------------------------------------------- RAWER  LAYER
-  Y1  = EPTR ( X , SC, HX )
-  Y1M = EPTR ( XM, SC, HX )
-  Y2M = EPST ( XM, SC, HX )
-  RLAY = Y1 - Y1M - ( X - XM ) * Y2M / SC
-  RETURN
-  END
+	Y1  = EPTR ( X , SC, HX )
+	Y1M = EPTR ( XM, SC, HX )
+	Y2M = EPST ( XM, SC, HX )
+	RLAY = Y1 - Y1M - ( X - XM ) * Y2M / SC
+	RETURN
+	END
 C
 C
-  REAL FUNCTION D1LAY ( X, XM, SC, HX )
+	REAL FUNCTION D1LAY ( X, XM, SC, HX )
 C ------------------------------------------------------------ dLAY/dX
-  D1LAY = ( EPST(X,SC,HX) - EPST(XM,SC,HX) ) /  SC
-  RETURN
-  END
+	D1LAY = ( EPST(X,SC,HX) - EPST(XM,SC,HX) ) /  SC
+	RETURN
+	END
 C
 C
-  REAL FUNCTION D2LAY ( X, XM, SC, HX )
+	REAL FUNCTION D2LAY ( X, XM, SC, HX )
 C ---------------------------------------------------------- d2LAY/dX2
-  D2LAY = EPLA(X,SC,HX) /  (SC * SC)
-  RETURN
-  END
+	D2LAY = EPLA(X,SC,HX) /  (SC * SC)
+	RETURN
+	END
 C
 C
-  REAL FUNCTION EPTR ( X, SC, HX )
+	REAL FUNCTION EPTR ( X, SC, HX )
 C ------------------------------------------------------------ TRANSITION
-  COMMON/ARGEXP/ARGMAX
-  D1 = ( X - HX ) / SC
-  IF (ABS(D1).LT.ARGMAX) GOTO 1
-  IF (D1.GT.0.0) THEN
-    EPTR = D1
-  ELSE
-    EPTR = 0.0
-  ENDIF
-  RETURN
-1 EPTR = ALOG ( 1. + EXP( D1 ))
-  RETURN
-  END
+	COMMON/ARGEXP/ARGMAX
+	D1 = ( X - HX ) / SC
+	IF (ABS(D1).LT.ARGMAX) GOTO 1
+	IF (D1.GT.0.0) THEN
+	  EPTR = D1
+	ELSE
+	  EPTR = 0.0
+	ENDIF
+	RETURN
+1	EPTR = ALOG ( 1. + EXP( D1 ))
+	RETURN
+	END
 C
 C
-  REAL FUNCTION EPST ( X, SC, HX )
+	REAL FUNCTION EPST ( X, SC, HX )
 C -------------------------------------------------------------- STEP
-  COMMON/ARGEXP/ARGMAX
-  D1 = ( X - HX ) / SC
-  IF (ABS(D1).LT.ARGMAX) GOTO 1
-  IF (D1.GT.0.0) THEN
-    EPST = 1.
-  ELSE
-    EPST = 0.
-  ENDIF
-  RETURN
-1 EPST = 1. / ( 1. + EXP( -D1 ))
-  RETURN
-  END
+	COMMON/ARGEXP/ARGMAX
+	D1 = ( X - HX ) / SC
+	IF (ABS(D1).LT.ARGMAX) GOTO 1
+	IF (D1.GT.0.0) THEN
+	  EPST = 1.
+	ELSE
+	  EPST = 0.
+	ENDIF
+	RETURN
+1	EPST = 1. / ( 1. + EXP( -D1 ))
+	RETURN
+	END
 C
 C
-  REAL FUNCTION EPSTEP ( Y2, Y1, SC, HX, X)
+	REAL FUNCTION EPSTEP ( Y2, Y1, SC, HX, X)
 C---------------------------------------------- STEP FROM Y1 TO Y2
-  EPSTEP = Y1 + ( Y2 - Y1 ) * EPST ( X, SC, HX)
-  RETURN
-  END
+	EPSTEP = Y1 + ( Y2 - Y1 ) * EPST ( X, SC, HX)
+	RETURN
+	END
 C
 C
-  REAL FUNCTION EPLA ( X, SC, HX )
+	REAL FUNCTION EPLA ( X, SC, HX )
 C ------------------------------------------------------------ PEAK
-  COMMON/ARGEXP/ARGMAX
-  D1 = ( X - HX ) / SC
-  IF (ABS(D1).LT.ARGMAX) GOTO 1
-    EPLA = 0
-    RETURN
-1 D0 = EXP ( D1 )
-  D2 = 1. + D0
-  EPLA = D0 / ( D2 * D2 )
-  RETURN
-  END
+	COMMON/ARGEXP/ARGMAX
+	D1 = ( X - HX ) / SC
+	IF (ABS(D1).LT.ARGMAX) GOTO 1
+		EPLA = 0
+		RETURN
+1	D0 = EXP ( D1 )
+	D2 = 1. + D0
+	EPLA = D0 / ( D2 * D2 )
+	RETURN
+	END
 c
 c
-  FUNCTION XE2TO5(H,HMF2,NL,HX,SC,AMP)
+	FUNCTION XE2TO5(H,HMF2,NL,HX,SC,AMP)
 C----------------------------------------------------------------------
 C NORMALIZED ELECTRON DENSITY (N/NMF2) FOR THE MIDDLE IONOSPHERE FROM
 C HME TO HMF2 USING LAY-FUNCTIONS.
 C----------------------------------------------------------------------
-  DIMENSION HX(NL),SC(NL),AMP(NL)
-  SUM = 1.0
-  DO 1 I=1,NL
-     YLAY = AMP(I) * RLAY( H, HMF2, SC(I), HX(I) )
-     zlay=10.**ylay
-1    sum=sum*zlay
-  XE2TO5 = sum
-  RETURN
-  END
+	DIMENSION	HX(NL),SC(NL),AMP(NL)
+	SUM = 1.0
+	DO 1 I=1,NL
+	   YLAY = AMP(I) * RLAY( H, HMF2, SC(I), HX(I) )
+	   zlay=10.**ylay
+1	   sum=sum*zlay
+	XE2TO5 = sum
+	RETURN
+	END
 C
 C
-  REAL FUNCTION XEN(H,HMF2,XNMF2,HME,NL,HX,SC,AMP)
+	REAL FUNCTION XEN(H,HMF2,XNMF2,HME,NL,HX,SC,AMP)
 C----------------------------------------------------------------------
 C ELECTRON DENSITY WITH NEW MIDDLE IONOSPHERE
 C----------------------------------------------------------------------
-  DIMENSION HX(NL),SC(NL),AMP(NL)
+	DIMENSION	HX(NL),SC(NL),AMP(NL)
 C
-  IF(H.LT.HMF2) GOTO 100
-    XEN = XE1(H)
-    RETURN
-100 IF(H.LT.HME) GOTO 200
-    XEN = XNMF2 * XE2TO5(H,HMF2,NL,HX,SC,AMP)
-    RETURN
-200 XEN = XE6(H)
-  RETURN
-  END
+	IF(H.LT.HMF2) GOTO 100
+		XEN = XE1(H)
+		RETURN
+100	IF(H.LT.HME) GOTO 200
+		XEN = XNMF2 * XE2TO5(H,HMF2,NL,HX,SC,AMP)
+		RETURN
+200	XEN = XE6(H)
+	RETURN
+	END
 C
 C
-  SUBROUTINE VALGUL(XHI,HVB,VWU,VWA,VDP)
+	SUBROUTINE VALGUL(XHI,HVB,VWU,VWA,VDP)
 C ---------------------------------------------------------------------
 C   CALCULATES E-F VALLEY PARAMETERS; T.L. GULYAEVA, ADVANCES IN
 C   SPACE RESEARCH 7, #6, 39-48, 1987.
 C
-C INPUT:  XHI SOLAR ZENITH ANGLE [DEGREE]
+C	INPUT:	XHI	SOLAR ZENITH ANGLE [DEGREE]
 C
-C OUTPUT: VDP VALLEY DEPTH  (NVB/NME)
-C   VWU VALLEY WIDTH  [KM]
-C   VWA VALLEY WIDTH  (SMALLER, CORRECTED BY RAWER)
-C   HVB HEIGHT OF VALLEY BASE [KM]
+C	OUTPUT:	VDP	VALLEY DEPTH  (NVB/NME)
+C		VWU	VALLEY WIDTH  [KM]
+C		VWA	VALLEY WIDTH  (SMALLER, CORRECTED BY RAWER)
+C		HVB	HEIGHT OF VALLEY BASE [KM]
 C -----------------------------------------------------------------------
 C
-  COMMON  /CONST/UMR
+	COMMON	/CONST/UMR
 C
-  CS = 0.1 + COS(UMR*XHI)
-  ABC = ABS(CS)
-  VDP = 0.45 * CS / (0.1 + ABC ) + 0.55
-  ARL = ( 0.1 + ABC + CS ) / ( 0.1 + ABC - CS)
-  ZZZ = ALOG( ARL )
-  VWU = 45. - 10. * ZZZ
-  VWA = 45. -  5. * ZZZ
-  HVB = 1000. / ( 7.024 + 0.224 * CS + 0.966 * ABC )
-  RETURN
-  END
+	CS = 0.1 + COS(UMR*XHI)
+	ABC = ABS(CS)
+	VDP = 0.45 * CS / (0.1 + ABC ) + 0.55
+	ARL = ( 0.1 + ABC + CS ) / ( 0.1 + ABC - CS)
+	ZZZ = ALOG( ARL )
+	VWU = 45. - 10. * ZZZ
+	VWA = 45. -  5. * ZZZ
+	HVB = 1000. / ( 7.024 + 0.224 * CS + 0.966 * ABC )
+	RETURN
+	END
 C
 C
-  SUBROUTINE ROGUL(IDAY,XHI,SX,GRO)
+	SUBROUTINE ROGUL(IDAY,XHI,SX,GRO)
 C ---------------------------------------------------------------------
 C   CALCULATES RATIO H0.5/HMF2 FOR HALF-DENSITY POINT (NE(H0.5)=0.5*NMF2)
 C   T.L. GULYAEVA, ADVANCES IN SPACE RESEARCH 7, #6, 39-48, 1987.
 C
-C INPUT:  IDAY  DAY OF YEAR
-C   XHI SOLAR ZENITH ANGLE [DEGREE]
+C	INPUT:	IDAY	DAY OF YEAR
+C		XHI	SOLAR ZENITH ANGLE [DEGREE]
 C
-C OUTPUT: GRO RATIO OF HALF DENSITY HEIGHT TO F PEAK HEIGHT
-C   SX  SMOOTHLY VARYING SEASON PARAMTER (SX=1 FOR
-C     DAY=1; SX=3 FOR DAY=180; SX=2 FOR EQUINOX)
+C	OUTPUT:	GRO	RATIO OF HALF DENSITY HEIGHT TO F PEAK HEIGHT
+C		SX	SMOOTHLY VARYING SEASON PARAMTER (SX=1 FOR
+C			DAY=1; SX=3 FOR DAY=180; SX=2 FOR EQUINOX)
 C -----------------------------------------------------------------------
 C
-  SX = 2. - COS ( IDAY * 0.017214206 )
-  XS = ( XHI - 20. * SX) / 15.
-  GRO = 0.8 - 0.2 / ( 1. + EXP(XS) )
+	SX = 2. - COS ( IDAY * 0.017214206 )
+	XS = ( XHI - 20. * SX) / 15.
+	GRO = 0.8 - 0.2 / ( 1. + EXP(XS) )
 c same as gro=0.6+0.2/(1+exp(-xs))
-  RETURN
-  END
+	RETURN
+	END
 C
 C
-  SUBROUTINE LNGLSN ( N, A, B, AUS)
+	SUBROUTINE LNGLSN ( N, A, B, AUS)
 C --------------------------------------------------------------------
 C SOLVES QUADRATIC SYSTEM OF LINEAR EQUATIONS:
 C
-C INPUT:  N NUMBER OF EQUATIONS (= NUMBER OF UNKNOWNS)
-C   A(N,N)  MATRIX (LEFT SIDE OF SYSTEM OF EQUATIONS)
-C   B(N)  VECTOR (RIGHT SIDE OF SYSTEM)
+C	INPUT:	N	NUMBER OF EQUATIONS (= NUMBER OF UNKNOWNS)
+C		A(N,N)	MATRIX (LEFT SIDE OF SYSTEM OF EQUATIONS)
+C		B(N)	VECTOR (RIGHT SIDE OF SYSTEM)
 C
-C OUTPUT: AUS =.TRUE.   NO SOLUTION FOUND
-C     =.FALSE.  SOLUTION IS IN  A(N,J) FOR J=1,N
+C	OUTPUT:	AUS	=.TRUE.	  NO SOLUTION FOUND
+C			=.FALSE.  SOLUTION IS IN  A(N,J) FOR J=1,N
 C --------------------------------------------------------------------
 C
-  DIMENSION A(5,5), B(5), AZV(10)
-  LOGICAL   AUS
+	DIMENSION	A(5,5), B(5), AZV(10)
+	LOGICAL		AUS
 C
-  NN = N - 1
-  AUS = .FALSE.
-  DO 1 K=1,N-1
-    IMAX = K
-    L    = K
-    IZG  = 0
-    AMAX  = ABS( A(K,K) )
-110   L = L + 1
-    IF (L.GT.N) GOTO 111
-    HSP = ABS( A(L,K) )
-    IF (HSP.LT.1.E-8) IZG = IZG + 1
-    IF (HSP.LE.AMAX) GOTO 110
-111   IF (ABS(AMAX).GE.1.E-10) GOTO 133
-      AUS = .TRUE.
-      RETURN
-133   IF (IMAX.EQ.K) GOTO 112
-    DO 2 L=K,N
-      AZV(L+1)  = A(IMAX,L)
-      A(IMAX,L) = A(K,L)
-2     A(K,L)    = AZV(L+1)
-    AZV(1)  = B(IMAX)
-    B(IMAX) = B(K)
-    B(K)    = AZV(1)
-112   IF (IZG.EQ.(N-K)) GOTO 1
-    AMAX = 1. / A(K,K)
-    AZV(1) = B(K) * AMAX
-    DO 3 M=K+1,N
-3     AZV(M+1) = A(K,M) * AMAX
-    DO 4 L=K+1,N
-      AMAX = A(L,K)
-      IF (ABS(AMAX).LT.1.E-8) GOTO 4
-      A(L,K) = 0.0
-      B(L) = B(L) - AZV(1) * AMAX
-      DO 5 M=K+1,N
-5       A(L,M) = A(L,M) - AMAX * AZV(M+1)
-4   CONTINUE
-1 CONTINUE
-  DO 6 K=N,1,-1
-    AMAX = 0.0
-    IF (K.LT.N) THEN
-      DO 7 L=K+1,N
-7       AMAX = AMAX + A(K,L) * A(N,L)
-      ENDIF
-    IF (ABS(A(K,K)).LT.1.E-6) THEN
-      A(N,K) = 0.0
-    ELSE
-      A(N,K) = ( B(K) - AMAX ) / A(K,K)
-    ENDIF
-6 CONTINUE
-  RETURN
-  END
+	NN = N - 1
+	AUS = .FALSE.
+	DO 1 K=1,N-1
+		IMAX = K
+		L    = K
+		IZG  = 0
+		AMAX  = ABS( A(K,K) )
+110		L = L + 1
+		IF (L.GT.N) GOTO 111
+		HSP = ABS( A(L,K) )
+		IF (HSP.LT.1.E-8) IZG = IZG + 1
+		IF (HSP.LE.AMAX) GOTO 110
+111		IF (ABS(AMAX).GE.1.E-10) GOTO 133
+			AUS = .TRUE.
+			RETURN
+133		IF (IMAX.EQ.K) GOTO 112
+		DO 2 L=K,N
+			AZV(L+1)  = A(IMAX,L)
+			A(IMAX,L) = A(K,L)
+2			A(K,L)    = AZV(L+1)
+		AZV(1)  = B(IMAX)
+		B(IMAX) = B(K)
+		B(K)    = AZV(1)
+112		IF (IZG.EQ.(N-K)) GOTO 1
+		AMAX = 1. / A(K,K)
+		AZV(1) = B(K) * AMAX
+		DO 3 M=K+1,N
+3			AZV(M+1) = A(K,M) * AMAX
+		DO 4 L=K+1,N
+			AMAX = A(L,K)
+			IF (ABS(AMAX).LT.1.E-8) GOTO 4
+			A(L,K) = 0.0
+			B(L) = B(L) - AZV(1) * AMAX
+			DO 5 M=K+1,N
+5				A(L,M) = A(L,M) - AMAX * AZV(M+1)
+4		CONTINUE
+1	CONTINUE
+	DO 6 K=N,1,-1
+		AMAX = 0.0
+		IF (K.LT.N) THEN
+			DO 7 L=K+1,N
+7				AMAX = AMAX + A(K,L) * A(N,L)
+			ENDIF
+		IF (ABS(A(K,K)).LT.1.E-6) THEN
+			A(N,K) = 0.0
+		ELSE
+			A(N,K) = ( B(K) - AMAX ) / A(K,K)
+		ENDIF
+6	CONTINUE
+	RETURN
+	END
 C
 C
-  SUBROUTINE LSKNM ( N, M, M0, M1, HM, SC, HX, W, X, Y, VAR, SING)
+	SUBROUTINE LSKNM ( N, M, M0, M1, HM, SC, HX, W, X, Y, VAR, SING)
 C --------------------------------------------------------------------
 C   DETERMINES LAY-FUNCTIONS AMPLITUDES FOR A NUMBER OF CONSTRAINTS:
 C
-C INPUT:  N NUMBER OF AMPLITUDES ( LAY-FUNCTIONS)
-C   M NUMBER OF CONSTRAINTS
-C   M0  NUMBER OF POINT CONSTRAINTS
-C   M1  NUMBER OF FIRST DERIVATIVE CONSTRAINTS
-C   HM  F PEAK ALTITUDE  [KM]
-C   SC(N) SCALE PARAMETERS FOR LAY-FUNCTIONS  [KM]
-C   HX(N) HEIGHT PARAMETERS FOR LAY-FUNCTIONS  [KM]
-C   W(M)  WEIGHT OF CONSTRAINTS
-C   X(M)  ALTITUDES FOR CONSTRAINTS  [KM]
-C   Y(M)  LOG(DENSITY/NMF2) FOR CONSTRAINTS
+C	INPUT:	N	NUMBER OF AMPLITUDES ( LAY-FUNCTIONS)
+C		M	NUMBER OF CONSTRAINTS
+C		M0	NUMBER OF POINT CONSTRAINTS
+C		M1	NUMBER OF FIRST DERIVATIVE CONSTRAINTS
+C		HM	F PEAK ALTITUDE  [KM]
+C		SC(N)	SCALE PARAMETERS FOR LAY-FUNCTIONS  [KM]
+C		HX(N)	HEIGHT PARAMETERS FOR LAY-FUNCTIONS  [KM]
+C		W(M)	WEIGHT OF CONSTRAINTS
+C		X(M)	ALTITUDES FOR CONSTRAINTS  [KM]
+C		Y(M)	LOG(DENSITY/NMF2) FOR CONSTRAINTS
 C
-C OUTPUT: VAR(M)  AMPLITUDES
-C   SING  =.TRUE.   NO SOLUTION
+C	OUTPUT:	VAR(M)	AMPLITUDES
+C		SING	=.TRUE.   NO SOLUTION
 C ------------------------------------------------------------------------
 C
-  LOGICAL   SING
-  DIMENSION VAR(N), HX(N), SC(N), W(M), X(M), Y(M),
-     &      BLI(5), ALI(5,5), XLI(5,10)
+	LOGICAL		SING
+	DIMENSION	VAR(N), HX(N), SC(N), W(M), X(M), Y(M),
+     &			BLI(5), ALI(5,5), XLI(5,10)
 C
-  M01=M0+M1
-  SCM=0
-  DO 1 J=1,5
-    BLI(J) = 0.
-    DO 1 I=1,5
-1     ALI(J,I) = 0.
-  DO 2 I=1,N
-    DO 3 K=1,M0
-3     XLI(I,K) = RLAY( X(K), HM, SC(I), HX(I) )
-    DO 4 K=M0+1,M01
-4     XLI(I,K) = D1LAY( X(K), HM, SC(I), HX(I) )
-    DO 5 K=M01+1,M
-5     XLI(I,K) = D2LAY( X(K), HM, SC(I), HX(I) )
-2 CONTINUE
-    DO 7 J=1,N
-    DO 6 K=1,M
-      BLI(J) = BLI(J) + W(K) * Y(K) * XLI(J,K)
-      DO 6 I=1,N
-6       ALI(J,I) = ALI(J,I) + W(K) * XLI(I,K)
-     &          * XLI(J,K)
-7 CONTINUE
-  CALL LNGLSN( N, ALI, BLI, SING )
-  IF (.NOT.SING) THEN
-    DO 8 I=1,N
-8     VAR(I) = ALI(N,I)
-    ENDIF
-  RETURN
-  END
+	M01=M0+M1
+	SCM=0
+	DO 1 J=1,5
+		BLI(J) = 0.
+		DO 1 I=1,5
+1			ALI(J,I) = 0.
+	DO 2 I=1,N
+		DO 3 K=1,M0
+3			XLI(I,K) = RLAY( X(K), HM, SC(I), HX(I) )
+		DO 4 K=M0+1,M01
+4			XLI(I,K) = D1LAY( X(K), HM, SC(I), HX(I) )
+		DO 5 K=M01+1,M
+5			XLI(I,K) = D2LAY( X(K), HM, SC(I), HX(I) )
+2	CONTINUE
+		DO 7 J=1,N
+		DO 6 K=1,M
+			BLI(J) = BLI(J) + W(K) * Y(K) * XLI(J,K)
+			DO 6 I=1,N
+6				ALI(J,I) = ALI(J,I) + W(K) * XLI(I,K)
+     &					* XLI(J,K)
+7	CONTINUE
+	CALL LNGLSN( N, ALI, BLI, SING )
+	IF (.NOT.SING) THEN
+		DO 8 I=1,N
+8			VAR(I) = ALI(N,I)
+		ENDIF
+	RETURN
+	END
 C
 C
-  SUBROUTINE INILAY(NIGHT,XNMF2,XNMF1,XNME,VNE,HMF2,HMF1,
-     &        HME,HV1,HV2,HHALF,HXL,SCL,AMP,IQUAL)
+	SUBROUTINE INILAY(NIGHT,XNMF2,XNMF1,XNME,VNE,HMF2,HMF1,
+     &				HME,HV1,HV2,HHALF,HXL,SCL,AMP,IQUAL)
 C-------------------------------------------------------------------
 C CALCULATES AMPLITUDES FOR LAY FUNCTIONS
 C D. BILITZA, DECEMBER 1988
 C
-C INPUT:  NIGHT LOGICAL VARIABLE FOR DAY/NIGHT DISTINCTION
-C   XNMF2 F2 PEAK ELECTRON DENSITY [M-3]
-C   XNMF1 F1 PEAK ELECTRON DENSITY [M-3]
-C   XNME  E  PEAK ELECTRON DENSITY [M-3]
-C   VNE ELECTRON DENSITY AT VALLEY BASE [M-3]
-C   HMF2  F2 PEAK ALTITUDE [KM]
-C   HMF1  F1 PEAK ALTITUDE [KM]
-C   HME E  PEAK ALTITUDE [KM]
-C   HV1 ALTITUDE OF VALLEY TOP [KM]
-C   HV2 ALTITUDE OF VALLEY BASE [KM]
-C   HHALF ALTITUDE OF HALF-F2-PEAK-DENSITY [KM]
+C INPUT:	NIGHT	LOGICAL VARIABLE FOR DAY/NIGHT DISTINCTION
+C		XNMF2	F2 PEAK ELECTRON DENSITY [M-3]
+C		XNMF1	F1 PEAK ELECTRON DENSITY [M-3]
+C		XNME	E  PEAK ELECTRON DENSITY [M-3]
+C		VNE	ELECTRON DENSITY AT VALLEY BASE [M-3]
+C		HMF2	F2 PEAK ALTITUDE [KM]
+C		HMF1	F1 PEAK ALTITUDE [KM]
+C		HME	E  PEAK ALTITUDE [KM]
+C		HV1	ALTITUDE OF VALLEY TOP [KM]
+C		HV2	ALTITUDE OF VALLEY BASE [KM]
+C		HHALF	ALTITUDE OF HALF-F2-PEAK-DENSITY [KM]
 C
-C OUTPUT: HXL(4)  HEIGHT PARAMETERS FOR LAY FUNCTIONS [KM]
-C   SCL(4)  SCALE PARAMETERS FOR LAY FUNCTIONS [KM]
-C   AMP(4)  AMPLITUDES FOR LAY FUNCTIONS
-C   IQUAL =0 ok, =1 ok using second choice for HXL(1)
+C OUTPUT:	HXL(4)	HEIGHT PARAMETERS FOR LAY FUNCTIONS [KM]
+C		SCL(4)	SCALE PARAMETERS FOR LAY FUNCTIONS [KM]
+C		AMP(4)	AMPLITUDES FOR LAY FUNCTIONS
+C		IQUAL	=0 ok, =1 ok using second choice for HXL(1)
 C                       =2 NO SOLUTION
 C---------------------------------------------------------------
-  DIMENSION XX(8),YY(8),WW(8),AMP(4),HXL(4),SCL(4)
-  LOGICAL   SSIN,NIGHT
+	DIMENSION	XX(8),YY(8),WW(8),AMP(4),HXL(4),SCL(4)
+	LOGICAL		SSIN,NIGHT
 c
 c constants --------------------------------------------------------
-    NUMLAY=4
-    NC1 = 2
-    ALG102=ALOG10(2.)
+		NUMLAY=4
+		NC1 = 2
+		ALG102=ALOG10(2.)
 c
-c constraints: xx == height yy == log(Ne/NmF2)    ww == weights
+c constraints: xx == height	yy == log(Ne/NmF2)    ww == weights
 c -----------------------------------------------------------------
-    ALOGF = ALOG10(XNMF2)
-    ALOGEF = ALOG10(XNME) - ALOGF
-    XHALF=XNMF2/2.
-    XX(1) = HHALF
-    XX(2) = HV1
-    XX(3) = HV2
-    XX(4) = HME
-    XX(5) = HME - ( HV2 - HME )
-    YY(1) = -ALG102
-    YY(2) = ALOGEF
-    YY(3) = ALOG10(VNE) - ALOGF
-    YY(4) = ALOGEF
-    YY(5) = YY(3)
-    YY(7) = 0.0
-    WW(2) = 1.
-    WW(3) = 2.
-    WW(4) = 5.
+		ALOGF = ALOG10(XNMF2)
+		ALOGEF = ALOG10(XNME) - ALOGF
+		XHALF=XNMF2/2.
+		XX(1) = HHALF
+ 		XX(2) = HV1
+		XX(3) = HV2
+		XX(4) = HME
+		XX(5) = HME - ( HV2 - HME )
+		YY(1) = -ALG102
+		YY(2) = ALOGEF
+		YY(3) = ALOG10(VNE) - ALOGF
+		YY(4) = ALOGEF
+		YY(5) = YY(3)
+		YY(7) = 0.0
+		WW(2) = 1.
+		WW(3) = 2.
+		WW(4) = 5.
 c
 c geometric paramters for LAY -------------------------------------
 c difference to earlier version:  HXL(3) = HV2 + SCL(3)
 c
-    SCL0 = 0.7 * ( 0.216 * ( HMF2 - HHALF ) + 56.8 )
-    SCL(1) = 0.8 * SCL0
-    SCL(2) = 10.
-    SCL(3) = 9.
-      SCL(4) = 6.
-    HXL(3) = HV2
+		SCL0 = 0.7 * ( 0.216 * ( HMF2 - HHALF ) + 56.8 )
+		SCL(1) = 0.8 * SCL0
+		SCL(2) = 10.
+ 		SCL(3) = 9.
+	  	SCL(4) = 6.
+		HXL(3) = HV2
 c
 C DAY CONDITION--------------------------------------------------
-c earlier tested:   HXL(2) = HMF1 + SCL(2)
+c earlier tested: 	HXL(2) = HMF1 + SCL(2)
 c
-      IF(NIGHT) GOTO 7711
-    NUMCON = 8
-    HXL(1) = 0.9 * HMF2
-      HXL1T  = HHALF
-    HXL(2) = HMF1
-    HXL(4) = HME - SCL(4)
-    XX(6) = HMF1
-    XX(7) = HV2
-    XX(8) = HME
-    YY(8) = 0.0
-    WW(5) = 1.
-      WW(7) = 50.
-      WW(8) = 500.
+	    IF(NIGHT) GOTO 7711
+		NUMCON = 8
+		HXL(1) = 0.9 * HMF2
+		  HXL1T  = HHALF
+		HXL(2) = HMF1
+		HXL(4) = HME - SCL(4)
+		XX(6) = HMF1
+ 		XX(7) = HV2
+		XX(8) = HME
+		YY(8) = 0.0
+		WW(5) = 1.
+	   	WW(7) = 50.
+	   	WW(8) = 500.
 c without F-region ----------------------------------------------
-    IF(XNMF1.GT.0) GOTO 100
-      HXL(2)=(HMF2+HHALF)/2.
-      YY(6) = 0.
-      WW(6) = 0.
-      WW(1) = 1.
-      GOTO 7722
+		IF(XNMF1.GT.0) GOTO 100
+			HXL(2)=(HMF2+HHALF)/2.
+			YY(6) = 0.
+			WW(6) = 0.
+			WW(1) = 1.
+			GOTO 7722
 c with F-region --------------------------------------------
-100   YY(6) = ALOG10(XNMF1) - ALOGF
-    WW(6) = 3.
-    IF((XNMF1-XHALF)*(HMF1-HHALF).LT.0.0) THEN
-      WW(1)=0.5
-    ELSE
-      ZET = YY(1) - YY(6)
-      WW(1) = EPST( ZET, 0.1, 0.15)
-    ENDIF
-    IF(HHALF.GT.HMF1) THEN
-      HFFF=HMF1
-      XFFF=XNMF1
-    ELSE
-      HFFF=HHALF
-      XFFF=XHALF
-    ENDIF
-          GOTO 7722
+100		YY(6) = ALOG10(XNMF1) - ALOGF
+		WW(6) = 3.
+		IF((XNMF1-XHALF)*(HMF1-HHALF).LT.0.0) THEN
+		  WW(1)=0.5
+		ELSE
+		  ZET = YY(1) - YY(6)
+		  WW(1) = EPST( ZET, 0.1, 0.15)
+		ENDIF
+		IF(HHALF.GT.HMF1) THEN
+		  HFFF=HMF1
+		  XFFF=XNMF1
+		ELSE
+		  HFFF=HHALF
+		  XFFF=XHALF
+		ENDIF
+	        GOTO 7722
 c
 C NIGHT CONDITION---------------------------------------------------
 c different HXL,SCL values were tested including:
-c SCL(1) = HMF2 * 0.15 - 27.1 HXL(2) = 200.
-c HXL(2) = HMF1 + SCL(2)    HXL(3) = 140.
-c   SCL(3) = 5.     HXL(4) = HME + SCL(4)
-c HXL(4) = 105.
+c	SCL(1) = HMF2 * 0.15 - 27.1	HXL(2) = 200.
+c	HXL(2) = HMF1 + SCL(2)		HXL(3) = 140.
+c  	SCL(3) = 5.			HXL(4) = HME + SCL(4)
+c	HXL(4) = 105.
 c
-7711    NUMCON = 7
-    HXL(1) = HHALF
-      HXL1T  = 0.4 * HMF2 + 30.
-    HXL(2) = ( HMF2 + HV1 ) / 2.
-    HXL(4) = HME
-    XX(6) = HV2
-    XX(7) = HME
-    YY(6) = 0.0
-    WW(1) = 1.
-    WW(3) = 3.
-    WW(5) = 0.5
-    WW(6) = 50.
-    WW(7) = 500.
-    HFFF=HHALF
-    XFFF=XHALF
+7711		NUMCON = 7
+		HXL(1) = HHALF
+		  HXL1T  = 0.4 * HMF2 + 30.
+		HXL(2) = ( HMF2 + HV1 ) / 2.
+		HXL(4) = HME
+		XX(6) = HV2
+ 		XX(7) = HME
+		YY(6) = 0.0
+		WW(1) = 1.
+		WW(3) = 3.
+		WW(5) = 0.5
+		WW(6) = 50.
+ 		WW(7) = 500.
+		HFFF=HHALF
+		XFFF=XHALF
 c
 C are valley-top and bottomside point compatible ? -------------
 C
-7722  IF((HV1-HFFF)*(XNME-XFFF).LT.0.0) WW(2)=0.5
-  IF(HV1.LE.HV2+5.0) WW(2)=0.5
+7722	IF((HV1-HFFF)*(XNME-XFFF).LT.0.0) WW(2)=0.5
+	IF(HV1.LE.HV2+5.0) WW(2)=0.5
 c
 C DETERMINE AMPLITUDES-----------------------------------------
 C
-      NC0=NUMCON-NC1
-      IQUAL=0
-2299      CALL LSKNM(NUMLAY,NUMCON,NC0,NC1,HMF2,SCL,HXL,WW,XX,YY,
-     &    AMP,SSIN)
-      IF(IQUAL.gt.0) GOTO 1937
-      IF((ABS(AMP(1)).GT.10.0).OR.(SSIN)) THEN
-    IQUAL=1
-    HXL(1)=HXL1T
-    GOTO 2299
-    ENDIF
-1937      IF(SSIN) IQUAL=2
-      RETURN
-      END
+	    NC0=NUMCON-NC1
+	    IQUAL=0
+2299	    CALL LSKNM(NUMLAY,NUMCON,NC0,NC1,HMF2,SCL,HXL,WW,XX,YY,
+     &		AMP,SSIN)
+	   	IF(IQUAL.gt.0) GOTO 1937
+	    IF((ABS(AMP(1)).GT.10.0).OR.(SSIN)) THEN
+		IQUAL=1
+		HXL(1)=HXL1T
+		GOTO 2299
+		ENDIF
+1937	    IF(SSIN) IQUAL=2
+	    RETURN
+	    END
 c
 c
-  subroutine ioncom(h,z,f,fs,t,cn)
+	subroutine ioncom(h,z,f,fs,t,cn)
 c---------------------------------------------------------------
 c ion composition model
 c A.D. Danilov and A.P. Yaichnikov, A New Model of the Ion
 c   Composition at 75 to 1000 km for IRI, Adv. Space Res. 5, #7,
 c   75-79, 107-108, 1985
 c
-c   h altitude in km
-c z solar zenith angle in radians
-c f latitude in radians
-c fs  10.7cm solar radio flux
-c t season (month)
-c cn(1)   O+  relative density in percent
-c cn(2)   H+  relative density in percent
-c cn(3)   N+  relative density in percent
-c cn(4)   He+ relative density in percent
-c cn(5)   NO+ relative density in percent
-c cn(6)   O2+ relative density in percent
-c cn(7)   cluster ions  relative density in percent
+c 	h	altitude in km
+c	z	solar zenith angle in radians
+c	f	latitude in radians
+c	fs	10.7cm solar radio flux
+c	t	season (month)
+c	cn(1)   O+  relative density in percent
+c	cn(2)   H+  relative density in percent
+c	cn(3)   N+  relative density in percent
+c	cn(4)   He+ relative density in percent
+c	cn(5)   NO+ relative density in percent
+c	cn(6)   O2+ relative density in percent
+c	cn(7)   cluster ions  relative density in percent
 c---------------------------------------------------------------
 c
-  dimension cn(7),cm(7),hm(7),alh(7),all(7),beth(7),
-     &      betl(7),p(5,6,7),var(6),po(5,6),ph(5,6),
-     &      pn(5,6),phe(5,6),pno(5,6),po2(5,6),pcl(5,6)
+	dimension	cn(7),cm(7),hm(7),alh(7),all(7),beth(7),
+     &			betl(7),p(5,6,7),var(6),po(5,6),ph(5,6),
+     &			pn(5,6),phe(5,6),pno(5,6),po2(5,6),pcl(5,6)
 
-  data po/4*0.,98.5,4*0.,320.,4*0.,-2.59E-4,2.79E-4,-3.33E-3,
-     &    -3.52E-3,-5.16E-3,-2.47E-2,4*0.,-2.5E-6,1.04E-3,
-     &    -1.79E-4,-4.29E-5,1.01E-5,-1.27E-3/
-  data ph/-4.97E-7,-1.21E-1,-1.31E-1,0.,98.1,355.,-191.,
-     &    -127.,0.,2040.,4*0.,-4.79E-6,-2.E-4,5.67E-4,
-     &    2.6E-4,0.,-5.08E-3,10*0./
-  data pn/7.6E-1,-5.62,-4.99,0.,5.79,83.,-369.,-324.,0.,593.,
-     &    4*0.,-6.3E-5,-6.74E-3,-7.93E-3,-4.65E-3,0.,-3.26E-3,
-     &    4*0.,-1.17E-5,4.88E-3,-1.31E-3,-7.03E-4,0.,-2.38E-3/
-  data phe/-8.95E-1,6.1,5.39,0.,8.01,4*0.,1200.,4*0.,-1.04E-5,
-     &    1.9E-3,9.53E-4,1.06E-3,0.,-3.44E-3,10*0./
-  data pno/-22.4,17.7,-13.4,-4.88,62.3,32.7,0.,19.8,2.07,115.,
-     &    5*0.,3.94E-3,0.,2.48E-3,2.15E-4,6.67E-3,5*0.,
-     &    -8.4E-3,0.,-3.64E-3,2.E-3,-2.59E-2/
-  data po2/8.,-12.2,9.9,5.8,53.4,-25.2,0.,-28.5,-6.72,120.,
-     &    5*0.,-1.4E-2,0.,-9.3E-3,3.3E-3,2.8E-2,5*0.,4.25E-3,
-     &    0.,-6.04E-3,3.85E-3,-3.64E-2/
-  data pcl/4*0.,100.,4*0.,75.,10*0.,4*0.,-9.04E-3,-7.28E-3,
-     &    2*0.,3.46E-3,-2.11E-2/
+	data po/4*0.,98.5,4*0.,320.,4*0.,-2.59E-4,2.79E-4,-3.33E-3,
+     &		-3.52E-3,-5.16E-3,-2.47E-2,4*0.,-2.5E-6,1.04E-3,
+     &		-1.79E-4,-4.29E-5,1.01E-5,-1.27E-3/
+	data ph/-4.97E-7,-1.21E-1,-1.31E-1,0.,98.1,355.,-191.,
+     &		-127.,0.,2040.,4*0.,-4.79E-6,-2.E-4,5.67E-4,
+     &		2.6E-4,0.,-5.08E-3,10*0./
+	data pn/7.6E-1,-5.62,-4.99,0.,5.79,83.,-369.,-324.,0.,593.,
+     &		4*0.,-6.3E-5,-6.74E-3,-7.93E-3,-4.65E-3,0.,-3.26E-3,
+     &		4*0.,-1.17E-5,4.88E-3,-1.31E-3,-7.03E-4,0.,-2.38E-3/
+	data phe/-8.95E-1,6.1,5.39,0.,8.01,4*0.,1200.,4*0.,-1.04E-5,
+     &		1.9E-3,9.53E-4,1.06E-3,0.,-3.44E-3,10*0./
+	data pno/-22.4,17.7,-13.4,-4.88,62.3,32.7,0.,19.8,2.07,115.,
+     &		5*0.,3.94E-3,0.,2.48E-3,2.15E-4,6.67E-3,5*0.,
+     &		-8.4E-3,0.,-3.64E-3,2.E-3,-2.59E-2/
+	data po2/8.,-12.2,9.9,5.8,53.4,-25.2,0.,-28.5,-6.72,120.,
+     &		5*0.,-1.4E-2,0.,-9.3E-3,3.3E-3,2.8E-2,5*0.,4.25E-3,
+     &		0.,-6.04E-3,3.85E-3,-3.64E-2/
+	data pcl/4*0.,100.,4*0.,75.,10*0.,4*0.,-9.04E-3,-7.28E-3,
+     &		2*0.,3.46E-3,-2.11E-2/
 
-  DO 8 I=1,5
-  DO 8 J=1,6
-    p(i,j,1)=po(i,j)
-    p(i,j,2)=ph(i,j)
-    p(i,j,3)=pn(i,j)
-    p(i,j,4)=phe(i,j)
-    p(i,j,5)=pno(i,j)
-    p(i,j,6)=po2(i,j)
-    p(i,j,7)=pcl(i,j)
-8 continue
+	DO 8 I=1,5
+	DO 8 J=1,6
+		p(i,j,1)=po(i,j)
+		p(i,j,2)=ph(i,j)
+		p(i,j,3)=pn(i,j)
+		p(i,j,4)=phe(i,j)
+		p(i,j,5)=pno(i,j)
+		p(i,j,6)=po2(i,j)
+		p(i,j,7)=pcl(i,j)
+8	continue
 
-  s=0.
-  do 5 i=1,7
-    do 7 j=1,6
-    var(j) = p(1,j,i)*cos(z) + p(2,j,i)*cos(f) +
-     &       p(3,j,i)*cos(0.013*(300.-fs)) +
-     &       p(4,j,i)*cos(0.52*(t-6.)) + p(5,j,i)
-7   continue
-    cm(i)  = var(1)
-    hm(i)  = var(2)
-    all(i) = var(3)
-    betl(i)= var(4)
-    alh(i) = var(5)
-    beth(i)= var(6)
-    hx=h-hm(i)
-    if(hx) 1,2,3
-1   cn(i) = cm(i) * exp( hx * (hx * all(i) + betl(i)) )
-    goto 4
-2     cn(i) = cm(i)
-    goto 4
-3   cn(i) = cm(i) * exp( hx * (hx * alh(i) + beth(i)) )
-4   continue
-    if(cn(i).LT.0.005*cm(i)) cn(i)=0.
-    if(cn(i).GT.cm(i)) cn(i)=cm(i)
-    s=s+cn(i)
-5 continue
-  do 6 i=1,7
-6   cn(i)=cn(i)/s*100.
-  return
-  end
+	s=0.
+	do 5 i=1,7
+	  do 7 j=1,6
+		var(j) = p(1,j,i)*cos(z) + p(2,j,i)*cos(f) +
+     &  		 p(3,j,i)*cos(0.013*(300.-fs)) +
+     &			 p(4,j,i)*cos(0.52*(t-6.)) + p(5,j,i)
+7	  continue
+	  cm(i)  = var(1)
+	  hm(i)  = var(2)
+	  all(i) = var(3)
+	  betl(i)= var(4)
+	  alh(i) = var(5)
+	  beth(i)= var(6)
+	  hx=h-hm(i)
+ 	  if(hx) 1,2,3
+1		cn(i) = cm(i) * exp( hx * (hx * all(i) + betl(i)) )
+		goto 4
+2	  	cn(i) = cm(i)
+		goto 4
+3		cn(i) = cm(i) * exp( hx * (hx * alh(i) + beth(i)) )
+4	  continue
+	  if(cn(i).LT.0.005*cm(i)) cn(i)=0.
+	  if(cn(i).GT.cm(i)) cn(i)=cm(i)
+	  s=s+cn(i)
+5	continue
+	do 6 i=1,7
+6		cn(i)=cn(i)/s*100.
+	return
+	end
 C
 C
 C
@@ -2892,10 +2892,10 @@ C         F10.7 EFFECT
 C        TIME INDEPENDENT
       T2 = 0.385528E-1 * PLG(3,1) + 0.303445E-2 * PLG(5,1)
 C        SYMMETRICAL ANNUAL AND SEMIANNUAL
-  CD14 = COS( DR  * (IDAY+8.45398) )
-        CD18 = COS( DR2 * (IDAY-125.818) )
-        CD32 = COS( DR  * (IDAY-30.0150) )
-        CD39 = COS( DR2 * (IDAY-2.75905) )
+	CD14 = COS( DR  * (IDAY+8.45398) )
+      	CD18 = COS( DR2 * (IDAY-125.818) )
+      	CD32 = COS( DR  * (IDAY-30.0150) )
+      	CD39 = COS( DR2 * (IDAY-2.75905) )
       T3 = 0.805486E-2 * CD32 + 0.14237E-1 * CD18
 C        ASYMMETRICAL ANNUAL AND SEMIANNUAL
       T5 = F1 * (-0.127371 * PLG(2,1) - 0.302449E-1 * PLG(4,1) ) * CD14
@@ -2942,7 +2942,7 @@ C         F10.7 EFFECT
 C        TIME INDEPENDENT
       T2 = -0.467542E-1 * PLG(3,1) + 0.12026 * PLG(5,1)
 C        ASYMMETRICAL ANNUAL
-        CD14 = COS( DR  * (IDAY+8.45398) )
+      	CD14 = COS( DR  * (IDAY+8.45398) )
       T5 = -0.13324 * PLG(2,1)  * CD14
 C        SEMIDIURNAL
       ZZ = PLG(4,3) * CD14
@@ -2955,8 +2955,8 @@ C  dTn/dh at lower boundary  [Eq. A6]
 C
 C NEUTRAL TEMPERATURE AT LOWER BOUNDARY 120KM
 C
-        CD9  = COS( DR2 * (IDAY-89.3820) )
-        CD11 = COS( DR  * (IDAY+8.45398) )
+      	CD9  = COS( DR2 * (IDAY-89.3820) )
+      	CD11 = COS( DR  * (IDAY+8.45398) )
       T1 = 0.568478E-3 * DFA
       T4 = 0.107674E-1 * CD9
       T5 =-0.192414E-1 * PLG(2,1) * CD11

@@ -1,5 +1,5 @@
 module readtgcm
-
+  use, intrinsic :: iso_fortran_env, only: stderr=>error_unit, stdout=>output_unit
 ! This software is part of the GLOW model.  Use is governed by the Open Source
 ! Academic Research License Agreement contained in the file glowlicense.txt.
 ! For more information see the file glow.txt.
@@ -24,7 +24,7 @@ module readtgcm
 !   glon     Array of longitudes
 !   glat     Array of latitudes
 !   zlev     Array of midpoints
-!   zilev    Array of interfaces 
+!   zilev    Array of interfaces
 
 ! read_tgcm returns:
 ! 3D global fields:
@@ -140,20 +140,20 @@ module readtgcm
       call handle_ncerr(istat,trim(msg),1)
     else
       if (iprint > 0) &
-      write(6,"(/,'Opened file ',a)") trim(ncfile)
+      write(stdout,"(/,'Opened file ',a)") trim(ncfile)
     endif
 !
 ! Allocate arrays to read 2d and 3d spatial variables:
-! 
+!
     if (.not.allocated(f3d)) allocate(f3d(nlon,nlat,nlev)) ! 3d global read array
     if (.not.allocated(f2d)) allocate(f2d(nlon,nlat))      ! 2d global read array
 !
 ! Read itime history (model time mtime(:,itime)):
 !
       if (itime <= 0.or.itime > ntime) then
-        write(6,"('>>> read_tgcm: bad itime=',i4,' (ntime=',i4,')')") &
+        write(stderr,"('>>> read_tgcm: bad itime=',i4,' (ntime=',i4,')')") &
           itime,ntime
-        stop 'itime'
+        error stop 'itime'
       endif
 
       istat = nf90_inq_varid(ncid,'year',id)
@@ -171,7 +171,7 @@ module readtgcm
       istat = nf90_inq_varid(ncid,'mtime',id)
       istat = nf90_get_var(ncid,id,mtime,(/1,itime/),(/3,1/))
 
-      write(6,"(/,'read_tgcm: itime=',i4,' ntime=',i4,' iyear=',i5,' iday=',i4,' ut=',f8.2,' mtime=',3i4)") &
+      write(stdout,"(/,'read_tgcm: itime=',i4,' ntime=',i4,' iyear=',i5,' iday=',i4,' ut=',f8.2,' mtime=',3i4)") &
         itime,ntime,iyear,iday,ut,mtime
 !
 ! Read vars at current history/time:
@@ -188,11 +188,11 @@ module readtgcm
             f3d = 0.
             istat = nf90_get_var(ncid,id,f3d,(/1,1,1,itime/),(/nlon,nlat,nlev,1/))
             if (istat /= NF90_NOERR) then
-              write(6,"('>>> Error reading 3d var ')") fnames(n)
+              write(stderr,"('>>> Error reading 3d var ')") fnames(n)
               call handle_ncerr(istat,'Error from nf90_get_var',1)
             endif
             if (iprint > 0) &
-            write(6,"('Read 3d var: itime=',i4,' n=',i4,' fld ',a,' id=',i4,' min,max=',2es12.4)") &
+            write(stdout,"('Read 3d var: itime=',i4,' n=',i4,' fld ',a,' id=',i4,' min,max=',2es12.4)") &
               itime,n,trim(fnames(n)),id,minval(f3d(:,:,1:nlev-1)),maxval(f3d(:,:,1:nlev-1))
 !
 ! 2d var+time: assume (nlon,nlat):
@@ -201,11 +201,11 @@ module readtgcm
             f2d = 0.
             istat = nf90_get_var(ncid,id,f2d,(/1,1,itime/),(/nlon,nlat,1/))
             if (istat /= NF90_NOERR) then
-              write(6,"('>>> Error reading 2d var ')") fnames(n)
+              write(stderr,"('>>> Error reading 2d var ')") fnames(n)
               call handle_ncerr(istat,'Error from nf90_get_var',1)
             endif
             if (iprint > 0) &
-            write(6,"('Read 2d var: itime=',i4,' n=',i4,' fld ',a,' id=',i4,' min,max=',2es12.4)") &
+            write(stdout,"('Read 2d var: itime=',i4,' n=',i4,' fld ',a,' id=',i4,' min,max=',2es12.4)") &
               itime,n,trim(fnames(n)),id,minval(f2d(:,:)),maxval(f2d(:,:))
           endif ! 2d or 3d var
 !
@@ -216,113 +216,113 @@ module readtgcm
             case('TN')
               if (.not.allocated(tn)) allocate(tn(nlon,nlat,nlev))
               tn = f3d
-              tn(:,:,nlev) = tn(:,:,nlev-1) 
+              tn(:,:,nlev) = tn(:,:,nlev-1)
               if (iprint > 0) &
-              write(6,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
+              write(stdout,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
                 fnames(n),minval(tn),maxval(tn)
-              found(n) = .true. 
+              found(n) = .true.
             case('UN')
               if (.not.allocated(un)) allocate(un(nlon,nlat,nlev))
               un = f3d
-              un(:,:,nlev) = un(:,:,nlev-1) 
+              un(:,:,nlev) = un(:,:,nlev-1)
               if (iprint > 0) &
-              write(6,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
+              write(stdout,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
                 fnames(n),minval(un),maxval(un)
-              found(n) = .true. 
+              found(n) = .true.
             case('VN')
               if (.not.allocated(vn)) allocate(vn(nlon,nlat,nlev))
               vn = f3d
-              vn(:,:,nlev) = vn(:,:,nlev-1) 
+              vn(:,:,nlev) = vn(:,:,nlev-1)
               if (iprint > 0) &
-              write(6,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
+              write(stdout,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
                 fnames(n),minval(vn),maxval(vn)
-              found(n) = .true. 
+              found(n) = .true.
             case('O2')
               if (.not.allocated(o2)) allocate(o2(nlon,nlat,nlev))
               o2 = f3d
               if (iprint > 0) &
-              write(6,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
+              write(stdout,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
                 fnames(n),minval(o2),maxval(o2)
-              found(n) = .true. 
+              found(n) = .true.
             case('O1')
               if (.not.allocated(o1)) allocate(o1(nlon,nlat,nlev))
               o1 = f3d
               if (iprint > 0) &
-              write(6,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
+              write(stdout,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
                 fnames(n),minval(o1),maxval(o1)
-              found(n) = .true. 
+              found(n) = .true.
             case('N2')
               if (.not.allocated(n2)) allocate(n2(nlon,nlat,nlev))
               n2 = f3d
               if (iprint > 0) &
-              write(6,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
+              write(stdout,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
                 fnames(n),minval(n2),maxval(n2)
-              found(n) = .true. 
+              found(n) = .true.
             case('HE')
               if (.not.allocated(he)) allocate(he(nlon,nlat,nlev))
               he = f3d
               if (iprint > 0) &
-              write(6,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
+              write(stdout,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
                 fnames(n),minval(he),maxval(he)
-              found(n) = .true. 
+              found(n) = .true.
             case('NO')
               if (.not.allocated(no)) allocate(no(nlon,nlat,nlev))
               no = f3d
               if (iprint > 0) &
-              write(6,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
+              write(stdout,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
                 fnames(n),minval(no),maxval(no)
-              found(n) = .true. 
+              found(n) = .true.
             case('TI')
               if (.not.allocated(ti)) allocate(ti(nlon,nlat,nlev))
               ti = f3d
-              ti(:,:,nlev) = ti(:,:,nlev-1) 
+              ti(:,:,nlev) = ti(:,:,nlev-1)
               if (iprint > 0) &
-              write(6,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
+              write(stdout,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
                 fnames(n),minval(ti),maxval(ti)
-              found(n) = .true. 
+              found(n) = .true.
             case('TE')
               if (.not.allocated(te)) allocate(te(nlon,nlat,nlev))
               te = f3d
-              te(:,:,nlev) = te(:,:,nlev-1) 
+              te(:,:,nlev) = te(:,:,nlev-1)
               if (iprint > 0) &
-              write(6,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
+              write(stdout,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
                 fnames(n),minval(te),maxval(te)
-              found(n) = .true. 
+              found(n) = .true.
             case('NE')
               if (.not.allocated(ne)) allocate(ne(nlon,nlat,nlev))
               ne = f3d
               if (iprint > 0) &
-              write(6,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
+              write(stdout,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
                 fnames(n),minval(ne),maxval(ne)
-              found(n) = .true. 
+              found(n) = .true.
             case('Z')
               if (.not.allocated(z)) allocate(z(nlon,nlat,nlev))
               z = f3d
               if (iprint > 0) &
-              write(6,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
+              write(stdout,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
                 fnames(n),minval(z),maxval(z)
-              found(n) = .true. 
+              found(n) = .true.
             case('ZG')
               if (.not.allocated(zg)) allocate(zg(nlon,nlat,nlev))
               zg = f3d*1.e-5 ! cm->km
               if (iprint > 0) &
-              write(6,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
+              write(stdout,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
                 fnames(n),minval(zg),maxval(zg)
-              found(n) = .true. 
+              found(n) = .true.
             case('N2D')
               if (.not.allocated(n2d)) allocate(n2d(nlon,nlat,nlev))
               n2d = f3d
               if (iprint > 0) &
-              write(6,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
+              write(stdout,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
                 fnames(n),minval(n2d),maxval(n2d)
-              found(n) = .true. 
+              found(n) = .true.
             case('N4S')
               if (.not.allocated(n4s)) allocate(n4s(nlon,nlat,nlev))
               n4s = f3d
               if (iprint > 0) &
-              write(6,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
+              write(stdout,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
                 fnames(n),minval(n4s),maxval(n4s)
-              found(n) = .true. 
+              found(n) = .true.
 !
 ! 2d fields (nlon,nlat):
 !
@@ -330,46 +330,46 @@ module readtgcm
               if (.not.allocated(cusp)) allocate(cusp(nlon,nlat))
               cusp = f2d
               if (iprint > 0) &
-              write(6,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
+              write(stdout,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
                 fnames(n),minval(cusp),maxval(cusp)
-              found(n) = .true. 
+              found(n) = .true.
             case('DRIZZLE')
               if (.not.allocated(drizzle)) allocate(drizzle(nlon,nlat))
               drizzle = f2d
               if (iprint > 0) &
-              write(6,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
+              write(stdout,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
                 fnames(n),minval(drizzle),maxval(drizzle)
-              found(n) = .true. 
+              found(n) = .true.
             case('ALFA')
               if (.not.allocated(alfa)) allocate(alfa(nlon,nlat))
               alfa = f2d
               if (iprint > 0) &
-              write(6,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
+              write(stdout,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
                 fnames(n),minval(alfa),maxval(alfa)
-              found(n) = .true. 
+              found(n) = .true.
             case('NFLUX')
               if (.not.allocated(nflux)) allocate(nflux(nlon,nlat))
               nflux = f2d
               if (iprint > 0) &
-              write(6,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
+              write(stdout,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
                 fnames(n),minval(nflux),maxval(nflux)
-              found(n) = .true. 
+              found(n) = .true.
             case('EFLUX')
               if (.not.allocated(eflux)) allocate(eflux(nlon,nlat))
               eflux = f2d
               if (iprint > 0) &
-              write(6,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
+              write(stdout,"('read_tgcm: Field ',a,' min,max=',2es12.4)") &
                 fnames(n),minval(eflux),maxval(eflux)
-              found(n) = .true. 
+              found(n) = .true.
 !
 ! Unknown field (this should not happen):
 !
             case default
-              write(6,"('>>> read_tgcm: unknown field: ',a)") trim(fnames(n))
-              stop 'read tgcm 3d fields'
+              write(stderr,"('>>> read_tgcm: unknown field: ',a)") trim(fnames(n))
+              error stop 'read tgcm 3d fields'
           end select ! fnames(n)
         else
-          write(6,"('>>> WARNING: did not find field ',a,' on the tgcm file')") trim(fnames(n))
+          write(stderr,"('>>> WARNING: did not find field ',a,' on the tgcm file')") trim(fnames(n))
         endif   ! bottom of found variable conditional, scs 11/16
       enddo ! n=1,nf
 !
@@ -380,12 +380,12 @@ module readtgcm
         if (found(findx('O1')).and.found(findx('O2')).and.found(findx('HE'))) then
           n2 = 1.-o2-o1-he
           if (iprint > 0) &
-          write(6,"('read_tgcm: Field N2 (1-O2-O-HE) min,max=',2es12.4)") &
+          write(stdout,"('read_tgcm: Field N2 (1-O2-O-HE) min,max=',2es12.4)") &
             minval(n2),maxval(n2)
         else
-          write(6,"('>>> FATAL: N2 not found on the file, and at least one of')")
-          write(6,"('    o2, o, he also not found on the file.')")
-          stop 'read_tgcm'
+          write(stderr,"('>>> FATAL: N2 not found on the file, and at least one of')")
+          write(stderr,"('    o2, o, he also not found on the file.')")
+          error stop 'read_tgcm'
         endif
         found(findx('N2'))=.true.
       endif ! N2 not found
@@ -396,15 +396,15 @@ module readtgcm
         if (.not.found(findx('TN')).or..not.found(findx('O2')).or.&
             .not.found(findx('O1')).or..not.found(findx('N2')).or.&
             .not.found(findx('Z' )).or..not.found(findx('HE'))) then
-          write(6,"('>>> FATAL: ZG not found on the file, and at least one of')")
-          write(6,"('    tn,o2,o,n2,he,z also not found on the file.')")
-          stop 'read_tgcm'
+          write(stderr,"('>>> FATAL: ZG not found on the file, and at least one of')")
+          write(stderr,"('    tn,o2,o,n2,he,z also not found on the file.')")
+          error stop 'read_tgcm'
         endif
         if (.not.allocated(zg)) allocate(zg(nlon,nlat,nlev))
         call calczg(tn,o2,o1,n2,he,z,zg,glat,nlon,nlat,nlev,dlev)
         zg = zg*1.e-5 ! cm to km
         if (iprint > 0) &
-        write(6,"('Field ZG (from calczg) min,max (km)=',2es12.4)") &
+        write(stdout,"('Field ZG (from calczg) min,max (km)=',2es12.4)") &
           minval(zg),maxval(zg)
         found(findx('ZG'))=.true.
       endif ! zg not on the file
@@ -414,7 +414,7 @@ module readtgcm
       if (.not.found(findx('N2D'))) then
         if (.not.allocated(n2d)) allocate(n2d(nlon,nlat,nlev))
         n2d = 0.
-        write(6,"('read_tgcm: N2D not found on tgcm history, so set it to zero.')")
+        write(stderr,"('read_tgcm: N2D not found on tgcm history, so set it to zero.')")
         found(findx('N2D'))=.true.
       endif
 !
@@ -423,8 +423,8 @@ module readtgcm
       if (.not.found(findx('HE'))) then
         if (.not.allocated(he)) allocate(he(nlon,nlat,nlev))
         he = 0.
-        write(6,"('read_tgcm: HE not found on tgcm history, so set it to zero.')")
-        write(6,"('>>> WARNING: This may cause erroneous O density at high altitude')")
+        write(stderr,"('read_tgcm: HE not found on tgcm history, so set it to zero.')")
+        write(stderr,"('>>> WARNING: This may cause erroneous O density at high altitude')")
         found(findx('HE'))=.true.
       endif
 !
@@ -433,31 +433,31 @@ module readtgcm
       if (.not.found(findx('CUSP'))) then
         if (.not.allocated(cusp)) allocate(cusp(nlon,nlat))
         cusp = 0.
-        write(6,"('read_tgcm: CUSP not found on tgcm history, so set it to zero.')")
+        write(stderr,"('read_tgcm: CUSP not found on tgcm history, so set it to zero.')")
         found(findx('CUSP'))=.true.
       endif
       if (.not.found(findx('DRIZZLE'))) then
         if (.not.allocated(drizzle)) allocate(drizzle(nlon,nlat))
         drizzle = 0.
-        write(6,"('read_tgcm: DRIZZLE not found on tgcm history, so set it to zero.')")
+        write(stderr,"('read_tgcm: DRIZZLE not found on tgcm history, so set it to zero.')")
         found(findx('DRIZZLE'))=.true.
       endif
       if (.not.found(findx('ALFA'))) then
         if (.not.allocated(alfa)) allocate(alfa(nlon,nlat))
         alfa = 0.
-        write(6,"('read_tgcm: ALFA not found on tgcm history, so set it to zero.')")
+        write(stderr,"('read_tgcm: ALFA not found on tgcm history, so set it to zero.')")
         found(findx('ALFA'))=.true.
       endif
       if (.not.found(findx('NFLUX'))) then
         if (.not.allocated(nflux)) allocate(nflux(nlon,nlat))
         nflux = 0.
-        write(6,"('read_tgcm: NFLUX not found on tgcm history, so set it to zero.')")
+        write(stderr,"('read_tgcm: NFLUX not found on tgcm history, so set it to zero.')")
         found(findx('NFLUX'))=.true.
       endif
       if (.not.found(findx('EFLUX'))) then
         if (.not.allocated(eflux)) allocate(eflux(nlon,nlat))
         eflux = 0.
-        write(6,"('read_tgcm: EFLUX not found on tgcm history, so set it to zero.')")
+        write(stderr,"('read_tgcm: EFLUX not found on tgcm history, so set it to zero.')")
         found(findx('EFLUX'))=.true.
       endif
 !
@@ -465,9 +465,9 @@ module readtgcm
 !
       do n=1,nf
         if (.not.found(n)) then
-          write(6,"(/,'>>> FATAL: field ',a,' was not found on tgcm file ',a)") &
+          write(stderr,"(/,'>>> FATAL: field ',a,' was not found on tgcm file ',a)") &
             fnames(n),trim(ncfile)
-          stop 'read_tgcm'
+          error stop 'read_tgcm'
         endif
       enddo
 !
@@ -491,13 +491,13 @@ module readtgcm
       call denconv(n4s,14.,tn,o2mmr,o1mmr,n2mmr,hemmr,zlev,nlon,nlat,nlev)
 
       if (iprint > 0) then
-        write(6,"('After denconv: O2 (cm3) min,max=',2es12.4)") minval(o2),maxval(o2)
-        write(6,"('After denconv: O1 (cm3) min,max=',2es12.4)") minval(o1),maxval(o1)
-        write(6,"('After denconv: N2 (cm3) min,max=',2es12.4)") minval(n2),maxval(n2)
-        write(6,"('After denconv: HE (cm3) min,max=',2es12.4)") minval(he),maxval(he)
-        write(6,"('After denconv: NO (cm3) min,max=',2es12.4)") minval(no),maxval(no)
-        write(6,"('After denconv: N2D(cm3) min,max=',2es12.4)") minval(n2d),maxval(n2d)
-        write(6,"('After denconv: N4S(cm3) min,max=',2es12.4)") minval(n4s),maxval(n4s)
+        write(stdout,"('After denconv: O2 (cm3) min,max=',2es12.4)") minval(o2),maxval(o2)
+        write(stdout,"('After denconv: O1 (cm3) min,max=',2es12.4)") minval(o1),maxval(o1)
+        write(stdout,"('After denconv: N2 (cm3) min,max=',2es12.4)") minval(n2),maxval(n2)
+        write(stdout,"('After denconv: HE (cm3) min,max=',2es12.4)") minval(he),maxval(he)
+        write(stdout,"('After denconv: NO (cm3) min,max=',2es12.4)") minval(no),maxval(no)
+        write(stdout,"('After denconv: N2D(cm3) min,max=',2es12.4)") minval(n2d),maxval(n2d)
+        write(stdout,"('After denconv: N4S(cm3) min,max=',2es12.4)") minval(n4s),maxval(n4s)
       endif
 !
 ! Close the file:
@@ -598,7 +598,7 @@ module readtgcm
         f(i,j,k) = f(i,j,k) * pkt * mbar / wt
       enddo
     enddo
-  enddo 
+  enddo
   end subroutine denconv
 
 !-----------------------------------------------------------------------
@@ -608,7 +608,7 @@ module readtgcm
 ! Find index in fnames(nf) that matches input name.
 !
   character(len=*),intent(in) :: name
-  integer :: n    
+  integer :: n
   findx = 0
   do n=1,nf
     if (trim(fnames(n))==name) then
@@ -617,14 +617,14 @@ module readtgcm
     endif
   enddo
   if (findx==0) then
-    write(6,"('>>> findx: could not find index to field ',a)") name
-    stop 'findx'
+    write(stderr,"('>>> findx: could not find index to field ',a)") name
+    error stop 'findx'
   endif
   end function findx
 
 !-----------------------------------------------------------------------
 
-  integer function find_mtimes(ncfile,start_mtime,stop_mtime,mtimes,itimes) 
+  integer function find_mtimes(ncfile,start_mtime,stop_mtime,mtimes,itimes)
 !
 ! Open ncfile, find start and stop model times. Return all mtimes
 ! from start to stop, and return in mtimes(mxtimes). Function value
@@ -663,7 +663,7 @@ module readtgcm
 ! Get model times on the file, and close:
     if (.not.allocated(mtime_file)) allocate(mtime_file(3,ntimes))
     istat = nf90_inq_varid(ncid,'mtime',id)
-    istat = nf90_get_var(ncid,id,mtime_file,(/1,1/),(/3,ntimes/)) 
+    istat = nf90_get_var(ncid,id,mtime_file,(/1,1/),(/3,ntimes/))
     istat = nf90_close(ncid)
 !
 ! Search for start time:
@@ -676,19 +676,19 @@ module readtgcm
             mtime_file(2,i)==start_mtime(2).and. &
             mtime_file(3,i)==start_mtime(3)) then
           itime0 = i
-          write(6,"('Found requested start_mtime ',3i4,' (history ',i4,' on the file).')") &
+          write(stdout,"('Found requested start_mtime ',3i4,' (history ',i4,' on the file).')") &
             start_mtime,itime0
-          exit 
+          exit
         endif
       enddo
     endif
     if (itime0==0) then
-      write(6,"('>>> Could not find tgcm start_mtime ',3i4,' mtimes on the file are as follows:')") &
+      write(stderr,"('>>> Could not find tgcm start_mtime ',3i4,' mtimes on the file are as follows:')") &
         start_mtime
       do i=1,ntimes
-        write(6,"('i=',i4,' mtime(i)=',3i4)") i,mtime_file(:,i)
+        write(stderr,"('i=',i4,' mtime(i)=',3i4)") i,mtime_file(:,i)
       enddo
-      stop 'start_mtime'
+      error stop 'start_mtime'
     endif
 !
 ! Search for stop time:
@@ -701,33 +701,33 @@ module readtgcm
             mtime_file(2,i)==stop_mtime(2).and. &
             mtime_file(3,i)==stop_mtime(3)) then
           itime1 = i
-          write(6,"('Found requested stop_mtime ',3i4,' (history ',i4,' on the file).')") &
+          write(stdout,"('Found requested stop_mtime ',3i4,' (history ',i4,' on the file).')") &
             stop_mtime,itime1
-          exit 
+          exit
         endif
       enddo
     endif
     if (itime1==0) then
-      write(6,"('>>> Could not find tgcm stop_mtime ',3i4,' mtimes on the file are as follows:')") &
+      write(stderr,"('>>> Could not find tgcm stop_mtime ',3i4,' mtimes on the file are as follows:')") &
         stop_mtime
       do i=1,ntimes
-        write(6,"('i=',i4,' mtime(i)=',3i4)") i,mtime_file(:,i)
+        write(stderr,"('i=',i4,' mtime(i)=',3i4)") i,mtime_file(:,i)
       enddo
-      stop 'start_mtime'
+      error stop 'start_mtime'
     endif
 !
 ! This should not happen, but you never know...
     if (itime1 < itime0) then
-      write(6,"('>>> find_mtimes: bad itime0 must be <= itime1: itime0,1=',2i4)") &
+      write(stderr,"('>>> find_mtimes: bad itime0 must be <= itime1: itime0,1=',2i4)") &
         itime0,itime1
-      write(6,"('>>> mtime_file(itime0)=',3i4,' mtime_file(itime1)=',3i4)") &
+      write(stderr,"('>>> mtime_file(itime0)=',3i4,' mtime_file(itime1)=',3i4)") &
         mtime_file(:,itime0),mtime_file(:,itime1)
-      stop 'itime0,1'
+      error stop 'itime0,1'
     endif
 !
 ! Return values:
     find_mtimes = itime1-itime0+1 ! number of model times
-    write(6,"('Number of model times to read = ',i4)") find_mtimes
+    write(stdout,"('Number of model times to read = ',i4)") find_mtimes
     do i=itime0,itime1
       mtimes(:,i-itime0+1) = mtime_file(:,i) ! model times from start to stop
       itimes(i-itime0+1) = i                 ! file index of each model time
@@ -757,7 +757,7 @@ module readtgcm
       write(msg,"('Error opening file ',a)") trim(ncfile)
       call handle_ncerr(istat,trim(msg),1)
     else
-      write(6,"(/,'Opened file ',a)") trim(ncfile)
+      write(stdout,"(/,'Opened file ',a)") trim(ncfile)
     endif
 !
 ! Get number of times (histories) (length of unlimited variable):
@@ -804,7 +804,7 @@ module readtgcm
 !   write(6,"('read_tgcm_coords: nilev=',i4,' zilev=',/,(8f10.3))") nilev,zilev
 !   write(6,"('read_tgcm_coords: nilev=',i4,' zilev(nilev)=',f9.3,' zilev(1)=',f9.3,' dlev=',f9.3)") &
 !     nilev,zilev(nilev),zilev(1),dlev
-    write(6,"('read_tgcm_coords: ntime=',i4,' nlon=',i4,' nlat=',i4,' nlev=',i4)") ntime,nlon,nlat,nlev
+    write(stdout,"('read_tgcm_coords: ntime=',i4,' nlon=',i4,' nlat=',i4,' nlev=',i4)") ntime,nlon,nlat,nlev
 !
 ! Allocate and read 1d time-dependent variables (or, this could be done
 ! on a per-history basis below, reading into scalars instead of arrays
@@ -877,13 +877,13 @@ module readtgcm
     integer,intent(in) :: istat,ifatal
     character(len=*),intent(in) :: msg
 !
-    write(6,"(/72('-'))")
-    write(6,"('>>> Error from netcdf library:')")
-    write(6,"(a)") trim(msg)
-    write(6,"('istat=',i5)") istat
-    write(6,"(a)") nf90_strerror(istat)
-    write(6,"(72('-')/)")
-    if (ifatal > 0) stop('Fatal netcdf error')
+    write(stderr,"(/72('-'))")
+    write(stderr,"('>>> Error from netcdf library:')")
+    write(stderr,"(a)") trim(msg)
+    write(stderr,"('istat=',i5)") istat
+    write(stderr,"(a)") nf90_strerror(istat)
+    write(stderr,"(72('-')/)")
+    if (ifatal > 0)  error stop 'Fatal NetCDF error'
   end subroutine handle_ncerr
 
 !-----------------------------------------------------------------------
