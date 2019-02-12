@@ -37,7 +37,7 @@ find_package(MPI COMPONENTS Fortran)
 find_package(NetCDF)
 if(MPI_Fortran_FOUND AND NetCDF_FOUND)
   add_executable(mpi_glow.bin glowdriver.f90 readtgcm.f90 output.f90 tzgrid.f90)
-  target_link_libraries(mpi_glow.bin cglow MPI::MPI_Fortran NetCDF::NetCDF_Fortran NetCDF::NetCDF_C)
+  target_link_libraries(mpi_glow.bin cglow MPI::MPI_Fortran NetCDF::NetCDF_Fortran)
   target_compile_options(mpi_glow.bin PRIVATE ${new})
 endif()
 
