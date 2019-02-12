@@ -51,13 +51,13 @@ module cglow
   implicit none
   save
 
-! Array dimensions, configurable:
+!! Array dimensions, configurable:
 
   integer :: jmax                ! number of vertical levels
+  integer :: nbins               ! number of energetic electron energy bins
 
-! Array dimensions, non-configurable:
+!! Array dimensions, non-configurable:
 
-  integer,parameter :: nbins=260 ! number of energetic electron energy bins
   integer,parameter :: lmax=123  ! number of wavelength intervals for solar flux
   integer,parameter :: nmaj=3    ! number of major species
   integer,parameter :: nst=6     ! number of states produced by photoionization/dissociation
@@ -130,10 +130,10 @@ module cglow
        zceta(nc,nw,jmax), &
        zlbh(nc,jmax))
 
-    allocate          &
-      (phitop(nbins), &
-       ener  (nbins), &
-       del   (nbins))
+!    allocate          &
+!      (phitop(nbins), &
+!       ener  (nbins), &
+!       del   (nbins))
 
     allocate          &
       (wave1(lmax),   &
@@ -213,9 +213,9 @@ module cglow
        zeta(:,:)    =0.
        zceta(:,:,:) =0.
        zlbh(:,:)    =0.
-       phitop(:)    =0.
-       ener  (:)    =0.
-       del   (:)    =0.
+!       phitop(:)    =0.
+!       ener  (:)    =0.
+!       del   (:)    =0.
        wave1(:)     =0.
        wave2(:)     =0.
        sflux(:)     =0.

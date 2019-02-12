@@ -5,7 +5,35 @@ implicit none
 !private
 public :: alt_grid, linspace, cumsum
 
+interface argv
+  procedure argv_r, argv_i
+end interface argv
+
 contains
+
+
+subroutine argv_r(i, val)
+
+integer, intent(in) :: i
+real, intent(out) :: val
+character(1024) :: buf
+
+call get_command_argument(i, buf)
+read(buf, *) val
+
+end subroutine argv_r
+
+
+subroutine argv_i(i, val)
+
+integer, intent(in) :: i
+integer, intent(out) :: val
+character(1024) :: buf
+
+call get_command_argument(i, buf)
+read(buf, *) val
+
+end subroutine argv_i
 
 
 pure real function alt_grid(Nalt, minalt, dmin, dmax)

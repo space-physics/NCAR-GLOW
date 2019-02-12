@@ -43,6 +43,7 @@ legend(ax, 'show','location','northeast')
 %%
 figure
 semilogx(iono.energy_bin_centers, iono.Eflux)
+grid('on')
 title('Particle Flux')
 xlabel('energy bin centers [eV]')
 ylabel('hemispherical flux [cm^{-2} s^{-1} eV^{-1}')

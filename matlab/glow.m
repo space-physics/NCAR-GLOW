@@ -1,4 +1,4 @@
-function iono = glow(time, glat, glon, f107a, f107, f107p, Ap, Q, Echar)
+function iono = glow(time, glat, glon, f107a, f107, f107p, Ap, Q, Echar, Nbins)
 
 Nalt = 250;  % jmax in Fortran
 
@@ -10,6 +10,7 @@ validateattributes(f107p, {'numeric'}, {'positive', 'scalar'})
 validateattributes(Ap, {'numeric'}, {'positive', 'scalar'})
 validateattributes(Q, {'numeric'}, {'positive', 'scalar'})
 validateattributes(Echar, {'numeric'}, {'positive', 'scalar'})
+validateattributes(Nbins, {'numeric'}, {'positive', 'integer', 'scalar'})
 %% binary
 cwd = fileparts(mfilename('fullpath'));
 exe = [cwd,filesep,'..', filesep, 'build', filesep, 'glow.bin'];
@@ -21,7 +22,7 @@ idate = [int2str(tvec(1)), int2str(date2doy(time))];
 utsec = num2str(tvec(4)*3600 + tvec(5)*60 + tvec(6));
 
 cmd = [exe, ' ', idate,' ',utsec,...
-       ' ',num2str([glat, glon, f107a, f107, f107p, Ap, Q, Echar])];
+       ' ',num2str([glat, glon, f107a, f107, f107p, Ap, Q, Echar, Nbins])];
 [status,dat] = system(cmd);
 if status ~= 0, error(dat), end
 

@@ -10,10 +10,11 @@ f107p = 100;
 Q = 1;
 %% characteristic energy [eV]
 Echar = 100e3;
-
+%% Number of energy bins
+Nbins = 250;
 %% glow model
 % Axxxx wavelength in angstrom, intensity in Rayleigh 10^6 photons cm-2
 % density cgs cm-3
-iono = glow(time, glat, glon, f107a, f107, f107p, Ap, Q, Echar);
+iono = glow(time, glat, glon, f107a, f107, f107p, Ap, Q, Echar, Nbins);
 
 plotglow(iono, time, glat, glon)
