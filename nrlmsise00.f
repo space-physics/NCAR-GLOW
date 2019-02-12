@@ -132,7 +132,7 @@ C              22 - ALL TN3 VAR           23 - TURBO SCALE HEIGHT VAR
 C
 C        To get current values of SW: CALL TRETRV(SW)
 C
-      DIMENSION D(9),T(2),AP(7),DS(9),TS(2)
+      DIMENSION D(9),T(2),AP(*),DS(9),TS(2)
       DIMENSION ZN3(5),ZN2(4),SV(25)
       COMMON/GTS3C/TLB,S,DB04,DB16,DB28,DB32,DB40,DB48,DB01,ZA,T0,Z0
      & ,G0,RL,DD,DB14,TR12
@@ -346,7 +346,7 @@ C        D(9) - Anomalous oxygen NUMBER DENSITY(CM-3)
 C        T(1) - EXOSPHERIC TEMPERATURE
 C        T(2) - TEMPERATURE AT ALT
 C
-      DIMENSION D(9),T(2),AP(7),DS(9),TS(2)
+      DIMENSION D(9),T(2),AP(*),DS(9),TS(2)
       COMMON/METSEL/IMR
       CALL GTD7(IYD,SEC,ALT,GLAT,GLONG,STL,F107A,F107,AP,MASS,D,T)
 C       TOTAL MASS DENSITY
@@ -398,7 +398,7 @@ C        T(2) - TEMPERATURE AT ALT
 C
       COMMON/PARMB/GSURF,RE
       COMMON/METSEL/IMR
-      DIMENSION D(9),T(2),AP(7)
+      DIMENSION D(9),T(2),AP(*)
       SAVE
       DATA BM/1.3806E-19/,RGAS/831.4/
       DATA TEST/.00043/,LTEST/12/
@@ -466,7 +466,7 @@ C-----------------------------------------------------------------------
       FUNCTION VTST7(IYD,SEC,GLAT,GLONG,STL,F107A,F107,AP,IC)
 C       Test if geophysical variables or switches changed and save
 C       Return 0 if unchanged and 1 if changed
-      DIMENSION AP(7),IYDL(2),SECL(2),GLATL(2),GLL(2),STLL(2)
+      DIMENSION AP(*),IYDL(2),SECL(2),GLATL(2),GLL(2),STLL(2)
       DIMENSION FAL(2),FL(2),APL(7,2),SWL(25,2),SWCL(25,2)
       COMMON/CSW/SW(25),ISW,SWC(25)
       SAVE
@@ -577,7 +577,7 @@ C
       COMMON/GTS3C/TLB,S,DB04,DB16,DB28,DB32,DB40,DB48,DB01,ZA,T0,Z0
      & ,G0,RL,DD,DB14,TR12
       COMMON/MESO7/TN1(5),TN2(4),TN3(5),TGN1(2),TGN2(2),TGN3(2)
-      DIMENSION D(9),T(2),MT(11),AP(1),ALTL(8)
+      DIMENSION D(9),T(2),MT(11),AP(*),ALTL(8)
       COMMON/LOWER7/PTM(10),PDM(10,8)
       COMMON/PARM7/PT(150),PD(150,9),PS(150),PDL(25,2),PTL(100,4),
      $ PMA(100,10),SAM(100)
@@ -966,7 +966,7 @@ C-----------------------------------------------------------------------
 C       CALCULATE G(L) FUNCTION 
 C       Upper Thermosphere Parameters
       REAL LAT, LONG
-      DIMENSION P(200),SV(25),AP(7)
+      DIMENSION P(*),SV(25),AP(*)
       COMMON/TTEST/TINF,GB,ROUT,T(15)
       COMMON/CSW/SW(25),ISW,SWC(25)
       COMMON/LPOLY/PLG(9,4),CTLOC,STLOC,C2TLOC,S2TLOC,C3TLOC,S3TLOC,
@@ -1223,7 +1223,7 @@ C      VERSION OF GLOBE FOR LOWER ATMOSPHERE 10/26/99
       COMMON/LPOLY/PLG(9,4),CTLOC,STLOC,C2TLOC,S2TLOC,C3TLOC,S3TLOC,
      $ IYR,DAY,DF,DFA,APD,APDF,APT(4),LONG
       COMMON/CSW/SW(25),ISW,SWC(25)
-      DIMENSION P(200),T(14)
+      DIMENSION P(*),T(14)
       SAVE
       DATA DR/1.72142E-2/,DGTR/1.74533E-2/,PSET/2./
       DATA DAYL/-1./,P32,P18,P14,P39/4*-1000./
