@@ -110,6 +110,7 @@ if(buf /= '-e') then
   if (ef>.001 .and. ec>1.) call maxt (ef,ec,ener,del,nbins,itail,fmono,emono,phitop)
 else
   call argv(10, nbins)
+  allocate(ener(nbins), del(nbins), phitop(nbins))
 
   do j = 1,nbins
     call argv(10+j, ener(j))

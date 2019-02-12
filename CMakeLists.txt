@@ -2,11 +2,17 @@ cmake_minimum_required(VERSION 3.0)
 project(GLOW
   LANGUAGES Fortran
   VERSION 0.981)
+enable_testing()
 
 add_compile_options(-O3)
-if(CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL 8)
-  list(APPEND old -std=legacy -w)
-  list(APPEND new -std=f2018)
+if(CMAKE_Fortran_COMPILER_ID STREQUAL GCC)
+
+  list(APPEND old -w)
+
+  if(CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL 8)
+    list(APPEND old -std=legacy)
+    list(APPEND new -std=f2018)
+  endif()
 endif()
 
 set(cglow_src glow.f90 cglow.f90 fieldm.f solzen.f90 ssflux.f90 rcolum.f90 qback.f90 etrans.f90 exsect.f gchem.f90 bands.f90 ephoto.f90 egrid.f90 maxt.f90)
@@ -21,3 +27,25 @@ target_compile_options(cglow PRIVATE ${old})
 add_executable(glow.bin glowpython.f90 utils.f90 fsutils.f90)
 target_link_libraries(glow.bin cglow)
 target_compile_options(glow.bin PRIVATE ${new})
+
+function(check_octave_source_runs code)
+
+# imported target doesn't work with CMake 3.13
+execute_process(COMMAND ${Octave_EXECUTABLE} --eval ${code}
+  ERROR_QUIET OUTPUT_QUIET
+  RESULT_VARIABLE ok
+  TIMEOUT 5)
+
+set(OctaveOK ${ok} CACHE BOOL "GNU Octave is sufficiently new to run self-tests")
+
+endfunction(check_octave_source_runs)
+
+find_package(Octave COMPONENTS Interpreter)
+check_octave_source_runs("exit(exist('validateattributes'))")
+if(OctaveOK)
+
+add_test(NAME Simple COMMAND Octave::Interpreter --eval Simple
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/matlab)
+set_tests_properties(Simple PROPERTIES TIMEOUT 20)
+
+endif()
