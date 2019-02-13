@@ -1,4 +1,4 @@
-project('GLOW', 'fortran', 
+project('GLOW', 'fortran',
   version : '0.981',
   default_options : ['default_library=static', 'buildtype=release'])
 
@@ -18,6 +18,25 @@ utils_src = files('mzgrid.f90', 'conduct.f90', 'nrlmsise00.f', 'iri90.f')
 
 cglow = library('cglow', cglow_src, snoem_src, utils_src, fortran_args : old)
 
+# ------  Python Matlab command line driver -----------
+
 glowexe = executable('glow.bin', 'glowpython.f90', 'utils.f90', 'fsutils.f90',
   link_with : cglow,
   fortran_args : new)
+
+octave = find_program('octave', required : false)
+if octave.found()
+  test('Simple', octave, args : ['--eval', 'Simple'],
+    workdir : meson.source_root() / 'matlab')
+endif
+ # ------ MPI driver ------------
+mpi = dependency('mpi', language : 'fortran')
+netcdf = dependency('NetCDF',
+  method : 'cmake', cmake_module_path : meson.source_root() / 'cmake/Modules',
+  required : false)
+if mpi.found() and netcdf.found()
+mpiglow = executable('mpi_glow.bin', 'glowdriver.f90', 'readtgcm.f90', 'output.f90', 'tzgrid.f90',
+  dependencies : [netcdf, mpi],
+  link_with : cglow,
+  fortran_args : old)
+endif

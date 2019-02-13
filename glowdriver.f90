@@ -33,7 +33,7 @@ program glowdriver
 ! nex     number of ionized/excited species
 ! nw      number of airglow emission wavelengths
 ! nc      number of component production terms for each emission
-  use, intrinsic :: iso_fortran_env, only: stderr=>error_unit, stdout=>output_unit
+  use, intrinsic :: iso_fortran_env, only: stderr=>error_unit, stdout=>output_unit, stdin=>input_unit
   use mpi
 
   use cglow,only: cglow_init      ! subroutine to allocate use-associated variables
@@ -100,9 +100,15 @@ program glowdriver
     tgcm_ncfile,iri90_dir,jmax,glow_ncfile, &
     start_mtime,stop_mtime,data_dir,writelbh,writered
 
+  character(1024) :: buf
+
 ! Execute:
 
-!
+  !> number of energy bins
+  call get_command_argument(1, buf)
+  read(buf, *) nbins
+  allocate(ener(nbins), del(nbins), phitop(nbins))
+
 ! Set up MPI:
 !
   call mpi_init(mpierr)
@@ -122,7 +128,7 @@ program glowdriver
 ! If tgcm history file is not provided, will use namelist inputs for MSIS/IRI/NOEM:
 !
   if (itask == 0) then
-    read (5,nml=glow_input)
+    read(stdin, nml=glow_input)
     if (len_trim(tgcm_ncfile) > 0) then
       tgcm = .true.
       call read_tgcm_coords(tgcm_ncfile)
@@ -130,7 +136,7 @@ program glowdriver
     else
       tgcm = .false.
       ntimes = ifix((utstop-utstart)/utstep) + 1
-      write(stderr,"('glow_drv: tgcm_ncfile not provided, will use MSIS/IRI')")
+      write(stderr,*) "glow_drv: tgcm_ncfile not provided, will use MSIS/IRI"
     endif
   endif
 !
@@ -267,8 +273,8 @@ program glowdriver
           call tzgrid(i,l,jmax,z,zo,zo2,zn2,zns,znd,zno,ztn,zun,zvn,ze,zti,zte)
         else
           stl = ut/3600. + glong/15.
-          if (stl < 0.) stl = stl + 24.
-          if (stl >= 24.) stl = stl - 24.
+          stl = modulo(stl, 24.)
+
           call mzgrid (jmax,nex,idate,ut,glat,glong,stl,f107a,f107,f107p,ap,iri90_dir, &
                      z,zo,zo2,zn2,zns,znd,zno,ztn,zun,zvn,ze,zti,zte,zxden)
         endif

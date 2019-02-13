@@ -15,6 +15,10 @@ addons:
     packages:
     - gfortran-6
     - octave
+    - libnetcdf-dev
+    - libnetcdff-dev
+    - libopenmpi-dev
+    - openmpi-bin
 
 matrix:
   include:

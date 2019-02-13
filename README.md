@@ -11,7 +11,7 @@ The GLobal airglOW Model
 * Subdirectory data/iri90 contains IRI input data files
 
 
-### Build
+## Build
 You can call this repo from a Meson wrap or CMake Fetch.
 To build by itself, do either:
 
@@ -29,3 +29,12 @@ cmake -B build -S .
 
 cmake --build build -j
 ```
+
+### MPI / NetCDF
+
+The parallel version of GLOW requires MPI and NetCDF for TIEGCM I/O.
+
+## Matlab
+
+The Matlab and Python interfaces work similarly.
+Matlab code is in the [matlab](./matlab) directory, and passes data to / from Glow over stdin / stdout pipes.
