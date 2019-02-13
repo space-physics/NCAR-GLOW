@@ -66,7 +66,7 @@ emono=0.
 !> Set data directories:
 call get_command_argument(0, buf)
 data_dir = dirname(buf, '/'//char(92)) // '/../data/'
-iri90_dir = data_dir // 'iri90/'
+iri90_dir = trim(data_dir) // 'iri90/'
 
 !> Set number of altitude levels:
 Nalt = 250

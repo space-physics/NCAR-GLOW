@@ -19,4 +19,6 @@ Nbins = 250;
 % density cgs cm-3
 iono = glowenergy(time, glat, glon, f107a, f107, f107p, Ap, Ebins, Phitop);
 
-plotglow(iono, time, glat, glon)
+if interactive
+  plotglow(iono, time, glat, glon)
+end

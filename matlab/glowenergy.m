@@ -17,7 +17,7 @@ exe = glowpath();
 
 cmd = [exe, ' ', idate,' ',utsec,' ',...
        num2str([glat, glon, f107a, f107, f107p, Ap]),...
-       ' -e ', int2str(Nbins),num2str([Ebins, Phitop])];
+       ' -e ', int2str(Nbins), ' ',num2str([Ebins, Phitop])];
 [status,dat] = system(cmd);
 if status ~= 0, error(dat), end
 

@@ -1,5 +1,6 @@
 module utils
 ! f2py -c utils.f90 -m futils
+use, intrinsic :: iso_fortran_env, only: stderr=>error_unit
 
 implicit none
 !private
@@ -17,9 +18,15 @@ subroutine argv_r(i, val)
 integer, intent(in) :: i
 real, intent(out) :: val
 character(1024) :: buf
+integer :: j
 
 call get_command_argument(i, buf)
-read(buf, *) val
+read(buf, *, iostat=j) val
+
+if(j/=0) then
+  write(stderr,*) 'failed to read value #',i
+  error stop
+endif
 
 end subroutine argv_r
 
@@ -29,9 +36,15 @@ subroutine argv_i(i, val)
 integer, intent(in) :: i
 integer, intent(out) :: val
 character(1024) :: buf
+integer :: j
 
 call get_command_argument(i, buf)
-read(buf, *) val
+read(buf, *, iostat=j) val
+
+if(j/=0) then
+  write(stderr,*) 'failed to read value #',i
+  error stop
+endif
 
 end subroutine argv_i
 
