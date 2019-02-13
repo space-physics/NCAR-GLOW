@@ -106,27 +106,27 @@
 ! A        scaling factor for EUVAC model
 
 
-    subroutine ssflux (iscale,f107,f107a,xuvfac,wave1,wave2,sflux)
+subroutine ssflux (iscale,f107,f107a,xuvfac,wave1,wave2,sflux)
 
-      use cglow,only: lmax,data_dir
+use cglow,only: lmax,data_dir
 
-      implicit none
-      save
+implicit none
+save
 
-      integer,intent(in) :: iscale
-      real,intent(in) :: f107, f107a, xuvfac
-      real,intent(out) :: wave1(lmax), wave2(lmax), sflux(lmax)
+integer,intent(in) :: iscale
+real,intent(in) :: f107, f107a, xuvfac
+real,intent(out) :: wave1(lmax), wave2(lmax), sflux(lmax)
 
-      integer :: l, islast, u
-      real :: wavel(lmax), waves(lmax), rflux(lmax), uflux(lmax)
-      real :: scale1(lmax), scale2(lmax), a(lmax), b1(3), b2(3), epsil
-      real :: r1, r2, p107
-      character(:), allocatable :: filepath
-      data epsil/1.0E-6/
-      data islast/-1/
+integer :: l, islast, u
+real :: wavel(lmax), waves(lmax), rflux(lmax), uflux(lmax)
+real :: scale1(lmax), scale2(lmax), a(lmax), b1(3), b2(3), epsil
+real :: r1, r2, p107
+character(:), allocatable :: filepath
+data epsil/1.0E-6/
+data islast/-1/
 
 ! regression coefficients which reduce to solar min. spectrum:
-      data b1/1.0, 0.0138, 0.005/, b2/1.0, 0.59425, 0.3811/
+data b1/1.0, 0.0138, 0.005/, b2/1.0, 0.59425, 0.3811/
 
 ! 'best fit' regression coefficients, commented out, for reference:
 !     DATA B1/1.31, 0.01106, 0.00492/, B2/-6.618, 0.66159, 0.38319/
@@ -134,77 +134,77 @@
 
 ! Hinteregger contrast ratio method:
 
-      if (iscale == 0) then
-        if (islast /= iscale) then
-          filepath = trim(data_dir)//'ssflux_hint.dat'
-          open(newunit=u,file=filepath,status='old',action='read')
-          read(u,*)
-          do l=lmax,1,-1
-            read(u,*) waves(l),wavel(l),rflux(l),scale1(l),scale2(l)
-          enddo
-          close(u)
-        endif
+if (iscale == 0) then
+  if (islast /= iscale) then
+    filepath = trim(data_dir)//'ssflux_hint.dat'
+    open(newunit=u,file=filepath,status='old',action='read')
+    read(u,*)
+    do l=lmax,1,-1
+      read(u,*) waves(l),wavel(l),rflux(l),scale1(l),scale2(l)
+    enddo
+    close(u)
+  endif
 !
-        r1 =  b1(1) + b1(2)*(f107a-71.5) + b1(3)*(f107-f107a+3.9)
-        r2 =  b2(1) + b2(2)*(f107a-71.5) + b2(3)*(f107-f107a+3.9)
+  r1 =  b1(1) + b1(2)*(f107a-71.5) + b1(3)*(f107-f107a+3.9)
+  r2 =  b2(1) + b2(2)*(f107a-71.5) + b2(3)*(f107-f107a+3.9)
 !
-        do l=1,lmax
-          sflux(l) = rflux(l) + (r1-1.)*scale1(l) + (r2-1.)*scale2(l)
-          if (sflux(l) < 0.0) sflux(l) = 0.0
-          if (xuvfac > epsil .and. wavel(l) < 251.0 .and. waves(l) > 17.0) &
-            sflux(l)=sflux(l)*xuvfac
-        enddo
-      endif
+  do l=1,lmax
+    sflux(l) = rflux(l) + (r1-1.)*scale1(l) + (r2-1.)*scale2(l)
+    if (sflux(l) < 0.0) sflux(l) = 0.0
+    if (xuvfac > epsil .and. wavel(l) < 251.0 .and. waves(l) > 17.0) &
+      sflux(l)=sflux(l)*xuvfac
+  enddo
+endif
 
 ! EUVAC Method:
 
-      if (iscale == 1) then
-        if (islast /= iscale) then
-          filepath = trim(data_dir)//'ssflux_euvac.dat'
-          open(newunit=u,file=filepath,status='old',action='read')
-          read(u,*)
-          do l=lmax,1,-1
-            read(u,*) waves(l),wavel(l),rflux(l),a(l)
-          enddo
-          close(u)
-        endif
+if (iscale == 1) then
+  if (islast /= iscale) then
+    filepath = trim(data_dir)//'ssflux_euvac.dat'
+    open(newunit=u,file=filepath,status='old',action='read')
+    read(u,*)
+    do l=lmax,1,-1
+      read(u,*) waves(l),wavel(l),rflux(l),a(l)
+    enddo
+    close(u)
+  endif
 
-      p107 = (f107+f107a)/2.
+p107 = (f107+f107a)/2.
 
-        do l=1,lmax
-          sflux(l) = rflux(l) * (1. + a(l)*(p107-80.))
-          if (sflux(l) < 0.1*rflux(l)) sflux(l) = 0.1*rflux(l)
-          if (xuvfac > epsil .and. wavel(l) < 51.0 .and. waves(l) > 17.0) &
-            sflux(l)=sflux(l)*xuvfac
-        enddo
-      endif
+  do l=1,lmax
+    sflux(l) = rflux(l) * (1. + a(l)*(p107-80.))
+    if (sflux(l) < 0.1*rflux(l)) sflux(l) = 0.1*rflux(l)
+    if (xuvfac > epsil .and. wavel(l) < 51.0 .and. waves(l) > 17.0) &
+      sflux(l)=sflux(l)*xuvfac
+  enddo
+endif
 
 ! User-supplied data:
 
-      if (iscale == 2) then
-        if (islast /= iscale) then
-          filepath = trim(data_dir)//'ssflux_user.dat'
-          open(newunit=u,file=filepath,status='old',action='read')
-          read(u,*)
-          do l=lmax,1,-1
-            read(u,*) waves(l),wavel(l),uflux(l)
-          enddo
-          close(u)
-        endif
-        do l=1,lmax
-          sflux(l)=uflux(l)
-        enddo
-      endif
+if (iscale == 2) then
+  if (islast /= iscale) then
+    filepath = trim(data_dir)//'ssflux_user.dat'
+    open(newunit=u,file=filepath,status='old',action='read')
+    read(u,*)
+    do l=lmax,1,-1
+      read(u,*) waves(l),wavel(l),uflux(l)
+    enddo
+    close(u)
+  endif
+  do l=1,lmax
+    sflux(l)=uflux(l)
+  enddo
+endif
 
 ! Fill wavelength arrays:
 
-      do l=1,lmax
-        wave1(l) = wavel(l)
-        wave2(l) = waves(l)
-      enddo
+do l=1,lmax
+  wave1(l) = wavel(l)
+  wave2(l) = waves(l)
+enddo
 
-      islast=iscale
+islast=iscale
 
-      return
+return
 
-    end subroutine ssflux
+end subroutine ssflux
