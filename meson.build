@@ -11,16 +11,14 @@ if fc.version().version_compare('>=8')
   new += '-std=f2018'
 endif
 
-cglow_src = files('glow.f90', 'cglow.f90', 'fieldm.f', 'solzen.f90', 'ssflux.f90', 'rcolum.f90', 'qback.f90', 'etrans.f90', 'exsect.f', 'gchem.f90', 'bands.f90', 'ephoto.f90', 'egrid.f90', 'maxt.f90')
-
-snoem_src = files('snoem.f90', 'snoemint.f90', 'geomag.f90')
-utils_src = files('mzgrid.f90', 'conduct.f90', 'nrlmsise00.f', 'iri90.f')
+subdir('src')
 
 cglow = library('cglow', cglow_src, snoem_src, utils_src, fortran_args : old)
 
 # ------  Python Matlab command line driver -----------
 
-glowexe = executable('glow.bin', 'glowpython.f90', 'utils.f90', 'fsutils.f90',
+glowexe = executable('glow.bin',
+  'src/glowpython.f90', 'src/utils.f90', 'src/fsutils.f90',
   link_with : cglow,
   fortran_args : new)
 
@@ -35,7 +33,8 @@ netcdf = dependency('NetCDF',
   method : 'cmake', cmake_module_path : meson.source_root() / 'cmake/Modules',
   required : false)
 if mpi.found() and netcdf.found()
-mpiglow = executable('mpi_glow.bin', 'glowdriver.f90', 'readtgcm.f90', 'output.f90', 'tzgrid.f90','fsutils.f90',
+mpiglow = executable('mpi_glow.bin',
+  'src/glowdriver.f90', 'src/readtgcm.f90', 'src/output.f90', 'src/tzgrid.f90','src/fsutils.f90',
   dependencies : [netcdf, mpi],
   link_with : cglow,
   fortran_args : old)

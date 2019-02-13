@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/scivision/NCAR-GLOW.svg?branch=master)](https://travis-ci.com/scivision/NCAR-GLOW)
+[![Build Status](https://travis-ci.com/scivision/NCAR-GLOW.svg?branch=cmake)](https://travis-ci.com/scivision/NCAR-GLOW)
 
 # GLOW
 The GLobal airglOW Model
@@ -33,8 +33,14 @@ cmake --build build -j
 ### MPI / NetCDF
 
 The parallel version of GLOW requires MPI and NetCDF for TIEGCM I/O.
+```sh
+mpirun -np 4 ./mpi_glow.bin 250 ~/data/myfile.nc
+```
 
 ## Matlab
 
 The Matlab and Python interfaces work similarly.
 Matlab code is in the [matlab](./matlab) directory, and passes data to / from Glow over stdin / stdout pipes.
+
+* Use built-in energy and altitude bins: [Simple.m](./matlab/Simple.m)
+* user input energy grid: [EnergyGrid.m](./matlab/EnergyGrid.m)
