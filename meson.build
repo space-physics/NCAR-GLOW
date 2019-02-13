@@ -35,7 +35,7 @@ netcdf = dependency('NetCDF',
   method : 'cmake', cmake_module_path : meson.source_root() / 'cmake/Modules',
   required : false)
 if mpi.found() and netcdf.found()
-mpiglow = executable('mpi_glow.bin', 'glowdriver.f90', 'readtgcm.f90', 'output.f90', 'tzgrid.f90',
+mpiglow = executable('mpi_glow.bin', 'glowdriver.f90', 'readtgcm.f90', 'output.f90', 'tzgrid.f90','fsutils.f90',
   dependencies : [netcdf, mpi],
   link_with : cglow,
   fortran_args : old)

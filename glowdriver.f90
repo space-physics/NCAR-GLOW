@@ -35,6 +35,7 @@ program glowdriver
 ! nc      number of component production terms for each emission
   use, intrinsic :: iso_fortran_env, only: stderr=>error_unit, stdout=>output_unit, stdin=>input_unit
   use mpi
+  use fsutils, only: expanduser
 
   use cglow,only: cglow_init      ! subroutine to allocate use-associated variables
   use cglow,only: jmax,nbins,lmax,nmaj,nei,nex,nw,nc,nst
@@ -132,6 +133,7 @@ program glowdriver
     read(stdin, nml=glow_input)
     if (len_trim(tgcm_ncfile) > 0) then
       tgcm = .true.
+      tgcm_ncfile = expanduser(tgcm_ncfile)
       call read_tgcm_coords(tgcm_ncfile)
       ntimes = find_mtimes(tgcm_ncfile,start_mtime,stop_mtime,mtimes,itimes)
     else
@@ -435,7 +437,7 @@ program glowdriver
 !
   if (itask == 0) then
     write (ifile,"('.',i3.3,'.nc')") itime
-    glow_ncfileit = trim(glow_ncfile) // ifile
+    glow_ncfileit = expanduser(glow_ncfile) // ifile
     call create_ncfile(glow_ncfileit,tgcm_ncfile)
     call write_ncfile(glow_ncfileit)
   endif
