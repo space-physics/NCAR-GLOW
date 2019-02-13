@@ -155,7 +155,7 @@ if (mpierr /= 0) error stop 'mpi_bcast nbins'
 call mpi_bcast(tgcm,1,MPI_LOGICAL,0,MPI_COMM_WORLD,mpierr)
 call mpi_bcast(data_dir,len(data_dir),MPI_CHARACTER,0,MPI_COMM_WORLD,mpierr)
 if (mpierr /= 0 .or. len_trim(data_dir)==0) error stop 'mpi_bcast cglow_data_dir'
-print *,data_dir, mpierr
+
 call mpi_bcast(iscale,1,MPI_INTEGER,0,MPI_COMM_WORLD,mpierr)
 call mpi_bcast(jlocal,1,MPI_INTEGER,0,MPI_COMM_WORLD,mpierr)
 call mpi_bcast(kchem,1,MPI_INTEGER,0,MPI_COMM_WORLD,mpierr)
