@@ -35,9 +35,8 @@ matrix:
 #    - cmake --build .
 
 install:
-- cmake -B build -S .
-- cmake --build build -j
+- cd build
+- cmake ..
+- cmake --build . -j
 
-script:
-- cd $TRAVIS_BUILD_DIR/build
-- ctest --output-on-failure
+script: ctest --output-on-failure

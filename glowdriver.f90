@@ -44,7 +44,7 @@ program glowdriver
   use cglow,only: zz,zo,zn2,zo2,zns,znd,zno,ztn,ze,zti,zte
   use cglow,only: ener,del,phitop,wave1,wave2,sflux,pespec,sespec,uflx,dflx,sion
   use cglow,only: photoi,photod,phono,aglw,ecalc,zxden,zeta,zceta,zlbh
-  use cglow,only: data_dir
+  use cglow,only: cglow_data_dir=>data_dir
 
   use readtgcm,only: read_tgcm           ! subroutine to read tgcm history file
   use readtgcm,only: read_tgcm_coords    ! subroutine to read tgcm history coordinates
@@ -70,11 +70,12 @@ program glowdriver
 
   implicit none
 
-  character(len=1024) :: &
+  character(1024) :: &
     tgcm_ncfile,         &    ! path to tgcm history file (tiegcm or timegcm)
     glow_ncfile,         &    ! name for of netCDF glow output files
     glow_ncfileit,       &    ! path to individual netCDF glow output file (integer appended)
-    iri90_dir                 ! directory containing iri data files
+    iri90_dir, &              ! directory containing iri data files
+    data_dir
   character(len=7) :: ifile
 
   real,allocatable :: z(:)            ! glow height coordinate in km (jmax)
@@ -139,7 +140,9 @@ program glowdriver
       write(stderr,*) "glow_drv: tgcm_ncfile not provided, will use MSIS/IRI"
     endif
   endif
-!
+
+  cglow_data_dir = trim(data_dir)
+
 ! Broadcast namelist inputs, tgcm coordinates, times, etc., to all processors:
 !
   call mpi_bcast(tgcm,1,MPI_LOGICAL,0,MPI_COMM_WORLD,mpierr)
@@ -275,7 +278,7 @@ program glowdriver
           stl = ut/3600. + glong/15.
           stl = modulo(stl, 24.)
 
-          call mzgrid (jmax,nex,idate,ut,glat,glong,stl,f107a,f107,f107p,ap,iri90_dir, &
+          call mzgrid(jmax,nex,idate,ut,glat,glong,stl,f107a,f107,f107p,ap,trim(iri90_dir), &
                      z,zo,zo2,zn2,zns,znd,zno,ztn,zun,zvn,ze,zti,zte,zxden)
         endif
 !
