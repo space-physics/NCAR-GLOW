@@ -22,7 +22,7 @@
 ! nw      number of airglow emission wavelengths
 ! nc      number of component production terms for each emission
 
-use, intrinsic :: iso_fortran_env, only: stdout=>output_unit
+use, intrinsic :: iso_fortran_env, only: stdout=>output_unit, stdin=>input_unit, wp=>real32
 use fsutils, only: dirname
 use utils, only: alt_grid, argv
 
@@ -43,12 +43,12 @@ character(:), allocatable :: iri90_dir
 
 character(1024) :: buf
 
-real,allocatable :: z(:)                    ! glow height coordinate in km (Nalt)
-real,allocatable :: zun(:), zvn(:)          ! neutral wind components (not in use)
-real,allocatable :: pedcond(:), hallcond(:) ! Pederson and Hall conductivities in S/m (mho)
-real,allocatable :: outf(:,:)               ! iri output (11,Nalt)
-real :: stl,fmono,emono
-real :: sw(25)
+real(wp), allocatable :: z(:)                    ! glow height coordinate in km (Nalt)
+real(wp), allocatable :: zun(:), zvn(:)          ! neutral wind components (not in use)
+real(wp), allocatable :: pedcond(:), hallcond(:) ! Pederson and Hall conductivities in S/m (mho)
+real(wp), allocatable :: outf(:,:)               ! iri output (11,Nalt)
+real(wp) :: stl,fmono,emono
+real(wp) :: sw(25)
 integer :: j,ii,itail
 
 data sw/25*1./
@@ -98,10 +98,9 @@ if(buf /= '-e') then
   read(buf, *) ef  ! hemispherical flux
 
   call argv(10, ec) ! characteristic energy [eV]
-
   call argv(11, nbins) ! number of energy bins
-
   allocate(ener(nbins), del(nbins), phitop(nbins))
+
   !! Call EGRID to set up electron energy grid:
   call egrid(ener, del, nbins)
 
@@ -112,11 +111,20 @@ else
   call argv(10, nbins)
   allocate(ener(nbins), del(nbins), phitop(nbins))
 
-  do j = 1,nbins
-    call argv(10+j, ener(j))
+  block
+    integer :: u
+    call get_command_argument(11, buf)
+    open(newunit=u, file=buf, access='stream', action='read', status='old')
 
-    call argv(10+nbins+j, phitop(j))
-  enddo
+    !> array filling real32 reads
+    read(u) ener
+    read(u) phitop
+
+    close(u)
+  endblock
+
+
+
 
   del(2:) = ener(2:) - ener(1:nbins-1)
   del(1) = del(2) / 2  ! arbitrary

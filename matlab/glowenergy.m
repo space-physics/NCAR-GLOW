@@ -15,9 +15,21 @@ assert(Nbins == length(Phitop), 'Phitop and Ebins must be same length')
 exe = glowpath();
 [idate, utsec] = glowdate(time);
 
+%% workaround Windows 8192 cmd line limit by using binary input files to pass data
+Efn = tempname;
+fid = fopen(Efn,'w');
+fwrite(fid, Ebins, 'float32');
+fwrite(fid, Phitop, 'float32');
+fclose(fid);
+
 cmd = [exe, ' ', idate,' ',utsec,' ',...
        num2str([glat, glon, f107a, f107, f107p, Ap]),...
-       ' -e ', int2str(Nbins), ' ',num2str([Ebins, Phitop])];
+       ' -e ', int2str(Nbins), ' ', Efn];
+
+if ispc && length(cmd) > 8000
+  warning('Windows has an 8k character limit on the command line')
+end
+
 [status,dat] = system(cmd);
 if status ~= 0, error(dat), end
 
