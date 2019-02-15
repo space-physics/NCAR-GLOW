@@ -1,4 +1,4 @@
-time = datenum(2015,12,13,10,0,0);
+time = datenum(2015,12,13, 10,0,0);
 glat = 65.1;
 glon = -147.5;
 Ap = 4;
@@ -7,13 +7,14 @@ f107 = 100;
 f107a = 100;
 f107p = 100;
 %% Energy grid
-Emin = 10;
+Emin = 0.1;
 Emax = 1e6;
 E0 = 100e3;
 Nbins = 250;
 
 [Ebins, Phitop] = monoenergetic(Emin, Emax, Nbins, E0);
-
+Phitop = Phitop * 3000;
+%Phitop(:)=0;
 %% glow model
 % Axxxx wavelength in angstrom, intensity in Rayleigh 10^6 photons cm-2
 % density cgs cm-3
