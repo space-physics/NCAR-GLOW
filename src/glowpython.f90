@@ -26,14 +26,16 @@ use, intrinsic :: iso_fortran_env, only: stdout=>output_unit, stdin=>input_unit,
 use fsutils, only: dirname
 use utils, only: alt_grid, argv
 
-use cglow,only: Nalt=>jmax,nbins,nex
+use cglow,only: Nalt=>jmax,nbins,nex, nw
 use cglow,only: idate,utsec=>ut,glat,glong,f107a,f107,f107p,ap,ef,ec
 use cglow,only: iscale,jlocal,kchem,xuvfac
 use cglow,only: zz,zo,zn2,zo2,zns,znd,zno,ztn,ze,zti,zte
 use cglow,only: ener,del,phitop
 use cglow,only: tir,ecalc,zxden,zeta
 use cglow,only: cglow_init
-use cglow,only: data_dir
+use cglow,only: data_dir, &
+  production, loss
+
 ! aglw, dflx, dip, efrac,,pespec ,tei,tpi, uflx,wave1,wave2,zceta,zlbh, photoi,photod,phono
 ! sflux, sion, sza,sespec, lmax,nei,nc,nmaj,,nst,nw
 
@@ -189,13 +191,19 @@ write(stdout,"(1x,0p,f5.1,f6.0,1p,12e10.2)") (z(j),ztn(j),zo(j),zn2(j),zno(j),ze
 !> Optical emissions  (Rayleighs)
 write(stdout,"('   Z      3371    4278    5200    5577    6300    7320   10400    " //&
   "3644    7774    8446    3726    LBH     1356    1493    1304')")
-write(stdout,"(1x,f5.1,15f8.2)")(z(j),(zeta(ii,j),ii=1,15),j=1,Nalt)
+write(stdout,"(1x,f5.1,15f8.2)") (z(j),(zeta(ii,j),ii=1,nw),j=1,Nalt)
+
+!> production, loss
+write(stdout, "(f5.1, 12f12.2)") (z(j),(production(ii,j), ii=1,nex), j=1,Nalt)
+
+write(stdout, "(f5.1, 12f12.2)") (z(j),(loss(ii,j), ii=1,nex), j=1,Nalt)
 
 !> energy bins
 write(stdout, '(i4)') Nbins
 write(stdout,'(1000f15.1)') ener
-
+!> incident particle flux
 write(stdout,'(1000f15.1)') phitop
+
 
 
 end program

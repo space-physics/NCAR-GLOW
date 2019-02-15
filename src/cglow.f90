@@ -96,6 +96,8 @@ module cglow
   real,allocatable,dimension(:,:) :: &                             ! (nei,nmaj)
     ww,ao,omeg,anu,bb,auto,thi,ak,aj,ts,ta,tb,gams,gamb
 
+  real(wp), allocatable, dimension(:,:) :: production, loss  ! gchem.f90
+
   contains
 
 !-----------------------------------------------------------------------
@@ -129,6 +131,8 @@ module cglow
        zeta(nw,jmax),   &
        zceta(nc,nw,jmax), &
        zlbh(nc,jmax))
+
+    allocate(production(NEX,JMAX), loss(NEX,JMAX))
 
     if (.not.allocated(phitop)) allocate(phitop(nbins))
     if (.not.allocated(ener)) allocate(ener(nbins))
@@ -189,6 +193,9 @@ module cglow
        gamb(nei,nmaj))
 
 ! Zero all allocated variable arrays:
+
+       production(:,:) = 0.
+       loss(:,:) = 0.
 
        zz   (:)     =0.
        zo   (:)     =0.

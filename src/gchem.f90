@@ -181,8 +181,8 @@
 !      B42 O+(2Do) fr. O+(2Pe)     Kirby et al, 1979
 !      B43 N2(C) bound fraction    ?
 !      B44 7990 fr. O(3s'3D)       appx. fr. Hecht, p.c.
-!      B45                         not currently in use 
-!      B46 N 1493 fr. N2+hv DI     guess 
+!      B45                         not currently in use
+!      B46 N 1493 fr. N2+hv DI     guess
 !      B47 N 1493 fr. N2+e* DI     guess, cf. Mumma and Zipf (1973), Meier (1991)
 !      B48 N2(a) from (a,a',w)     estimate from comparison with Ajello & Shemansky, GUVI data, etc.
 !      B49 7774, 1356 fr. O-+O+    Melendez, 1999; Qin, 2015 (cf. Tinsley 1973; Julienne, 1974)
@@ -195,7 +195,8 @@
     use cglow,only: jmax, nmaj, nex, nw, nc, kchem, sza, &
                     zz, zo, zn2, zo2, zno, zns, znd, ze, ztn, zti, zte, &
                     photoi, photod, phono, pia, sion, aglw, &
-                    tei, tpi, tir, e=>ecalc, den=>zxden, zeta, zceta, vcb
+                    tei, tpi, tir, e=>ecalc, den=>zxden, zeta, zceta, vcb, &
+                    P=>production, L=>loss
 !
     implicit none
     integer,parameter :: nr=50
@@ -204,7 +205,7 @@
     real ::   A(NR), B(NR), BZ(NR,JMAX), G(NR,JMAX), KZ(NR,JMAX), &
               OEI(JMAX), O2EI(JMAX), RN2EI(JMAX), &
               OPI(JMAX), O2PI(JMAX), RN2PI(JMAX), &
-              RN2ED(JMAX), SRCED(JMAX), P(NEX,JMAX), L(NEX,JMAX), OMINUS(JMAX), &
+              RN2ED(JMAX), SRCED(JMAX), OMINUS(JMAX), &
               T1(JMAX), T2(JMAX), T3(JMAX), T4(JMAX), T5(JMAX), &
               QQ(JMAX), RR(JMAX), SS(JMAX), TT(JMAX), UU(JMAX), &
               VV(JMAX), WW(JMAX), XX(JMAX)
@@ -416,11 +417,11 @@
               + B(32) * PHOTOI(4,2,I) &
               + B(11) * OEI(I) &
               + B(14) * O2EI(I)  &
-              + KZ(14,I) * DEN(2,I) * E(I) & 
-              + KZ(15,I) * DEN(2,I) * ZO(I) & 
+              + KZ(14,I) * DEN(2,I) * E(I) &
+              + KZ(15,I) * DEN(2,I) * ZO(I) &
               + A(6) * DEN(2,I) &
               + (1.-B(8)) * KZ(18,I) * DEN(1,I) * E(I) &
-              + KZ(19,I) * DEN(1,I) * ZO(I) & 
+              + KZ(19,I) * DEN(1,I) * ZO(I) &
               + A(7) * DEN(1,I) &
               + KZ(32,I) * DEN(4,I) * ZO(I) &
               + KZ(39,I) * DEN(5,I) * ZO(I)

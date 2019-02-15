@@ -90,6 +90,31 @@ set(ax, 'xscale', 'log')
 title(ax, 'ultraviolet')
 labelax(ax)
 
+%% production
+hP = figure(5); clf(5)
+set(hP, 'Name', 'production')
+ax = axes('parent', hP, 'nextplot', 'add');
+semilogx(ax, iono.production, iono.altkm)
+semilogx(ax, sum(iono.production, 2), iono.altkm)
+
+ylabel('altitude [km]')
+xlabel(ax,'per-species production cm^{-3} s^{-1}')
+title(ax, 'Production')
+grid(ax, 'on')
+set(ax, 'xscale', 'log')
+%%
+hL = figure(6); clf(6)
+set(hL, 'Name', 'loss')
+ax = axes('parent', hL, 'nextplot', 'add');
+semilogx(ax, iono.loss, iono.altkm)
+semilogx(ax, sum(iono.loss, 2), iono.altkm)
+
+
+ylabel('altitude [km]')
+xlabel(ax,'per-species loss cm^{-3} s^{-1}')
+title(ax, 'Loss')
+grid(ax, 'on')
+set(ax, 'xscale', 'log')
 end
 
 function labelax(ax)
