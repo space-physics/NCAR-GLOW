@@ -34,7 +34,7 @@ cmake --build build -j
 
 The parallel version of GLOW requires MPI and NetCDF for TIEGCM I/O.
 ```sh
-mpirun -np 4 ./mpi_glow.bin 250 ~/data/myfile.nc
+mpirun -np 2 ./mpi_glow.bin < ~/data/in.namelist.tgcm
 ```
 
 ## Matlab / GNU Octave

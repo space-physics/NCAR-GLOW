@@ -131,8 +131,11 @@ if (itask == 0) then
   !> number of energy bins
   block
     character(1024) :: buf
-    call get_command_argument(1, buf)
-    read(buf, *) nbins
+    nbins = 190
+    if (command_argument_count() >= 1) then
+      call get_command_argument(1, buf)
+      read(buf, *) nbins
+    endif
   endblock
 
   if (len_trim(tgcm_ncfile) > 0) then
