@@ -8,7 +8,7 @@
 ! use tgcm inputs, and loop over the tgcm lat x lon grid.
 ! if no tgcm_ncfile is provided, glow_drv will use MSIS and IRI.
 
-!tgcm_ncfile='/hao/tethysv1/data/tiegcm/test2/mareqxmax.v2sres.sec.nc'
+!tgcm_ncfile=
 
 ! start_mtime: model start time (day,hour,minute) (if -999, will start at first history)
 ! stop_mtime: model stop time (day,hour,minute) (if -999, will stop at last history)
@@ -23,11 +23,11 @@ glow_ncfile = 'out.decminmsis'
 
 ! directory containing data files for input to ephoto, snoem, and ssflux (default is data/).
 
-data_dir = 'data/'
+data_dir = '../data/'
 
 ! directory containing IRI coefficient data files (default is data/iri90/):
 
-iri90_dir = 'data/iri90/'
+iri90_dir = '../data/iri90/'
 
 ! flags controlling various glow options:
 
@@ -43,7 +43,7 @@ writered = .false. ! switch controlling output of OI 6300 redline component exci
 indate    = 13355   ! date in yyddd format
 utstart   =  3600.  ! start universal time in seconds (e.g., 43200. would be 12 hours)
 utstep    =  3600.  ! time step in seconds
-utstop    =  3600.  ! end universal time in seconds 
+utstop    =  3600.  ! end universal time in seconds
 f107a     =    70.  ! F10.7 81-day centered average
 f107      =    70.  ! F10.7 daily value
 f107p     =    70.  ! F10.7 daily value for previous day
