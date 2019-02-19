@@ -173,11 +173,13 @@ mark_as_advanced(
 
 function(check_octave_source_runs code)
 
+if(Octave_FOUND)
 execute_process(COMMAND Octave::Interpreter --eval ${code}
   ERROR_QUIET OUTPUT_QUIET
   RESULT_VARIABLE ok
   TIMEOUT 5)
 
 set(OctaveOK ${ok} CACHE BOOL "GNU Octave is sufficiently new to run self-tests")
+endif()
 
 endfunction(check_octave_source_runs)
