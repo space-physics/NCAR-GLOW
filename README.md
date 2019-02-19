@@ -37,6 +37,9 @@ The parallel version of GLOW requires MPI and NetCDF for TIEGCM I/O.
 mpirun -np 2 ./mpi_glow.bin < ~/data/in.namelist.tgcm
 ```
 
+Note, for an unknown reason, `in.namelist.msis` only works with -O0 or -O1 with gfortran 7. We didn't look into why.
+Otherwise, -O3 works fine.
+
 ## Matlab / GNU Octave
 
 The Matlab and Python interfaces work similarly.
