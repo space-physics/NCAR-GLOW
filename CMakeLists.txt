@@ -43,18 +43,6 @@ endif()
 
 #-------- tests --------------
 
-function(check_octave_source_runs code)
-
-# imported target doesn't work with CMake 3.13
-execute_process(COMMAND ${Octave_EXECUTABLE} --eval ${code}
-  ERROR_QUIET OUTPUT_QUIET
-  RESULT_VARIABLE ok
-  TIMEOUT 5)
-
-set(OctaveOK ${ok} CACHE BOOL "GNU Octave is sufficiently new to run self-tests")
-
-endfunction(check_octave_source_runs)
-
 find_package(Octave COMPONENTS Interpreter)
 check_octave_source_runs("exit(exist('validateattributes'))")
 if(OctaveOK)

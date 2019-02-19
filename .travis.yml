@@ -14,7 +14,8 @@ addons:
     sources: ubuntu-toolchain-r-test
     packages:
     - gfortran-6
-    - octave
+#    - octave  # needs Octave >= 4.2 for textscan to work properly
+# https://www.gnu.org/software/octave/NEWS-4.2.html
     - libnetcdf-dev
     - libnetcdff-dev
     - libopenmpi-dev

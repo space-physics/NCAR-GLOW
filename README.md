@@ -37,10 +37,12 @@ The parallel version of GLOW requires MPI and NetCDF for TIEGCM I/O.
 mpirun -np 4 ./mpi_glow.bin 250 ~/data/myfile.nc
 ```
 
-## Matlab
+## Matlab / GNU Octave
 
 The Matlab and Python interfaces work similarly.
 Matlab code is in the [matlab](./matlab) directory, and passes data to / from Glow over stdin / stdout pipes.
 
 * Use built-in energy and altitude bins: [Simple.m](./matlab/Simple.m)
 * user input energy grid: [EnergyGrid.m](./matlab/EnergyGrid.m)
+
+NOTE: if using GNU Octave, version &ge; 4.2 is required for proper [textscan() functionality](https://www.gnu.org/software/octave/NEWS-4.2.html)

@@ -168,3 +168,16 @@ mark_as_advanced(
   Octave_VERSION_MINOR
   Octave_VERSION_PATCH
 )
+
+# ---- Helper functions
+
+function(check_octave_source_runs code)
+
+execute_process(COMMAND Octave::Interpreter --eval ${code}
+  ERROR_QUIET OUTPUT_QUIET
+  RESULT_VARIABLE ok
+  TIMEOUT 5)
+
+set(OctaveOK ${ok} CACHE BOOL "GNU Octave is sufficiently new to run self-tests")
+
+endfunction(check_octave_source_runs)
