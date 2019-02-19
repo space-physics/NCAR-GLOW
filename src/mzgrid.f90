@@ -24,7 +24,7 @@
 !         f107p  F107. index of previous day
 !         ap     Ap index daily value
 !         iri90_dir  Directory containing IRI input files (set in namelist inputs)
-          
+
 ! Outputs:
 !         z      Geographic altitude (km)
 !         zo     O number density, cm-3
@@ -84,7 +84,7 @@ subroutine mzgrid (jmax,nex,idate,ut,glat,glong,stl,f107a,f107,f107p,ap,iri90_di
 ! The directory iri90_dir is the location of the ccirnn.asc and ursinn.asc files.
 !
         jf(:) = .true.
-!       jf(12) = .false.
+
         jf(5) = .false.
         jmag = 0
         rz12 = -f107a

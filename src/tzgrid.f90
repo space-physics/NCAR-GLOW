@@ -97,7 +97,7 @@ subroutine tzgrid(i,l,jmax,z,zo,zo2,zn2,zns,znd,zno,ztn,zun,zvn,ze,zti,zte)
           ze(j)  = ne(i,l,jj)
         endif
       endif
-    enddo 
+    enddo
     z(jmax) = z(jmax-1) + (z(jmax-1)-z(jmax-2))     !patch top level
     ze(jmax) = ze(jmax-1)**2 / ze(jmax-2)
   endif
@@ -134,7 +134,7 @@ subroutine tzgrid(i,l,jmax,z,zo,zo2,zn2,zns,znd,zno,ztn,zun,zvn,ze,zti,zte)
           zvn(j) = (vn(i,l,jj-1)+vn(i,l,jj))/2.
           ze(j)  = ne(i,l,jj)
       endif
-    enddo 
+    enddo
   endif
 
   if (nlev == 49) then                              ! low-res TIME-GCM
@@ -169,9 +169,9 @@ subroutine tzgrid(i,l,jmax,z,zo,zo2,zn2,zns,znd,zno,ztn,zun,zvn,ze,zti,zte)
           zvn(j) = (vn(i,l,jj-1)+vn(i,l,jj))/2.
           ze(j)  = ne(i,l,jj)
         endif
-    enddo 
+    enddo
     z(jmax) = z(jmax-1) + (z(jmax-1)-z(jmax-2))     !patch top level
-    ze(jmax) = ze(jmax-1)**2 / + ze(jmax-2)
+    ze(jmax) = ze(jmax-1)**2 / ze(jmax-2)
   endif
 
   if (nlev == 97) then                              ! high-res TIME-GCM
@@ -190,7 +190,7 @@ subroutine tzgrid(i,l,jmax,z,zo,zo2,zn2,zns,znd,zno,ztn,zun,zvn,ze,zti,zte)
           zun(j) = (un(i,l,jj-1)+un(i,l,jj))/2.
           zvn(j) = (vn(i,l,jj-1)+vn(i,l,jj))/2.
           ze(j)  = ne(i,l,jj)
-    enddo 
+    enddo
   endif
 
 end subroutine tzgrid

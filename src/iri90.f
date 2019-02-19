@@ -13,7 +13,7 @@ C Subroutine DFP splices directory and filename together.
 C Accepts longitudes -180 to +180; maps internal longitudes 0-360.
 C Added SAVE statements for volatile memory machines.
 C Changed 'file not found' error to output message on unit 6 and stop.
-C Changed JF(12)=.true. to write messages on unit 12 instead of 6.
+
 C Changed call to IONCOM to use floating point variable ZMONTH.
 C Note: JF(5)=.false. uses recommended (URSI) coefficients.
 C Note: JF(4)=.false. uses recommended Gulyeava B0 coefficients.
@@ -72,7 +72,7 @@ C          JF(8)=T[F]    NMF2 PEAK MODEL [INPUT VALUES]
 C          JF(9)=T[F]    HMF2 PEAK MODEL [INPUT VALUES]
 C          JF(10)=T[F]   TE MODEL [TE-NE MODEL WITH NE INPUT]
 C          JF(11)=T[F]   NE STANDARD [LAY-FUNCTIONS VERSION]
-C          JF(12)=T[F]   MESSAGE ARE WRITTEN TO UNIT=12 [=6]
+C          JF(12)=T[F]   MESSAGE ARE WRITTEN TO UNIT=12 [=6]  (not used)
 C
 C  JF(1:11)=.TRUE. GENERATES THE STANDARD IRI-90 PARAMETERS.
 C  IF YOU SET JF(8)=.FALSE., THAN YOU HAVE TO PROVIDE THE F2 PEAK
@@ -161,6 +161,7 @@ C*****************************************************************
 C
        SUBROUTINE IRI90(JF,JMAG,ALATI,ALONG,RZ12,MMDD,DHOUR,
      &                  ZKM,NZ,DIRECT,OUTF,OARR)
+      use, intrinsic :: iso_fortran_env, only: stdout=>output_unit
       dimension zkm(nz), outf(11,nz), oarr(30)
       character(*), intent(in) :: direct
       character(1024) :: path
@@ -249,8 +250,7 @@ C IUCCIR=UNIT NUMBER FOR CCIR COEFFICIENTS ........................
 C
       MONITO=6
       IUCCIR=10
-      KONSOL=6
-      IF (JF(12)) KONSOL=12
+      KONSOL=stdout
 
 c
 c selection of density and ion composition options ..................
