@@ -6,16 +6,7 @@ enable_testing()
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
 
-add_compile_options(-O3)
-if(CMAKE_Fortran_COMPILER_ID STREQUAL GCC)
-
-  list(APPEND old -w)
-
-  if(CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL 8)
-    list(APPEND old -std=legacy)
-    list(APPEND new -std=f2018)
-  endif()
-endif()
+include(cmake/compilers.cmake)
 
 set(cglow_src src/glow.f90 src/cglow.f90 src/fieldm.f src/solzen.f90 src/ssflux.f90 src/rcolum.f90 src/qback.f90 src/etrans.f90 src/exsect.f src/gchem.f90 src/bands.f90 src/ephoto.f90 src/egrid.f90 src/maxt.f90)
 
