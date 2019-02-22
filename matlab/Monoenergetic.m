@@ -12,7 +12,8 @@ Emax = 1e6;
 E0 = 100e3;
 Nbins = 250;
 
-[Ebins, Phitop] = monoenergetic(Emin, Emax, Nbins, E0);
+Ebins = loggrid(Emin, Emax, Nbins);
+Phitop = monoenergetic_flux(Ebins, E0);
 Phitop = Phitop * 3000;
 %Phitop(:)=0;
 %% glow model

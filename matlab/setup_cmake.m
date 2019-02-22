@@ -1,11 +1,11 @@
-%% setup GLOW using CMake+Fortran compiler
+function setup_cmake(srcdir, builddir)
+%% setup using CMake+Fortran compiler
+
+validateattributes(srcdir,{'char'},{'vector'})
+validateattributes(builddir,{'char'},{'vector'})
 
 system('cmake --version')
 
-cwd = fileparts(mfilename('fullpath'));
-
-srcdir =   [cwd, filesep,'..'];
-builddir = [cwd, filesep,'..',filesep,'build'];
 tail = [' -S ', srcdir, ' -B ', builddir];
 
 if ispc
@@ -23,3 +23,4 @@ if status~=0, error(ret), end
 disp(ret)
 
 disp('Fortran compilation complete')
+end
