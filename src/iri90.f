@@ -161,7 +161,8 @@ C*****************************************************************
 C
        SUBROUTINE IRI90(JF,JMAG,ALATI,ALONG,RZ12,MMDD,DHOUR,
      &                  ZKM,NZ,DIRECT,OUTF,OARR)
-      use, intrinsic :: iso_fortran_env, only: stdout=>output_unit
+      use, intrinsic :: iso_fortran_env, only: stdout=>output_unit,
+     &  stderr=>error_unit
       dimension zkm(nz), outf(11,nz), oarr(30)
       character(*), intent(in) :: direct
       character(1024) :: path
@@ -250,7 +251,7 @@ C IUCCIR=UNIT NUMBER FOR CCIR COEFFICIENTS ........................
 C
       MONITO=6
       IUCCIR=10
-      KONSOL=stdout
+      KONSOL=stderr
 
 c
 c selection of density and ion composition options ..................
