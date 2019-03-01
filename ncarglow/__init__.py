@@ -36,17 +36,17 @@ def glowparse(dat: str) -> dict:
     table = io.StringIO(dat)
 
     data = {}
-    data['dens'] = np.loadtxt(table, skiprows=2, max_rows=NALT)
+    data['dens'] = np.genfromtxt(table, skip_header=2, max_rows=NALT)
 
-    data['ver'] = np.loadtxt(table, skiprows=1, max_rows=NALT)
+    data['ver'] = np.genfromtxt(table, skip_header=1, max_rows=NALT)
 
-    data['production'] = np.loadtxt(table, skiprows=0, max_rows=NALT)
+    data['production'] = np.genfromtxt(table, skip_header=0, max_rows=NALT)
 
-    data['loss'] = np.loadtxt(table, max_rows=NALT)
+    data['loss'] = np.genfromtxt(table, max_rows=NALT)
 
-    Nbins = int(np.loadtxt(table, max_rows=1))
-    data['Ebin_centers'] = np.loadtxt(table, max_rows=1)
-    data['Eflux'] = np.loadtxt(table, max_rows=1)
+    Nbins = int(np.genfromtxt(table, max_rows=1))
+    data['Ebin_centers'] = np.genfromtxt(table, max_rows=1)
+    data['Eflux'] = np.genfromtxt(table, max_rows=1)
 
     assert Nbins == data['Ebin_centers'].size == data['Eflux'].size
 
