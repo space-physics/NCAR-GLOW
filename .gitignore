@@ -1,3 +1,5 @@
+.mypy_cache/
+*.egg-info/
 fort.12
 __pycache__/
 bin/

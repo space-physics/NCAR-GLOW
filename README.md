@@ -1,20 +1,20 @@
 [![Build Status](https://travis-ci.com/scivision/NCAR-GLOW.svg?branch=cmake)](https://travis-ci.com/scivision/NCAR-GLOW)
 
 # GLOW
-The GLobal airglOW Model
+The GLobal airglOW Model in Python.
+Install/compile by:
+```sh
+pip install -e .
+```
 
-* Fortran-90 source code files,
-* Makefiles,
-* Example input and output files,
-* Example job script,
-* Subdirectory data/ contains input data files,
-* Subdirectory data/iri90 contains IRI input data files
+Then use examples such as:
+
+* Simple.py:  Maxwellian precipiation, specify Q and E0.
 
 
-## Build
+## Fortran
 You can call this repo from a Meson wrap or CMake Fetch.
-To build by itself, do either:
-
+To build Fortran code by itself, do either:
 
 ```sh
 meson build
@@ -42,8 +42,7 @@ Otherwise, -O3 works fine.
 
 ## Matlab / GNU Octave
 
-The Matlab and Python interfaces work similarly.
-Matlab code is in the [matlab](./matlab) directory, and passes data to / from Glow over stdin / stdout pipes.
+The Matlab interface is in the [matlab](./matlab) directory, and passes data to / from Glow over stdin / stdout pipes.
 
 * Use built-in energy and altitude bins: [Simple.m](./matlab/Simple.m)
 * user input energy grid: [EnergyGrid.m](./matlab/EnergyGrid.m)
