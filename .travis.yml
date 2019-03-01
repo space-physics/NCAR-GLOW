@@ -37,7 +37,7 @@ matrix:
 
 install:
 - cd build
-- cmake ..
+- cmake ../src
 - cmake --build . -j
 
 script: ctest --output-on-failure
