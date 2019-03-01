@@ -15,7 +15,9 @@ assert(Nbins == length(Phitop), 'Phitop and Ebins must be same length')
 exe = glowpath();
 [idate, utsec] = glowdate(time);
 
-%% workaround Windows 8192 cmd line limit by using binary input files to pass data
+%% workaround Windows
+% 8192 cmd line limit AND lack of stdin
+% by using binary input files to pass data
 Efn = tempname;
 fid = fopen(Efn,'w');
 fwrite(fid, Ebins, 'float32');

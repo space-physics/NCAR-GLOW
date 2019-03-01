@@ -30,6 +30,23 @@ def simple(time: datetime, glat: float, glon: float,
     return glowparse(dat)
 
 
+def ebins(time: datetime, glat: float, glon: float,
+          f107a: float, f107: float, f107p: float, Ap: int,
+          Ebins: float, Phitop: float, Efn: str) -> tuple:
+
+    idate, utsec = glowdate(time)
+
+    cmd = [str(EXE), idate, utsec, str(glat), str(glon),
+           str(f107a), str(f107), str(f107p), str(Ap),
+           '-e', str(Ebins.size), Efn]
+
+    dat = subprocess.check_output(cmd, timeout=15,
+                                  stderr=subprocess.DEVNULL,
+                                  universal_newlines=True)
+
+    return glowparse(dat)
+
+
 def glowparse(raw: str) -> tuple:
 
     table = io.StringIO(raw)

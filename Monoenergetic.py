@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 import ncarglow as glow
 from datetime import datetime
+import numpy as np
 from matplotlib.pyplot import figure, show
+import tempfile
 
 
 time = datetime(2015, 12, 13, 10, 0, 0)
@@ -12,14 +14,24 @@ Ap = 4
 f107 = 100
 f107a = 100
 f107p = 100
-# %% flux [erg cm-2 s-1 == mW m-2 s-1]
-Q = 1
-# %% characteristic energy [eV]
-Echar = 100e3
-# %% Number of energy bins
+# %% Energy grid [eV]
+Emin = 0.1
+Emax = 1e6
+E0 = 100e3
 Nbins = 250
+# %% monoenergetic beam
+Ebins = np.logspace(np.log10(Emin), np.log10(Emax), Nbins).astype(np.float32)
+Phitop = np.zeros_like(Ebins)
+Phitop[abs(Ebins-E0).argmin()] = 1.
+Phitop = Phitop.astype(np.float32)
+# %% Matlab compatible workaround (may change to use stdin in future)
+with tempfile.NamedTemporaryFile('wb') as f:
+    Ebins.tofile(f)
+    Phitop.tofile(f)
+# %% run glow
+    iono, precip, production, loss = glow.ebins(time, glat, glon, f107a, f107, f107p, Ap,
+                                                Ebins, Phitop, f.name)
 
-iono, precip, production, loss = glow.simple(time, glat, glon, f107a, f107, f107p, Ap, Q, Echar, Nbins)
 # %% simple plots
 ax = figure().gca()
 ax.plot(precip['Energy'], precip['Eflux'])
