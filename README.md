@@ -17,15 +17,15 @@ You can call this repo from a Meson wrap or CMake Fetch.
 To build Fortran code by itself, do either:
 
 ```sh
-meson build
+meson build src
 
-ninja -c build
+ninja -C build
 ```
 
 or
 
 ```sh
-cmake -B build -S .
+cmake -B build -S src
 
 cmake --build build -j
 ```

@@ -16,7 +16,7 @@ setuptools.setup(
 
 Rb = Path(__file__).resolve().parent
 BINDIR = Rb / 'build'
-SRCDIR = Rb
+SRCDIR = Rb / 'src'
 
 
 def cmake_setup():

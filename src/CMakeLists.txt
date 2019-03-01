@@ -4,22 +4,22 @@ project(GLOW
   VERSION 0.981)
 enable_testing()
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/Modules)
 
-include(cmake/compilers.cmake)
+include(../cmake/compilers.cmake)
 
-set(cglow_src src/glow.f90 src/cglow.f90 src/fieldm.f src/solzen.f90 src/ssflux.f90 src/rcolum.f90 src/qback.f90 src/etrans.f90 src/exsect.f src/gchem.f90 src/bands.f90 src/ephoto.f90 src/egrid.f90 src/maxt.f90)
+set(cglow_src glow.f90 cglow.f90 fieldm.f solzen.f90 ssflux.f90 rcolum.f90 qback.f90 etrans.f90 exsect.f gchem.f90 bands.f90 ephoto.f90 egrid.f90 maxt.f90)
 
-set(snoem_src src/snoem.f90 src/snoemint.f90 src/geomag.f90)
+set(snoem_src snoem.f90 snoemint.f90 geomag.f90)
 
-set(utils_src src/mzgrid.f90 src/conduct.f90 src/nrlmsise00.f src/iri90.f)
+set(utils_src mzgrid.f90 conduct.f90 nrlmsise00.f iri90.f)
 
 add_library(cglow ${cglow_src} ${snoem_src} ${utils_src})
 target_compile_options(cglow PRIVATE ${old})
 
 # ------  Python Matlab command line driver -----------
 
-add_executable(glow.bin src/glowpython.f90 src/utils.f90 src/fsutils.f90)
+add_executable(glow.bin glowpython.f90 utils.f90 fsutils.f90)
 target_link_libraries(glow.bin cglow)
 target_compile_options(glow.bin PRIVATE ${new})
 
@@ -27,7 +27,7 @@ target_compile_options(glow.bin PRIVATE ${new})
 find_package(MPI COMPONENTS Fortran)
 find_package(NetCDF)
 if(MPI_Fortran_FOUND AND NetCDF_FOUND)
-  add_executable(mpi_glow.bin src/glowdriver.f90 src/readtgcm.f90 src/output.f90 src/tzgrid.f90 src/fsutils.f90)
+  add_executable(mpi_glow.bin glowdriver.f90 readtgcm.f90 output.f90 tzgrid.f90 fsutils.f90)
   target_link_libraries(mpi_glow.bin cglow MPI::MPI_Fortran NetCDF::NetCDF_Fortran)
   target_compile_options(mpi_glow.bin PRIVATE ${new})
 endif()

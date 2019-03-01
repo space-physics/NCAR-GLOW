@@ -4,7 +4,9 @@ function setup_cmake(srcdir, builddir)
 validateattributes(srcdir,{'char'},{'vector'})
 validateattributes(builddir,{'char'},{'vector'})
 
-system('cmake --version')
+[status, ret] = system('cmake --version');
+if status~=0, error(ret), end
+disp(ret)
 
 tail = [' -S ', srcdir, ' -B ', builddir];
 

@@ -1,7 +1,7 @@
 
 cwd = fileparts(mfilename('fullpath'));
 
-srcdir =   [cwd, filesep,'..'];
+srcdir =   [cwd, filesep,'..',filesep,'src'];
 builddir = [cwd, filesep,'..',filesep,'build'];
 
 assert(exist(srcdir,'dir')==7, ['source directory ',srcdir,' does not exist'])
