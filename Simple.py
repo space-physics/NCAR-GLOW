@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 import ncarglow as glow
+import ncarglow.plots as gp
 from datetime import datetime
-from matplotlib.pyplot import figure, show
+from matplotlib.pyplot import show
 
 
 time = datetime(2015, 12, 13, 10, 0, 0)
@@ -21,18 +22,8 @@ Nbins = 250
 
 iono, precip, production, loss = glow.simple(time, glat, glon, f107a, f107, f107p, Ap, Q, Echar, Nbins)
 # %% simple plots
-ax = figure().gca()
-ax.plot(precip['Energy'], precip['Eflux'])
-ax.set_xlabel('Energy bin centers [eV]')
-ax.set_ylabel('hemispherical flux')
-ax.grid(True)
+gp.precip(precip)
 
-ax = figure().gca()
-ax.plot(iono['A4278'], iono['alt_km'])
-ax.set_xscale('log')
-ax.set_xlabel('Volume Emission Rate [Rayleigh]')
-ax.set_ylabel('altitude [km]')
-ax.set_ylim((50, None))
-ax.grid(True)
+gp.ver(iono)
 
 show()

@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 import ncarglow as glow
 from datetime import datetime
+import ncarglow.plots as gp
 import numpy as np
-from matplotlib.pyplot import figure, show
+from matplotlib.pyplot import show
 import tempfile
 
 
@@ -33,18 +34,8 @@ with tempfile.NamedTemporaryFile('wb') as f:
                                                 Ebins, Phitop, f.name)
 
 # %% simple plots
-ax = figure().gca()
-ax.plot(precip['Energy'], precip['Eflux'])
-ax.set_xlabel('Energy bin centers [eV]')
-ax.set_ylabel('hemispherical flux')
-ax.grid(True)
+gp.precip(precip)
 
-ax = figure().gca()
-ax.plot(iono['A4278'], iono['alt_km'])
-ax.set_xscale('log')
-ax.set_xlabel('Volume Emission Rate [Rayleigh]')
-ax.set_ylabel('altitude [km]')
-ax.set_ylim((50, None))
-ax.grid(True)
+gp.ver(iono)
 
 show()
