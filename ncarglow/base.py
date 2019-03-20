@@ -1,27 +1,38 @@
 import subprocess
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Tuple
 import io
 import numpy as np
 import xarray
+import os
+import tempfile
+
+import geomagindices as gi
+from .build import build
 
 NALT = 250
 
 EXE = Path(__file__).resolve().parents[1] / 'build' / 'glow.bin'
+if os.name == 'nt':
+    EXE = EXE.with_suffix('.bin.exe')
 if not EXE.is_file():
-    raise FileNotFoundError(f'{EXE} is missing, did you compile GLOW?')
+    build()
 
 
 def simple(time: datetime, glat: float, glon: float,
-           f107a: float, f107: float, f107p: float, Ap: int,
            Q: float, Echar: float, Nbins: int) -> tuple:
 
     idate, utsec = glowdate(time)
 
+    ionoparams = gi.getApF107(time, 81)
+    ionoparams_prevday = gi.getApF107(time-timedelta(days=1), 81)
+
     cmd = [str(EXE), idate, utsec, str(glat), str(glon),
-           str(f107a), str(f107), str(f107p), str(Ap), str(Q),
-           str(Echar), str(Nbins)]
+           str(ionoparams['f107s'].item()), str(ionoparams['f107'].item()),
+           str(ionoparams_prevday['f107'].item()),
+           str(ionoparams['Ap'].item()),
+           str(Q), str(Echar), str(Nbins)]
 
     dat = subprocess.check_output(cmd, timeout=15,
                                   stderr=subprocess.DEVNULL,
@@ -31,20 +42,39 @@ def simple(time: datetime, glat: float, glon: float,
 
 
 def ebins(time: datetime, glat: float, glon: float,
-          f107a: float, f107: float, f107p: float, Ap: int,
-          Ebins: np.ndarray, Phitop: np.ndarray, Efn: str) -> tuple:
+          Ebins: np.ndarray, Phitop: np.ndarray) -> tuple:
 
     idate, utsec = glowdate(time)
 
+# %% Matlab compatible workaround (may change to use stdin in future)
+    Efn = Path(tempfile.mkstemp('.dat')[1])
+    with Efn.open('wb') as f:
+        Ebins.tofile(f)
+        Phitop.tofile(f)
+
+    tmpfile_size = Efn.stat().st_size
+    expected_size = (Ebins.size + Phitop.size)*4
+    if tmpfile_size != expected_size:
+        raise OSError(f'{Efn} size {tmpfile_size} != {expected_size}')
+
+    ionoparams = gi.getApF107(time, 81)
+    ionoparams_prevday = gi.getApF107(time-timedelta(days=1), 81)
+
     cmd = [str(EXE), idate, utsec, str(glat), str(glon),
-           str(f107a), str(f107), str(f107p), str(Ap),
-           '-e', str(Ebins.size), Efn]
+           str(ionoparams['f107s'].item()), str(ionoparams['f107'].item()),
+           str(ionoparams_prevday['f107'].item()),
+           str(ionoparams['Ap'].item()),
+           '-e', str(Ebins.size), str(Efn)]
 
-    dat = subprocess.check_output(cmd, timeout=15,
-                                  stderr=subprocess.DEVNULL,
-                                  universal_newlines=True)
+    ret = subprocess.run(cmd, timeout=15, universal_newlines=True, stdout=subprocess.PIPE)
+    if ret.returncode:
+        raise RuntimeError(f'GLOW failed at {time}')
+    try:
+        Efn.unlink()
+    except PermissionError:
+        pass
 
-    return glowparse(dat)
+    return glowparse(ret.stdout)
 
 
 def glowparse(raw: str) -> tuple:

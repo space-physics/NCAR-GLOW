@@ -22,7 +22,7 @@
 ! nw      number of airglow emission wavelengths
 ! nc      number of component production terms for each emission
 
-use, intrinsic :: iso_fortran_env, only: stdout=>output_unit, stdin=>input_unit, wp=>real32
+use, intrinsic :: iso_fortran_env, only: stdout=>output_unit, stdin=>input_unit, wp=>real32, stderr=>error_unit
 use fsutils, only: dirname
 use utils, only: alt_grid, argv
 
@@ -114,13 +114,18 @@ else
   allocate(ener(nbins), del(nbins), phitop(nbins))
 
   block
-    integer :: u
+    integer :: u, ios
     call get_command_argument(11, buf)
     open(newunit=u, file=buf, access='stream', action='read', status='old')
 
     !> array filling real32 reads
-    read(u) ener
-    read(u) phitop
+    read(u, iostat=ios) ener
+    read(u, iostat=ios) phitop
+    if(ios /= 0) then
+      write(stderr,*) 'failed to read input energy bin file ',trim(buf),' code',ios
+      if (ios < 0) write(stderr,*) 'was file truncated?'
+      stop 1
+    endif
 
     close(u)
   endblock

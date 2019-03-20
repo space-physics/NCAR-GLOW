@@ -1,43 +1,39 @@
 # OSX and Windows work, just commented to save Travis resources
-language: minimal
+language: python
 group: travis_latest
 dist: xenial
 
 git:
-  depth: 3
+  depth: 25
   quiet: true
+  
+python: 3.6
 
 env: FC=gfortran
 
 addons:
   apt:
-    sources: ubuntu-toolchain-r-test
+#    sources: ubuntu-toolchain-r-test
     packages:
-    - gfortran-6
+    - gfortran
 #    - octave  # needs Octave >= 4.2 for textscan to work properly
 # https://www.gnu.org/software/octave/NEWS-4.2.html
-    - libnetcdf-dev
-    - libnetcdff-dev
-    - libopenmpi-dev
-    - openmpi-bin
+#    - libnetcdf-dev
+#    - libnetcdff-dev
+#    - libopenmpi-dev
+#    - openmpi-bin
 
 matrix:
   include:
   - os: linux
-    env: FC=gfortran-6
 #  - os: osx
 #    before_install:
 #    - brew update > /dev/null
 #    - brew install gcc > /dev/null
 #  - os: windows
 #    install:
-#    - cd build
-#    - cmake -G "MinGW Makefiles" -DCMAKE_SH="CMAKE_SH-NOTFOUND" ..
-#    - cmake --build .
+#    - pip install -e .
 
-install:
-- cd build
-- cmake ../src
-- cmake --build . -j
+install: pip install -e .
 
-script: ctest --output-on-failure
+script: pytest -v

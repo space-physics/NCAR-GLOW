@@ -10,6 +10,7 @@ pip install -e .
 Then use examples such as:
 
 * Simple.py:  Maxwellian precipiation, specify Q and E0.
+* Monoenergetic.py: Specify unit flux for one energy bin, all other energy bins are zero flux.
 
 
 ## Fortran

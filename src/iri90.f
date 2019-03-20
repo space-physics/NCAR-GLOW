@@ -439,7 +439,8 @@ C
         MONTHO=MONTH
 	GOTO 4291
 
-8448	error stop path // ' IRI90: File not found'
+8448	write(stderr,*) path // ' IRI90: File not found'
+        stop 1
 
 
 C LINEAR INTERPOLATION IN SOLAR ACTIVITY
