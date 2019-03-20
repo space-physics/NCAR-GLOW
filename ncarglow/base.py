@@ -114,9 +114,12 @@ def glowparse(raw: str) -> xarray.Dataset:
     precip = xarray.Dataset({'precip': ('energy', Eflux)}, coords={'energy': E})
 
     assert E.size == Nbins
-
+# %% excited / ionized densities
+    dat = np.genfromtxt(table, skip_header=0, max_rows=NALT)[:, 1:]
+    d = {'excitedDensity': (('alt_km', 'state'), dat)}
+    excite = xarray.Dataset(d, coords=prodloss.coords)
 # %% assemble output
-    iono = xarray.merge((iono, prodloss, precip))
+    iono = xarray.merge((iono, prodloss, precip, excite))
 
     return iono
 

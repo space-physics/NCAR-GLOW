@@ -210,7 +210,7 @@ write(stdout,'(1000f15.1)') ener
 write(stdout,'(1000f15.1)') phitop
 
 !> excited / ionized densities
-write(stdout,'(A)') ' O+(2P)   O+(2D)   O+(4S)   N+   N2+   O2+   NO+    N2(A)    N(2P)   N(2D)    O(1S)   O(1D)'
+write(stdout,'(A)') ' alt.   O+(2P)   O+(2D)   O+(4S)   N+   N2+   O2+   NO+    N2(A)    N(2P)   N(2D)    O(1S)   O(1D)'
 write(stdout, "(f5.1, 12f12.2)") (z(j), (zxden(ii,j), ii=1,nex), j=1,Nalt)
 
 
