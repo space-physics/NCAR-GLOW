@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import ncarglow as glow
 import pytest
+from pytest import approx
 from datetime import datetime
 import numpy as np
 
@@ -16,13 +17,17 @@ def test_simple():
     # %% Number of energy bins
     Nbins = 250
 
-    iono, precip, production, loss = glow.simple(time, glat, glon, Q, Echar, Nbins)
+    try:
+        iono, precip, production, loss = glow.simple(time, glat, glon, Q, Echar, Nbins)
+    except ConnectionError:
+        pytest.xfail('CI internet FTP issue')
 
-    print(iono)
+    assert iono['alt_km'].size == Nbins
+    assert iono['Tn'][32] == approx(186.0)
+    assert iono['A5577'][32] == approx(18.74)
 
 
-def test_ebins(tmp_path):
-    tmpfn = tmp_path/'in.dat'
+def test_ebins():
     time = datetime(2015, 12, 13, 10, 0, 0)
     glat = 65.1
     glon = -147.5
@@ -36,13 +41,16 @@ def test_ebins(tmp_path):
     Phitop = np.zeros_like(Ebins)
     Phitop[abs(Ebins-E0).argmin()] = 1.
     Phitop = Phitop.astype(np.float32)
-    # %% Matlab compatible workaround (may change to use stdin in future)
-    with tmpfn.open('wb') as f:
-        Ebins.tofile(f)
-        Phitop.tofile(f)
     # %% run glow
-    iono, precip, production, loss = glow.ebins(time, glat, glon,
-                                                Ebins, Phitop, tmpfn)
+    try:
+        iono, precip, production, loss = glow.ebins(time, glat, glon,
+                                                    Ebins, Phitop)
+    except ConnectionError:
+        pytest.xfail('CI internet FTP issue')
+
+    assert iono['alt_km'].size == Nbins
+    assert iono['Tn'][32] == approx(186.0)
+    assert iono['A5577'][32] == approx(0.04)
 
 
 if __name__ == '__main__':
