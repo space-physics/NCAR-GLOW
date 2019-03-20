@@ -15,9 +15,9 @@ Echar = 100e3
 # %% Number of energy bins
 Nbins = 250
 
-iono, precip, production, loss = glow.simple(time, glat, glon, Q, Echar, Nbins)
+iono = glow.simple(time, glat, glon, Q, Echar, Nbins)
 # %% simple plots
-gp.precip(precip)
+gp.precip(iono['precip'])
 
 gp.ver(iono)
 

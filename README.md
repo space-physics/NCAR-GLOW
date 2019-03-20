@@ -1,7 +1,19 @@
 [![Build Status](https://travis-ci.com/scivision/NCAR-GLOW.svg?branch=cmake)](https://travis-ci.com/scivision/NCAR-GLOW)
 
 # GLOW
-The GLobal airglOW Model in Python.
+The GLobal airglOW Model, independently and easily accessed from:
+
+* Python &ge; 3.6
+* Matlab
+* GNU Octave &ge; 4.2
+* IDL / GDL
+* Fortran 2003
+
+We describe each language below, pick the one(s) that apply for you.
+They don't depend on each other.
+Python is the easiest and recommennded choice.
+
+## Python
 Install/compile by:
 ```sh
 git clone https://github.com/scivision/ncar-glow
@@ -15,7 +27,6 @@ Confirm the install with:
 pytest
 ```
 
-
 Then use examples such as:
 
 * Simple.py:  Maxwellian precipiation, specify Q and E0.
@@ -23,10 +34,20 @@ Then use examples such as:
 
 or use GLOW in your own Python program by:
 ```python
-import ncarglow
+import ncarglow as glow
 
-
+iono = glow.simple(time, glat, glon, Q, Echar, Nbins)
 ```
+
+`iono` is an 
+[xarray.Dataset](http://xarray.pydata.org/en/stable/generated/xarray.Dataset.html)
+containing outputs from GLOW, including:
+
+* number densities of neutrals, ions and electrons
+* Pedersen and Hall currents
+* volume emssion rate vs. wavelength and altitude
+* precipitating flux vs. energy
+* many more, request if you want it.
 
 ## Fortran
 You can call this repo from a Meson wrap or CMake Fetch.
@@ -60,7 +81,15 @@ Otherwise, -O3 works fine.
 
 The Matlab interface is in the [matlab](./matlab) directory, and passes data to / from Glow over stdin / stdout pipes.
 
+First, compile the Fortran code by running [setup.m](./matlab/setup.m)
+
+Then,
+
 * Use built-in energy and altitude bins: [Simple.m](./matlab/Simple.m)
-* user input energy grid: [EnergyGrid.m](./matlab/EnergyGrid.m)
+* user input energy grid: [Monoenergetic.m](./matlab/Monoenergetic.m)
 
 NOTE: if using GNU Octave, version &ge; 4.2 is required for proper [textscan() functionality](https://www.gnu.org/software/octave/NEWS-4.2.html)
+
+## IDL / GDL
+We have a small script for IDL / GDL thanks to Guy Grubbs.
+Let us know if you want this, we haven't taken the time to upload it yet. th

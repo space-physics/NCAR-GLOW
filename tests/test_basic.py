@@ -18,7 +18,7 @@ def test_simple():
     Nbins = 250
 
     try:
-        iono, precip, production, loss = glow.simple(time, glat, glon, Q, Echar, Nbins)
+        iono = glow.simple(time, glat, glon, Q, Echar, Nbins)
     except ConnectionError:
         pytest.xfail('CI internet FTP issue')
 
@@ -43,8 +43,7 @@ def test_ebins():
     Phitop = Phitop.astype(np.float32)
     # %% run glow
     try:
-        iono, precip, production, loss = glow.ebins(time, glat, glon,
-                                                    Ebins, Phitop)
+        iono = glow.ebins(time, glat, glon, Ebins, Phitop)
     except ConnectionError:
         pytest.xfail('CI internet FTP issue')
 

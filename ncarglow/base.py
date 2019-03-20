@@ -21,7 +21,7 @@ if not EXE.is_file():
 
 
 def simple(time: datetime, glat: float, glon: float,
-           Q: float, Echar: float, Nbins: int) -> tuple:
+           Q: float, Echar: float, Nbins: int) -> xarray.Dataset:
 
     idate, utsec = glowdate(time)
 
@@ -42,7 +42,7 @@ def simple(time: datetime, glat: float, glon: float,
 
 
 def ebins(time: datetime, glat: float, glon: float,
-          Ebins: np.ndarray, Phitop: np.ndarray) -> tuple:
+          Ebins: np.ndarray, Phitop: np.ndarray) -> xarray.Dataset:
 
     idate, utsec = glowdate(time)
 
@@ -77,62 +77,48 @@ def ebins(time: datetime, glat: float, glon: float,
     return glowparse(ret.stdout)
 
 
-def glowparse(raw: str) -> tuple:
+def glowparse(raw: str) -> xarray.Dataset:
 
     table = io.StringIO(raw)
 
     dat = np.genfromtxt(table, skip_header=2, max_rows=NALT)
     alt_km = dat[:, 0]
 
-    iono = xarray.Dataset(coords={'alt_km': alt_km})
+    states = ['Tn', 'O', 'N2', 'N', 'NO', 'NeIn', 'NeOut', 'ionrate',
+              'O+', 'O2+', 'NO+', 'N2D', 'pedersen', 'hall']
 
-    iono['Tn'] = dat[:, 1]
-    iono['O'] = dat[:, 2]
-    iono['N2'] = dat[:, 3]
-    iono['NO'] = dat[:, 4]
-    iono['NeIn'] = dat[:, 5]
-    iono['NeOut'] = dat[:, 6]
-    iono['ionrate'] = dat[:, 7]
-    iono['O+'] = dat[:, 8]
-    iono['O2+'] = dat[:, 9]
-    iono['NO+'] = dat[:, 10]
-    iono['N2D'] = dat[:, 11]
-    iono['pedersen'] = dat[:, 12]
-    iono['hall'] = dat[:, 13]
+    d: dict = {k: ('alt_km', v) for (k, v) in zip(states, dat[:, 1:].T)}
+
 # %% VER
     dat = np.genfromtxt(table, skip_header=1, max_rows=NALT)
 
-    if (dat[:, 0] != iono['alt_km']).any():
-        raise ValueError('altitude grids not matching between density and VER')
+    wavelen = ['A3371', 'A4278', 'A5200', 'A5577', 'A6300', 'A7320', 'A10400',
+               'A3644', 'A7774', 'A8446', 'A3726', 'LBH', 'A1356', 'A1493', 'A1304']
 
-    iono['A3371'] = dat[:, 1]
-    iono['A4278'] = dat[:, 2]
-    iono['A5200'] = dat[:, 3]
-    iono['A5577'] = dat[:, 4]
-    iono['A6300'] = dat[:, 5]
-    iono['A7320'] = dat[:, 6]
-    iono['A10400'] = dat[:, 7]
-    iono['A3644'] = dat[:, 8]
-    iono['A7774'] = dat[:, 9]
-    iono['A8446'] = dat[:, 10]
-    iono['A3726'] = dat[:, 11]
-    iono['LBH'] = dat[:, 12]
-    iono['A1356'] = dat[:, 13]
-    iono['A1493'] = dat[:, 14]
-    iono['A1304'] = dat[:, 15]
+    d.update({k: ('alt_km', v) for (k, v) in zip(wavelen, dat[:, 1:].T)})
+
+    iono = xarray.Dataset(d, coords={'alt_km': alt_km})
 # %% production & loss
-    production = np.genfromtxt(table, skip_header=0, max_rows=NALT)[:, 1:]
+    d = {'production': (('alt_km', 'state'), np.genfromtxt(table, skip_header=0, max_rows=NALT)[:, 1:]),
+         'loss': (('alt_km', 'state'), np.genfromtxt(table, max_rows=NALT)[:, 1:])}
 
-    loss = np.genfromtxt(table, max_rows=NALT)[:, 1:]
+    state = ['O+(2P)', 'O+(2D)', 'O+(4S)', 'N+', 'N2+', 'O2+', 'NO+', 'N2(A)',
+             'N(2P)', 'N(2D)', 'O(1S)', 'O(1D)']
+
+    prodloss = xarray.Dataset(d, coords={'alt_km': alt_km,
+                                         'state': state})
 # %% precip input
     Nbins = int(np.genfromtxt(table, max_rows=1))
     E = np.genfromtxt(table, max_rows=1)
     Eflux = np.genfromtxt(table, max_rows=1)
-    precip = xarray.Dataset({'Eflux': Eflux}, coords={'Energy': E})
+    precip = xarray.Dataset({'precip': ('energy', Eflux)}, coords={'energy': E})
 
     assert E.size == Nbins
 
-    return iono, precip, production, loss
+# %% assemble output
+    iono = xarray.merge((iono, prodloss, precip))
+
+    return iono
 
 
 def glowdate(t: datetime) -> Tuple[str, str]:

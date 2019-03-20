@@ -20,9 +20,9 @@ Phitop = np.zeros_like(Ebins)
 Phitop[abs(Ebins-E0).argmin()] = 1.
 Phitop = Phitop.astype(np.float32)
 # %% run glow
-iono, precip, production, loss = glow.ebins(time, glat, glon, Ebins, Phitop)
+iono = glow.ebins(time, glat, glon, Ebins, Phitop)
 # %% simple plots
-gp.precip(precip)
+gp.precip(iono['precip'])
 
 gp.ver(iono)
 
