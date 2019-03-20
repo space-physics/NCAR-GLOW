@@ -4,14 +4,29 @@
 The GLobal airglOW Model in Python.
 Install/compile by:
 ```sh
+git clone https://github.com/scivision/ncar-glow
+
+cd ncar-glow
+
 pip install -e .
 ```
+Confirm the install with:
+```sh
+pytest
+```
+
 
 Then use examples such as:
 
 * Simple.py:  Maxwellian precipiation, specify Q and E0.
 * Monoenergetic.py: Specify unit flux for one energy bin, all other energy bins are zero flux.
 
+or use GLOW in your own Python program by:
+```python
+import ncarglow
+
+
+```
 
 ## Fortran
 You can call this repo from a Meson wrap or CMake Fetch.
