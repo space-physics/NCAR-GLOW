@@ -84,7 +84,7 @@ def glowparse(raw: str) -> xarray.Dataset:
     dat = np.genfromtxt(table, skip_header=2, max_rows=NALT)
     alt_km = dat[:, 0]
 
-    states = ['Tn', 'O', 'N2', 'N', 'NO', 'NeIn', 'NeOut', 'ionrate',
+    states = ['Tn', 'O', 'N2', 'O2', 'N', 'NO', 'NeIn', 'NeOut', 'ionrate',
               'O+', 'O2+', 'NO+', 'N2D', 'pedersen', 'hall']
 
     d: dict = {k: ('alt_km', v) for (k, v) in zip(states, dat[:, 1:].T)}
