@@ -11,13 +11,13 @@ def precip(precip: xarray.DataArray):
 
 
 def ver(iono: xarray.Dataset):
-    _ver_group(iono[['A4278', 'A5577', 'A6300', 'A5200']], 'Visible')
+    _ver_group(iono['ver'].loc[:, ['4278', '5577', '6300', '5200']], 'Visible')
 
 
 def _ver_group(iono: xarray.Dataset, ttxt: str):
     ax = figure().gca()
-    for w in iono:
-        ax.plot(iono[w], iono['alt_km'], label=w)
+    for w in iono.wavelength:
+        ax.plot(iono.loc[:, w], iono.alt_km, label=w.item())
     ax.set_xscale('log')
     ax.set_xlabel('Volume Emission Rate [Rayleigh]')
     ax.set_ylabel('altitude [km]')

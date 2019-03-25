@@ -25,13 +25,12 @@ def simple(time: datetime, glat: float, glon: float,
 
     idate, utsec = glowdate(time)
 
-    ionoparams = gi.getApF107(time, 81)
-    ionoparams_prevday = gi.getApF107(time-timedelta(days=1), 81)
+    ip = gi.get_indices([time-timedelta(days=1), time], 81)
 
     cmd = [str(EXE), idate, utsec, str(glat), str(glon),
-           str(ionoparams['f107s'].item()), str(ionoparams['f107'].item()),
-           str(ionoparams_prevday['f107'].item()),
-           str(ionoparams['Ap'].item()),
+           str(ip['f107s'][1]), str(ip['f107'][1]),
+           str(ip['f107'][0]),
+           str(ip['Ap'][1]),
            str(Q), str(Echar), str(Nbins)]
 
     dat = subprocess.check_output(cmd, timeout=15,
@@ -57,13 +56,12 @@ def ebins(time: datetime, glat: float, glon: float,
     if tmpfile_size != expected_size:
         raise OSError(f'{Efn} size {tmpfile_size} != {expected_size}')
 
-    ionoparams = gi.getApF107(time, 81)
-    ionoparams_prevday = gi.getApF107(time-timedelta(days=1), 81)
+    ip = gi.get_indices([time-timedelta(days=1), time], 81)
 
     cmd = [str(EXE), idate, utsec, str(glat), str(glon),
-           str(ionoparams['f107s'].item()), str(ionoparams['f107'].item()),
-           str(ionoparams_prevday['f107'].item()),
-           str(ionoparams['Ap'].item()),
+           str(ip['f107s'][1]), str(ip['f107'][1]),
+           str(ip['f107'][0]),
+           str(ip['Ap'][1]),
            '-e', str(Ebins.size), str(Efn)]
 
     ret = subprocess.run(cmd, timeout=15, universal_newlines=True, stdout=subprocess.PIPE)
@@ -88,16 +86,17 @@ def glowparse(raw: str) -> xarray.Dataset:
               'O+', 'O2+', 'NO+', 'N2D', 'pedersen', 'hall']
 
     d: dict = {k: ('alt_km', v) for (k, v) in zip(states, dat[:, 1:].T)}
-
+    iono = xarray.Dataset(d, coords={'alt_km': alt_km})
 # %% VER
     dat = np.genfromtxt(table, skip_header=1, max_rows=NALT)
 
-    wavelen = ['A3371', 'A4278', 'A5200', 'A5577', 'A6300', 'A7320', 'A10400',
-               'A3644', 'A7774', 'A8446', 'A3726', 'LBH', 'A1356', 'A1493', 'A1304']
+    wavelen = [3371, 4278, 5200, 5577, 6300, 7320, 10400,
+               3644, 7774, 8446, 3726, 'LBH', 1356, 1493, 1304]
 
-    d.update({k: ('alt_km', v) for (k, v) in zip(wavelen, dat[:, 1:].T)})
-
-    iono = xarray.Dataset(d, coords={'alt_km': alt_km})
+    ver = xarray.DataArray(dat[:, 1:],
+                           coords={'alt_km': alt_km,
+                                   'wavelength': wavelen},
+                           dims=['alt_km', 'wavelength'], name='ver')
 # %% production & loss
     d = {'production': (('alt_km', 'state'), np.genfromtxt(table, skip_header=0, max_rows=NALT)[:, 1:]),
          'loss': (('alt_km', 'state'), np.genfromtxt(table, max_rows=NALT)[:, 1:])}
@@ -119,7 +118,7 @@ def glowparse(raw: str) -> xarray.Dataset:
     d = {'excitedDensity': (('alt_km', 'state'), dat)}
     excite = xarray.Dataset(d, coords=prodloss.coords)
 # %% assemble output
-    iono = xarray.merge((iono, prodloss, precip, excite))
+    iono = xarray.merge((iono, ver, prodloss, precip, excite))
 
     return iono
 

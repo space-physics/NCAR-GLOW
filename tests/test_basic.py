@@ -23,8 +23,8 @@ def test_simple():
         pytest.xfail('CI internet FTP issue')
 
     assert iono['alt_km'].size == Nbins
-    assert iono['Tn'][32] == approx(186.0)
-    assert iono['A5577'][32] == approx(18.74)
+    assert iono['Tn'][32] == approx(188.)
+    assert iono['ver'].loc[:, '5577'][32] == approx(20.45)
 
 
 def test_ebins():
@@ -48,8 +48,8 @@ def test_ebins():
         pytest.xfail('CI internet FTP issue')
 
     assert iono['alt_km'].size == Nbins
-    assert iono['Tn'][32] == approx(186.0)
-    assert iono['A5577'][32] == approx(0.04)
+    assert iono['Tn'][32] == approx(188.0)
+    assert iono['ver'].loc[:, '5577'][32] == approx(0.04)
 
 
 if __name__ == '__main__':
