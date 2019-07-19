@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/162534283.svg)](https://zenodo.org/badge/latestdoi/162534283)
+
 [![Build Status](https://dev.azure.com/mhirsch0512/NCAR-GLOW/_apis/build/status/space-physics.NCAR-GLOW?branchName=master)](https://dev.azure.com/mhirsch0512/NCAR-GLOW/_build/latest?definitionId=4&branchName=master)
 [![Build status](https://ci.appveyor.com/api/projects/status/9q837fimex3vf3en?svg=true)](https://ci.appveyor.com/project/scivision/ncar-glow)
 

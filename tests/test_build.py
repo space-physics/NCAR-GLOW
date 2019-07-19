@@ -8,6 +8,9 @@ R = Path(__file__).parent
 
 @pytest.mark.parametrize('build_sys', ['cmake', 'meson'])
 def test_build(build_sys, tmp_path):
+    if build_sys == 'cmake' and not build.check_cmake_version('3.13'):
+        pytest.skip('Too old CMake')
+
     build.build(build_sys, R.parent, tmp_path)
 
 
