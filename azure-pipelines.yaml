@@ -9,7 +9,7 @@ jobs:
     inputs:
       versionSpec: '3.6'
       addToPath: true
-  - script: sudo apt install -yq --no-install-recommends gfortran octave
+  - script: sudo apt install -yq --no-install-recommends gfortran
     displayName: 'Install Prereqs'
   - script: |
       python -m pip install meson
