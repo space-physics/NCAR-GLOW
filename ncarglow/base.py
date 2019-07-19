@@ -42,7 +42,10 @@ def simple(time: datetime, glat: float, glon: float,
                                   stderr=subprocess.DEVNULL,
                                   universal_newlines=True)
 
-    return glowparse(dat)
+    iono = glowparse(dat)
+    iono.attrs['geomag'] = ip
+
+    return iono
 
 
 def ebins(time: datetime, glat: float, glon: float,
@@ -87,8 +90,11 @@ def glowparse(raw: str) -> xarray.Dataset:
     dat = np.genfromtxt(table, skip_header=2, max_rows=NALT)
     alt_km = dat[:, 0]
 
-    states = ['Tn', 'O', 'N2', 'N', 'NO', 'NeIn', 'NeOut', 'ionrate',
+    states = ['Tn', 'O', 'N2', 'NO', 'NeIn', 'NeOut', 'ionrate',
               'O+', 'O2+', 'NO+', 'N2D', 'pedersen', 'hall']
+
+    if len(states) != dat.shape[1]-1:
+        raise ValueError('did not read raw output from GLOW correctly, please file a bug report.')
 
     d: dict = {k: ('alt_km', v) for (k, v) in zip(states, dat[:, 1:].T)}
     iono = xarray.Dataset(d, coords={'alt_km': alt_km})

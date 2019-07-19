@@ -20,7 +20,11 @@ MATLAB = shutil.which('matlab')
 @pytest.mark.parametrize('build_sys', ['cmake', 'meson'])
 def test_octave_build(build_sys, tmp_path):
     subprocess.check_call([OCTAVE, '--eval',
+<<<<<<< HEAD
+                           f"setup('{build_sys}', '{R.parent}', '{tmp_path}')"],
+=======
                            f"build('{build_sys}', '{R.parent}', '{tmp_path}')"],
+>>>>>>> db1f403... upgrade API for use as subproject
                           cwd=Rcode, timeout=120)
 
 
@@ -28,13 +32,17 @@ def test_octave_build(build_sys, tmp_path):
 @pytest.mark.parametrize('build_sys', ['cmake', 'meson'])
 def test_matlab_build(build_sys, tmp_path):
     subprocess.check_call([MATLAB, '-batch',
+<<<<<<< HEAD
+                           f"setup('{build_sys}', '{R.parent}', '{tmp_path}')"],
+=======
                            f"build('{build_sys}', '{R.parent}', '{tmp_path}')"],
+>>>>>>> db1f403... upgrade API for use as subproject
                           cwd=Rcode, timeout=120)
 
 
 @pytest.mark.skipif(not MATLAB, reason="Matlab not available")
 def test_matlab_api():
-    subprocess.check_call([MATLAB, '-batch', 'runtests'],
+    subprocess.check_call([MATLAB, '-batch', 'test_mod'],
                           cwd=R, timeout=60)
 
 

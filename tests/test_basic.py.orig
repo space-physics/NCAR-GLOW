@@ -23,12 +23,14 @@ def test_simple():
         pytest.skip('CI internet FTP issue')
 
     assert iono['alt_km'].size == Nbins
-    i = 32
-    assert iono.alt_km[i] == approx(101.8)
-    assert iono['Tn'][i] == approx(188.)
-    assert iono['ver'].loc[:, '5577'][i] == approx(20.45)
-    assert iono['ionrate'][i] == approx(335.)
-    assert iono['hall'][i].item() == approx(6.98e-05)
+    assert iono.alt_km[32] == approx(101.8)
+    assert iono['Tn'][32] == approx(188.)
+    assert iono['ver'].loc[:, '5577'][32] == approx(20.45)
+<<<<<<< HEAD
+    assert iono['ionrate'][32] == approx(473.)
+=======
+    assert iono['ionrate'][32] == approx(0.488)
+>>>>>>> db1f403... upgrade API for use as subproject
 
 
 def test_ebins():
