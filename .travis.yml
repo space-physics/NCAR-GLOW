@@ -21,11 +21,7 @@ matrix:
     before_install:
     - curl -Ls https://github.com/ninja-build/ninja/releases/download/v1.9.0/ninja-linux.zip -o ninja-linux.zip
     - sudo unzip ninja-linux.zip -d /usr/local/bin/
-    - python -m pip install -e meson
-#  - os: osx
-#    before_install:
-#    - brew update > /dev/null
-#    - brew install gcc > /dev/null
+    - python -m pip install meson
 
 install: pip install -e .
 

@@ -1,5 +1,5 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/9q837fimex3vf3en?svg=true)](https://ci.appveyor.com/project/scivision/ncar-glow)
-[![Build Status](https://travis-ci.com/scivision/NCAR-GLOW.svg?branch=cmake)](https://travis-ci.com/scivision/NCAR-GLOW)
+[![Build Status](https://travis-ci.com/space-physics/NCAR-GLOW.svg?branch=cmake)](https://travis-ci.com/space-physics/NCAR-GLOW)
 
 # GLOW
 The GLobal airglOW Model, independently and easily accessed from **Fortran 2003** compiler.
@@ -19,7 +19,7 @@ A Fortran compiler is required in any case.
 Install/compile by:
 
 ```sh
-git clone https://github.com/scivision/ncar-glow
+git clone https://github.com/space-physics/ncar-glow
 
 pip install -e ncar-glow
 ```
