@@ -1,4 +1,6 @@
-function [idate, utsec] = glowdate(time)
+function [idate, utsec] = datenum2utsec(time)
+
+validateattributes(time, {'numeric'}, {'scalar', 'positive'});
 
 tvec = datevec(time);
 idate = [int2str(tvec(1)), int2str(date2doy(time))];

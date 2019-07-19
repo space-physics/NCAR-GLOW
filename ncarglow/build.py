@@ -8,23 +8,26 @@ import shutil
 from pathlib import Path
 import subprocess
 import os
+import sys
 
 R = Path(__file__).resolve().parents[1]
-BINDIR = R / 'build'
-SRCDIR = R / 'src'
+SRCDIR = R
+BINDIR = SRCDIR / 'build'
 
 
-def build():
+def build(build_sys: str, src_dir: Path = SRCDIR, bin_dir: Path = BINDIR):
     """
     attempts build with Meson or CMake
     """
-    try:
-        meson_setup()
-    except (subprocess.CalledProcessError, FileNotFoundError, RuntimeError):
-        cmake_setup()
+    if build_sys == 'meson':
+        meson_setup(src_dir, bin_dir)
+    elif build_sys == 'cmake':
+        cmake_setup(src_dir, bin_dir)
+    else:
+        raise ValueError('Unknown build system {}'.format(build_sys))
 
 
-def cmake_setup():
+def cmake_setup(src_dir: Path, bin_dir: Path):
     """
     attempt to build using CMake >= 3
     """
@@ -34,37 +37,25 @@ def cmake_setup():
 
     wopts = ['-G', 'MinGW Makefiles', '-DCMAKE_SH="CMAKE_SH-NOTFOUND'] if os.name == 'nt' else []
 
-    subprocess.check_call([cmake_exe] + wopts + [str(SRCDIR)],
-                          cwd=BINDIR)
+    subprocess.check_call([cmake_exe, '-S', str(src_dir), '-B', str(bin_dir)] + wopts)
 
-    ret = subprocess.run([cmake_exe, '--build', str(BINDIR)],
-                         stderr=subprocess.PIPE,
-                         universal_newlines=True)
-
-    result(ret)
+    subprocess.check_call([cmake_exe, '--build', str(bin_dir), '--parallel'])
 
 
-def meson_setup():
+def meson_setup(src_dir: Path, bin_dir: Path):
     """
     attempt to build with Meson + Ninja
     """
     meson_exe = shutil.which('meson')
-    ninja_exe = shutil.which('ninja')
 
-    if not meson_exe or not ninja_exe:
-        raise FileNotFoundError('Meson or Ninja not available')
+    if not meson_exe:
+        raise FileNotFoundError('Meson not available')
 
-    if not (BINDIR / 'build.ninja').is_file():
-        subprocess.check_call([meson_exe, str(SRCDIR)], cwd=BINDIR)
+    if not (bin_dir / 'build.ninja').is_file():
+        subprocess.check_call([meson_exe, 'setup', str(bin_dir), str(src_dir)])
 
-    ret = subprocess.run(ninja_exe, cwd=BINDIR, stderr=subprocess.PIPE,
-                         universal_newlines=True)
-
-    result(ret)
+    subprocess.check_call([meson_exe, 'test', '-C', str(bin_dir)])
 
 
-def result(ret: subprocess.CompletedProcess):
-    if not ret.returncode:
-        print('\nBuild Complete!')
-    else:
-        raise RuntimeError(ret.stderr)
+if __name__ == '__main__':
+    build(sys.argv[1])

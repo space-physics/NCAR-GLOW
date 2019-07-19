@@ -20,11 +20,13 @@ def test_simple():
     try:
         iono = glow.simple(time, glat, glon, Q, Echar, Nbins)
     except ConnectionError:
-        pytest.xfail('CI internet FTP issue')
+        pytest.skip('CI internet FTP issue')
 
     assert iono['alt_km'].size == Nbins
+    assert iono.alt_km[32] == approx(101.8)
     assert iono['Tn'][32] == approx(188.)
     assert iono['ver'].loc[:, '5577'][32] == approx(20.45)
+    assert iono['ionrate'][32] == approx(335.)
 
 
 def test_ebins():
@@ -45,7 +47,7 @@ def test_ebins():
     try:
         iono = glow.ebins(time, glat, glon, Ebins, Phitop)
     except ConnectionError:
-        pytest.xfail('CI internet FTP issue')
+        pytest.skip('CI internet FTP issue')
 
     assert iono['alt_km'].size == Nbins
     assert iono['Tn'][32] == approx(188.0)
@@ -53,4 +55,4 @@ def test_ebins():
 
 
 if __name__ == '__main__':
-    pytest.main(['-x', __file__])
+    pytest.main(['-r', 'a', '-v', __file__])

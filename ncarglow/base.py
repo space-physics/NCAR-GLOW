@@ -17,7 +17,12 @@ EXE = Path(__file__).resolve().parents[1] / 'build' / 'glow.bin'
 if os.name == 'nt':
     EXE = EXE.with_suffix('.bin.exe')
 if not EXE.is_file():
-    build()
+    try:
+        build('meson')
+    except Exception:
+        build('cmake')
+if not EXE.is_file():
+    raise ImportError('GLOW executable not available. This is probably a Python package bug.')
 
 
 def simple(time: datetime, glat: float, glon: float,

@@ -55,7 +55,7 @@ ho=figure(4); clf(4)
 set(ho, 'Name', 'Optical Emissions','units', 'normalized')
 w = get(ho, 'position');
 if w(3) < 0.5
-  set(ho, 'position', [0.1, 0.5, 0.8, 0.5]);
+  set(ho, 'position', [0.1, 0.1, 0.8, 0.5])
 end
 ax = subplot(1,3,1,'parent', ho, 'nextplot', 'add');
 semilogx(ax, iono.A4278, iono.altkm, 'displayname', '4278', 'color','blue')

@@ -1,45 +1,33 @@
-project('GLOW', 'fortran',
-  version : '0.981',
-  default_options : ['default_library=static', 'buildtype=release'])
-
-add_global_arguments('-g', language : 'fortran')
-old = ['-w']
-new = ['-Wextra','-Wpedantic']
-fc = meson.get_compiler('fortran')
-if fc.version().version_compare('>=8')
-  old += '-std=legacy'
-  new += '-std=f2018'
-endif
 
 cglow_src = files('glow.f90', 'cglow.f90', 'fieldm.f', 'solzen.f90', 'ssflux.f90', 'rcolum.f90', 'qback.f90', 'etrans.f90', 'exsect.f', 'gchem.f90', 'bands.f90', 'ephoto.f90', 'egrid.f90', 'maxt.f90')
 snoem_src = files('snoem.f90', 'snoemint.f90', 'geomag.f90')
 utils_src = files('mzgrid.f90', 'conduct.f90', 'nrlmsise00.f', 'iri90.f')
 
-cglow = library('cglow', cglow_src, snoem_src, utils_src, fortran_args : old)
+cglow = library('cglow', cglow_src, snoem_src, utils_src, fortran_args : fargs_old)
 
 # ------  Python Matlab command line driver -----------
-
-glowexe = executable('glow.bin',
+exe_name = 'glow.bin'
+glowexe = executable(exe_name,
   'glowpython.f90', 'utils.f90', 'fsutils.f90',
   link_with : cglow,
-  fortran_args : new)
+  fortran_args : fargs_new)
 
-octave = find_program('octave', required : false)
-if octave.found()
-  test('Simple', octave, args : ['--eval', 'Simple'],
-    workdir : meson.source_root() / 'matlab')
+# -- hack: an always dirty target to be like RUNTIME_OUTPUT_DIRECTORY on CMake
+if host_machine.system() == 'windows'
+  exe_name += '.exe'
 endif
- # ------ MPI driver ------------
-mpi = dependency('mpi', language : 'fortran',
-  required : false)
-netcdf = dependency('NetCDF',
-  method : 'cmake', cmake_module_path : meson.source_root() / 'cmake/Modules',
-  required : false)
+
+custom_target('glow_runtime_output_directory',
+  build_by_default: true,
+  output: 'dummy',
+  command: ['python', '-c', 'import shutil; shutil.copy("' + meson.build_root()/'src'/exe_name + '", "' + meson.build_root() + '")'],
+  depends: glowexe)
+# -- end hack
 
 if mpi.found() and netcdf.found()
 mpiglow = executable('mpi_glow.bin',
   'glowdriver.f90', 'readtgcm.f90', 'output.f90', 'tzgrid.f90','fsutils.f90',
   dependencies : [netcdf, mpi],
   link_with : cglow,
-  fortran_args : old)
+  fortran_args : fargs_sold)
 endif
