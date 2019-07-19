@@ -1,32 +1,6 @@
 jobs:
-- job: UbuntuCMake
-  pool:
-    vmImage: 'ubuntu-latest'
 
-  steps:
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '3.6'
-      addToPath: true
-  - script: |
-      sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-      sudo apt update -q
-      sudo apt install -yq --no-install-recommends gfortran-6
-    displayName: 'Install Linux prereqs'
-  - script: |
-      cmake --version
-      cd $BUILD_DIR
-      cmake $(Build.SourcesDirectory)
-      cmake --build $BUILD_DIR --parallel
-    env:
-      BUILD_DIR: $(Build.BinariesDirectory)
-      FC: gfortran-6
-    displayName: 'CMake: Configure and Generate'
-  - script: ctest -R 2D --parallel --output-on-failure
-    workingDirectory: $(Build.BinariesDirectory)
-    displayName: 'CTest: 2D'
-
-- job: UbuntuMeson
+- job: Ubuntu
   pool:
     vmImage: 'ubuntu-latest'
 
@@ -39,24 +13,20 @@ jobs:
       sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
       sudo apt update -q
       sudo apt install -yq --no-install-recommends gfortran-6 octave
-    displayName: 'Install Linux prereqs'
+    displayName: 'Install Prereqs'
   - script: |
       python -m pip install meson
       curl -Ls https://github.com/ninja-build/ninja/releases/download/v1.9.0/ninja-linux.zip -o ninja-linux.zip
       sudo unzip ninja-linux.zip -d /usr/local/bin/
-    displayName: 'setup Meson'
-  - script: |
-      meson setup $BUILD_DIR $(Build.SourcesDirectory)
-      meson test -C $BUILD_DIR
+    displayName: 'Setup Meson'
+  - script: pip install -e .[tests]
     env:
-      BUILD_DIR: $(Build.BinariesDirectory)
       FC: gfortran-6
-    displayName: 'Build and test'
-  - publish: $(Build.BinariesDirectory)/meson-logs/testlog.txt
-    condition: succeededOrFailed()
-    artifact: LinuxTestLog
+    displayName: 'Build Python'
+  - script: pytest -r a -v
+    displayName: 'PyTest'
 
-- job: MacOSmeson
+- job: MacOS
   pool:
     vmImage: macOS-10.14
 
@@ -67,12 +37,7 @@ jobs:
       addToPath: true
   - script: brew install gcc meson
     displayName: 'Install Prereqs'
-  - script: |
-      meson setup $BUILD_DIR $(Build.SourcesDirectory)
-      meson test -C $BUILD_DIR
-    env:
-      BUILD_DIR: $(Build.BinariesDirectory)
-    displayName: 'Build and test'
-  - publish: $(Build.BinariesDirectory)/meson-logs/testlog.txt
-    condition: succeededOrFailed()
-    artifact: MacTestLog
+  - script: pip install -e .[tests]
+    displayName: 'Build Python'
+  - script: pytest -r a -v
+    displayName: 'PyTest'
