@@ -24,6 +24,15 @@ elif fc.get_id() == 'pgi'
   fargs_new +=  '-Mdclchk'
 endif
 
+mpi = dependency('mpi', language : 'fortran', required : false)
+netcdf = dependency('netcdf', required : false)
+
+subdir('src')
+
+# Octave and Matlab tests can be squirrely, make user request to test them.
+if not get_option('testmatlab')
+  subdir_done()
+endif
 
 matlab = find_program('matlab', required : false)
 octave = find_program('octave', required : false)
@@ -40,8 +49,3 @@ test('Simple', matoct, args : [margs, 'Simple'],
   workdir : meson.source_root() / 'matlab',
   timeout: 60)
 endif
-
-mpi = dependency('mpi', language : 'fortran', required : false)
-netcdf = dependency('netcdf', required : false)
-
-subdir('src')
