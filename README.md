@@ -1,8 +1,9 @@
 [![Build Status](https://dev.azure.com/mhirsch0512/NCAR-GLOW/_apis/build/status/space-physics.NCAR-GLOW?branchName=master)](https://dev.azure.com/mhirsch0512/NCAR-GLOW/_build/latest?definitionId=4&branchName=master)
 [![Build status](https://ci.appveyor.com/api/projects/status/9q837fimex3vf3en?svg=true)](https://ci.appveyor.com/project/scivision/ncar-glow)
-[![Build Status](https://travis-ci.com/space-physics/NCAR-GLOW.svg?branch=cmake)](https://travis-ci.com/space-physics/NCAR-GLOW)
+
 
 # GLOW
+
 The GLobal airglOW Model, independently and easily accessed from **Fortran 2003** compiler.
 Optionally available from scripting languages including:
 

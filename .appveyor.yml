@@ -16,8 +16,8 @@ init:
 - cmd: set PATH=%MINGW_DIR%;%PATH%
 - cmd: set PATH=%PY_DIR%;%PY_DIR%\Scripts;%PATH%
 # Ninja
-- sh: curl -Ls https://github.com/ninja-build/ninja/releases/download/v1.9.0/ninja-linux.zip -o ninja-linux.zip
-- sh: sudo unzip ninja-linux.zip -d /usr/local/bin/
+- sh: curl -Ls https://github.com/ninja-build/ninja/releases/download/v1.9.0/ninja-linux.zip -o /tmp/ninja-linux.zip
+- sh: sudo unzip /tmp/ninja-linux.zip -d /usr/local/bin/
 - cmd: cinst -y ninja
 
 install:

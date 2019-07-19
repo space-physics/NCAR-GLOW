@@ -2,17 +2,14 @@ jobs:
 
 - job: Ubuntu
   pool:
-    vmImage: 'ubuntu-latest'
+    vmImage: ubuntu-latest
 
   steps:
   - task: UsePythonVersion@0
     inputs:
       versionSpec: '3.6'
       addToPath: true
-  - script: |
-      sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-      sudo apt update -q
-      sudo apt install -yq --no-install-recommends gfortran-6 octave
+  - script: sudo apt install -yq --no-install-recommends gfortran octave
     displayName: 'Install Prereqs'
   - script: |
       python -m pip install meson
@@ -20,8 +17,6 @@ jobs:
       sudo unzip ninja-linux.zip -d /usr/local/bin/
     displayName: 'Setup Meson'
   - script: pip install -e .[tests]
-    env:
-      FC: gfortran-6
     displayName: 'Build Python'
   - script: pytest -r a -v
     displayName: 'PyTest'
@@ -36,6 +31,24 @@ jobs:
       versionSpec: '3.6'
       addToPath: true
   - script: brew install gcc meson
+    displayName: 'Install Prereqs'
+  - script: pip install -e .[tests]
+    displayName: 'Build Python'
+  - script: pytest -r a -v
+    displayName: 'PyTest'
+
+- job: WindowsMinGW
+  pool:
+    vmImage: windows-2019
+
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.6'
+      addToPath: true
+  - script: |
+      cinst -y mingw ninja
+      pip install meson
     displayName: 'Install Prereqs'
   - script: pip install -e .[tests]
     displayName: 'Build Python'
