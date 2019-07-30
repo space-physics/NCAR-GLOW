@@ -30,7 +30,7 @@ find_package(Octave COMPONENTS Interpreter)
 check_octave_source_runs("exit(exist('validateattributes'))")
 if(OctaveOK)
 
-add_test(NAME Simple COMMAND Octave::Interpreter --eval Simple
+add_test(NAME SimpleOctave COMMAND Octave::Interpreter --eval Simple
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/matlab)
 set_tests_properties(Simple PROPERTIES TIMEOUT 30)
 
@@ -40,7 +40,7 @@ endif()
 find_package(Matlab COMPONENTS MAIN_PROGRAM)
 if(Matlab_FOUND)
 
-add_test(NAME Simple COMMAND ${Matlab_MAIN_PROGRAM} -batch Simple
+add_test(NAME SimpleMatlab COMMAND ${Matlab_MAIN_PROGRAM} -batch Simple
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/matlab)
 set_tests_properties(Simple PROPERTIES TIMEOUT 90)
 

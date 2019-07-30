@@ -123,15 +123,12 @@ else
     read(u, iostat=ios) phitop
     if(ios /= 0) then
       write(stderr,*) 'failed to read input energy bin file ',trim(buf),' code',ios
-      if (ios < 0) write(stderr,*) 'was file truncated?'
-      stop 1
+      if (ios < 0) error stop 'was file truncated?'
+      error stop
     endif
 
     close(u)
   endblock
-
-
-
 
   del(2:) = ener(2:) - ener(1:nbins-1)
   del(1) = del(2) / 2  ! arbitrary
@@ -212,7 +209,6 @@ write(stdout,'(1000f15.1)') phitop
 !> excited / ionized densities
 write(stdout,'(A)') ' alt.   O+(2P)   O+(2D)   O+(4S)   N+   N2+   O2+   NO+    N2(A)    N(2P)   N(2D)    O(1S)   O(1D)'
 write(stdout, "(f5.1, 12f12.2)") (z(j), (zxden(ii,j), ii=1,nex), j=1,Nalt)
-
 
 
 end program

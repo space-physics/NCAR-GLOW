@@ -5,6 +5,10 @@ utils_src = files('mzgrid.f90', 'conduct.f90', 'nrlmsise00.f', 'iri90.f')
 
 cglow = library('cglow', cglow_src, snoem_src, utils_src, fortran_args : fargs_old)
 
+if meson.is_subproject()
+  subdir_done()
+endif
+
 # ------  Python Matlab command line driver -----------
 exe_name = 'glow.bin'
 glowexe = executable(exe_name,
@@ -20,9 +24,12 @@ endif
 custom_target('glow_runtime_output_directory',
   build_by_default: true,
   output: 'dummy',
-  command: ['python', '-c', 'import shutil; shutil.copy("' + meson.build_root()/'src'/exe_name + '", "' + meson.build_root() + '")'],
+  command: ['python', '-c', 'import shutil; shutil.copy("' + meson.current_build_dir() / exe_name + '", "' + meson.current_build_dir() / '..' + '")'],
   depends: glowexe)
 # -- end hack
+
+mpi = dependency('mpi', language : 'fortran', required : false)
+netcdf = dependency('netcdf', required : false)
 
 if mpi.found() and netcdf.found()
 mpiglow = executable('mpi_glow.bin',

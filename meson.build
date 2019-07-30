@@ -22,30 +22,29 @@ elif fc.get_id() == 'intel-cl'
 elif fc.get_id() == 'pgi'
   fargs_old += '-w'
   fargs_new +=  '-Mdclchk'
+elif fc.get_id() == 'flang'
+  fargs_old += '-w'
 endif
-
-mpi = dependency('mpi', language : 'fortran', required : false)
-netcdf = dependency('netcdf', required : false)
 
 subdir('src')
 
 # Octave and Matlab tests can be squirrely, make user request to test them.
-if not get_option('testmatlab')
+if meson.is_subproject() or not get_option('testmatlab')
   subdir_done()
 endif
 
-matlab = find_program('matlab', required : false)
-octave = find_program('octave', required : false)
-if octave.found()
-  matoct = matlab
-  margs = '-batch'
-elif matlab.found()
-  matoct = octave
-  margs = '--eval'
-endif
+margs = {'matlab': '-batch', 'octave': '--eval'}
 
-if octave.found() or matlab.found()
-test('Simple', matoct, args : [margs, 'Simple'],
-  workdir : meson.source_root() / 'matlab',
-  timeout: 60)
-endif
+foreach m : ['matlab', 'octave']
+
+  mexe = find_program(m, required : false)
+  if not mexe.found()
+    continue
+  endif
+
+  test('Simple-' + m, mexe,
+    args : [margs[m], 'Simple'],
+    workdir : meson.current_source_dir() / 'matlab',
+    timeout: 60)
+
+endforeach
