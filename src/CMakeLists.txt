@@ -7,6 +7,10 @@ set(utils_src mzgrid.f90 conduct.f90 nrlmsise00.f iri90.f)
 add_library(cglow ${cglow_src} ${snoem_src} ${utils_src})
 target_compile_options(cglow PRIVATE ${old})
 
+if(NOT CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+  return()
+endif()
+
 # ------  Python Matlab command line driver -----------
 
 add_executable(glow.bin glowpython.f90 utils.f90 fsutils.f90)
@@ -19,7 +23,8 @@ find_package(MPI COMPONENTS Fortran)
 find_package(NetCDF)
 if(MPI_Fortran_FOUND AND NetCDF_FOUND)
   add_executable(mpi_glow.bin glowdriver.f90 readtgcm.f90 output.f90 tzgrid.f90 fsutils.f90)
-  target_link_libraries(mpi_glow.bin cglow MPI::MPI_Fortran NetCDF::NetCDF_Fortran)
+  target_include_directories(mpi_glow.bin PRIVATE ${NetCDF_INCLUDE_DIRS})
+  target_link_libraries(mpi_glow.bin cglow MPI::MPI_Fortran ${NetCDF_LIBRARIES})
   target_compile_options(mpi_glow.bin PRIVATE ${new})
   set_target_properties(mpi_glow.bin PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 endif()
@@ -32,7 +37,7 @@ if(OctaveOK)
 
 add_test(NAME SimpleOctave COMMAND Octave::Interpreter --eval Simple
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/matlab)
-set_tests_properties(Simple PROPERTIES TIMEOUT 30)
+set_tests_properties(SimpleOctave PROPERTIES TIMEOUT 30)
 
 endif()
 
@@ -42,6 +47,6 @@ if(Matlab_FOUND)
 
 add_test(NAME SimpleMatlab COMMAND ${Matlab_MAIN_PROGRAM} -batch Simple
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/matlab)
-set_tests_properties(Simple PROPERTIES TIMEOUT 90)
+set_tests_properties(SimpleMatlab PROPERTIES TIMEOUT 90)
 
 endif()
