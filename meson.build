@@ -15,10 +15,10 @@ if fc.get_id() == 'gcc'
   endif
 elif fc.get_id() == 'intel'
   fargs_old += '-w'
-  fargs_new = ['-stand f18', '-implicitnone', '-W1']
+  fargs_new = ['-stand f18', '-warn declarations', '-W1']
 elif fc.get_id() == 'intel-cl'
   fargs_old += '/w'
-  fargs_new = ['/stand:f18', '/4Yd', '/W1']
+  fargs_new = ['/stand:f18', '/warn:declarations', '/W1']
 elif fc.get_id() == 'pgi'
   fargs_old += '-w'
   fargs_new +=  '-Mdclchk'
