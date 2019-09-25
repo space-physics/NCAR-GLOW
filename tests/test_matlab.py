@@ -45,4 +45,4 @@ def test_octave_api():
 
 
 if __name__ == '__main__':
-    pytest.main(['-r', 'a', '-v', '-s', __file__])
+    pytest.main(['-v', __file__])

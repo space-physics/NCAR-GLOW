@@ -5,23 +5,25 @@ from typing import Tuple
 import io
 import numpy as np
 import xarray
-import os
 import tempfile
+import shutil
 
 import geomagindices as gi
 from .build import build
 
 NALT = 250
 
-EXE = Path(__file__).resolve().parents[1] / 'build' / 'glow.bin'
-if os.name == 'nt':
-    EXE = EXE.with_suffix('.bin.exe')
-if not EXE.is_file():
+src_path = Path(__file__).resolve().parents[1]
+exe_path = src_path / 'build'
+exe_name = 'glow.bin'
+EXE = shutil.which(exe_name, path=str(exe_path))
+if not EXE:
     try:
-        build('meson')
+        build('meson', src_path, exe_path)
     except Exception:
-        build('cmake')
-if not EXE.is_file():
+        build('cmake', src_path, exe_path)
+EXE = shutil.which(exe_name, path=str(exe_path))
+if not EXE:
     raise ImportError('GLOW executable not available. This is probably a Python package bug.')
 
 
