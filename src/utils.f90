@@ -6,47 +6,33 @@ implicit none
 !private
 public :: alt_grid, linspace, cumsum
 
-interface argv
-  module procedure argv_r, argv_i
-end interface argv
-
 contains
 
 
-subroutine argv_r(i, val)
+subroutine argv(i, val)
 
 integer, intent(in) :: i
-real, intent(out) :: val
+class(*), intent(out) :: val
 character(1024) :: buf
 integer :: j
 
 call get_command_argument(i, buf)
-read(buf, *, iostat=j) val
+
+select type(val)
+  type is (real)
+    read(buf, *, iostat=j) val
+  type is (integer)
+    read(buf, *, iostat=j) val
+  class default
+    error stop 'unknown value type'
+end select
 
 if(j/=0) then
   write(stderr,*) 'failed to read value #',i
   error stop
 endif
 
-end subroutine argv_r
-
-
-subroutine argv_i(i, val)
-
-integer, intent(in) :: i
-integer, intent(out) :: val
-character(1024) :: buf
-integer :: j
-
-call get_command_argument(i, buf)
-read(buf, *, iostat=j) val
-
-if(j/=0) then
-  write(stderr,*) 'failed to read value #',i
-  error stop
-endif
-
-end subroutine argv_i
+end subroutine argv
 
 
 pure real function alt_grid(Nalt, minalt, dmin, dmax)
