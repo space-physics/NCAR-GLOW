@@ -6,7 +6,7 @@ from datetime import datetime
 import numpy as np
 
 
-def test_simple():
+def test_maxwellian():
     time = datetime(2015, 12, 13, 10, 0, 0)
     glat = 65.1
     glon = -147.5
@@ -18,7 +18,7 @@ def test_simple():
     Nbins = 250
 
     try:
-        iono = glow.simple(time, glat, glon, Q, Echar, Nbins)
+        iono = glow.maxwellian(time, glat, glon, Q, Echar, Nbins)
     except ConnectionError:
         pytest.skip('CI internet FTP issue')
 
@@ -29,6 +29,27 @@ def test_simple():
     assert iono['ver'].loc[:, '5577'][i] == approx(20.45)
     assert iono['ionrate'][i] == approx(335.)
     assert iono['hall'][i].item() == approx(6.98e-05)
+
+
+def test_noprecip():
+    time = datetime(2015, 12, 13, 10, 0, 0)
+    glat = 65.1
+    glon = -147.5
+    N_energy_bins = 250
+
+    try:
+        iono = glow.no_precipitation(time, glat, glon, N_energy_bins)
+    except ConnectionError:
+        pytest.skip('CI internet FTP issue')
+
+    assert iono['alt_km'].size == N_energy_bins
+    i = 32
+    assert iono.alt_km[i] == approx(101.8)
+    assert iono['Tn'][i] == approx(188.)
+    assert iono['ver'].loc[:, '5577'][i] == approx(0.)
+    assert iono['ver'].loc[:, '5577'][70] == approx(0.09)
+    assert iono['ionrate'][i] == approx(8.35)
+    assert iono['hall'][i].item() == approx(1.08e-05)
 
 
 def test_ebins():

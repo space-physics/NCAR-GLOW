@@ -97,20 +97,8 @@ call argv(8, ap)
 
 !> pick precipitation input
 call get_command_argument(9, buf)
-if(buf /= '-e') then  ! maxwellian precipitation differential number flux
-  read(buf, *) ef  ! hemispherical flux
-
-  call argv(10, ec) ! characteristic energy [eV]
-  call argv(11, nbins) ! number of energy bins
-  allocate(ener(nbins), del(nbins), phitop(nbins))
-
-  !! Call EGRID to set up electron energy grid:
-  call egrid(ener, del, nbins)
-
-  !! Call MAXT to put auroral electron flux specified into phitop array:
-  phitop(:) = 0.
-  if (ef>.001 .and. ec>1.) call maxt (ef,ec,ener,del,nbins,itail,fmono,emono,phitop)
-else   ! monoenergtic precipitation differential number flux
+if(buf == '-e') then
+  !! monoenergetic precipitation differential number flux
   call argv(10, nbins)
   allocate(ener(nbins), del(nbins), phitop(nbins))
 
@@ -133,6 +121,27 @@ else   ! monoenergtic precipitation differential number flux
 
   del(2:) = ener(2:) - ener(1:nbins-1)
   del(1) = del(2) / 2  ! arbitrary
+elseif(buf == '-noprecip') then
+  !! no precipitation
+  call argv(10, nbins)
+  allocate(ener(nbins), del(nbins), phitop(nbins))
+  !> setup energy grid
+  call egrid(ener, del, nbins)
+  phitop(:) = 0.
+else
+  !! maxwellian precipitation differential number flux
+  call argv(9, ef)  ! hemispherical flux
+
+  call argv(10, ec) ! characteristic energy [eV]
+  call argv(11, nbins) ! number of energy bins
+  allocate(ener(nbins), del(nbins), phitop(nbins))
+
+  !> setup energy grid
+  call egrid(ener, del, nbins)
+
+  !! Call MAXT to put auroral electron flux specified into phitop array:
+  phitop(:) = 0.
+  if (ef>.001 .and. ec>1.) call maxt (ef,ec,ener,del,nbins,itail,fmono,emono,phitop)
 
 endif
 

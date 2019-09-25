@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+"""
+Maxwellian shaped particle precipitation differential number flux
+"""
 import ncarglow as glow
 import ncarglow.plots as plot
 from datetime import datetime
@@ -15,7 +18,7 @@ Echar = 100e3
 # %% Number of energy bins
 Nbins = 250
 
-iono = glow.simple(time, glat, glon, Q, Echar, Nbins)
+iono = glow.maxwellian(time, glat, glon, Q, Echar, Nbins)
 # %% simple plots
 plot.precip(iono['precip'])
 
