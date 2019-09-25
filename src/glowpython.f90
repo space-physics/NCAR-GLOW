@@ -95,8 +95,9 @@ call argv(6, f107)
 call argv(7, f107p)
 call argv(8, ap)
 
+!> pick precipitation input
 call get_command_argument(9, buf)
-if(buf /= '-e') then
+if(buf /= '-e') then  ! maxwellian precipitation differential number flux
   read(buf, *) ef  ! hemispherical flux
 
   call argv(10, ec) ! characteristic energy [eV]
@@ -109,7 +110,7 @@ if(buf /= '-e') then
   !! Call MAXT to put auroral electron flux specified into phitop array:
   phitop(:) = 0.
   if (ef>.001 .and. ec>1.) call maxt (ef,ec,ener,del,nbins,itail,fmono,emono,phitop)
-else
+else   ! monoenergtic precipitation differential number flux
   call argv(10, nbins)
   allocate(ener(nbins), del(nbins), phitop(nbins))
 

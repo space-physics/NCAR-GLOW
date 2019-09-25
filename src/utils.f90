@@ -7,7 +7,7 @@ implicit none
 public :: alt_grid, linspace, cumsum
 
 interface argv
-  procedure argv_r, argv_i
+  module procedure argv_r, argv_i
 end interface argv
 
 contains

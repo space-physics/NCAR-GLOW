@@ -80,6 +80,8 @@ def ebins(time: datetime, glat: float, glon: float,
     try:
         Efn.unlink()
     except PermissionError:
+        # Windows sometimes does this if something else is holding the file open.
+        # this is also why we don't use a tempfile context manager for this application.
         pass
 
     return glowparse(ret.stdout)
