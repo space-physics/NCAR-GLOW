@@ -84,6 +84,36 @@ def no_precipitation(time: datetime, glat: float, glon: float, Nbins: int) -> xa
     return iono
 
 
+def no_source(time: datetime, glat: float, glon: float, Nbins: int, Talt: float, Thot: float) -> xarray.Dataset:
+    """ testing only, may give non-physical results"""
+    idate, utsec = glowdate(time)
+
+    ip = gi.get_indices([time - timedelta(days=1), time], 81)
+
+    cmd = [
+        str(EXE),
+        idate,
+        utsec,
+        str(glat),
+        str(glon),
+        str(ip["f107s"][1]),
+        str(ip["f107"][1]),
+        str(ip["f107"][0]),
+        str(ip["Ap"][1]),
+        "-nosource",
+        str(Nbins),
+        str(Talt),
+        str(Thot),
+    ]
+
+    dat = subprocess.check_output(cmd, timeout=15, stderr=subprocess.DEVNULL, universal_newlines=True)
+
+    iono = glowparse(dat)
+    iono.attrs["geomag"] = ip
+
+    return iono
+
+
 def ebins(time: datetime, glat: float, glon: float, Ebins: np.ndarray, Phitop: np.ndarray) -> xarray.Dataset:
 
     idate, utsec = glowdate(time)

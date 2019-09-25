@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """
-Maxwellian shaped particle precipitation differential number flux
+no particle precipitation.
+May give non-physical results, for testing only.
 """
 import ncarglow as glow
 import ncarglow.plots as plot
@@ -11,14 +12,12 @@ from matplotlib.pyplot import show
 time = datetime(2015, 12, 13, 10, 0, 0)
 glat = 65.1
 glon = -147.5
-# %% flux [erg cm-2 s-1 == mW m-2 s-1]
-Q = 1
-# %% characteristic energy [eV]
-Echar = 100e3
 # %% Number of energy bins
 Nbins = 250
+Talt = 130.0  # [km]
+Thot = 4000  # [K}]
 
-iono = glow.maxwellian(time, glat, glon, Q, Echar, Nbins)
+iono = glow.no_source(time, glat, glon, Nbins, Talt=Talt, Thot=Thot)
 # %% simple plots
 plot.precip(iono["precip"])
 

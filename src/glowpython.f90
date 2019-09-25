@@ -44,16 +44,20 @@ implicit none
 character(:), allocatable :: iri90_dir
 
 character(1024) :: buf
+character(80) :: operating_mode  ! what kind of user scenario
 
 real(wp), allocatable :: z(:)                    ! glow height coordinate in km (Nalt)
 real(wp), allocatable :: zun(:), zvn(:)          ! neutral wind components (not in use)
 real(wp), allocatable :: pedcond(:), hallcond(:) ! Pederson and Hall conductivities in S/m (mho)
 real(wp), allocatable :: outf(:,:)               ! iri output (11,Nalt)
 real(wp) :: stl,fmono,emono
-real(wp) :: sw(25)
+real(wp), parameter :: sw(25) = [1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.]
 integer :: j,ii,itail
 
-data sw/25*1./
+!> -nosource variables
+real :: Thot, Talt
+integer :: ialt
+
 
 ! Initialize standard switches:
 iscale=1
@@ -96,8 +100,9 @@ call argv(7, f107p)
 call argv(8, ap)
 
 !> pick precipitation input
-call get_command_argument(9, buf)
-if(buf == '-e') then
+call get_command_argument(9, operating_mode)
+select case (operating_mode)
+case ('-e')
   !! monoenergetic precipitation differential number flux
   call argv(10, nbins)
   allocate(ener(nbins), del(nbins), phitop(nbins))
@@ -121,14 +126,19 @@ if(buf == '-e') then
 
   del(2:) = ener(2:) - ener(1:nbins-1)
   del(1) = del(2) / 2  ! arbitrary
-elseif(buf == '-noprecip') then
+case('-noprecip', '-nosource')
   !! no precipitation
   call argv(10, nbins)
   allocate(ener(nbins), del(nbins), phitop(nbins))
+
+  !> what altitude to set temperature
+  call argv(11, Talt)  !< altitude to set temperature
+  call argv(12, Thot)  !< temperature to set
+
   !> setup energy grid
   call egrid(ener, del, nbins)
   phitop(:) = 0.
-else
+case default
   !! maxwellian precipitation differential number flux
   call argv(9, ef)  ! hemispherical flux
 
@@ -142,8 +152,7 @@ else
   !! Call MAXT to put auroral electron flux specified into phitop array:
   phitop(:) = 0.
   if (ef>.001 .and. ec>1.) call maxt (ef,ec,ener,del,nbins,itail,fmono,emono,phitop)
-
-endif
+end select
 
 !! Call CGLOW_INIT (module CGLOW) to set array dimensions and allocate use-associated variables:
 call cglow_init
@@ -176,6 +185,13 @@ z = alt_grid(Nalt=Nalt, minalt=60., dmin=0.5, dmax=4.)
 
 call mzgrid (Nalt,nex,idate,utsec,glat,glong,stl,f107a,f107,f107p,ap,iri90_dir, &
              z,zo,zo2,zn2,zns,znd,zno,ztn,zun,zvn,ze,zti,zte,zxden)
+
+if(operating_mode == '-nosource') then
+!! testing only. Set Ti=Te=Thot at a single altitude
+  ialt = minloc(abs(z-Talt), dim=1)
+  zte(ialt) = Thot
+  zti(ialt) = Thot
+endif
 
 !! Fill altitude array, converting to cm:
 zz(:) = z(:) * 1.e5     !< km to cm at all Nalt levels

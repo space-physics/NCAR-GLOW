@@ -16,7 +16,7 @@ Nbins = 250
 
 iono = glow.no_precipitation(time, glat, glon, Nbins)
 # %% simple plots
-plot.precip(iono['precip'])
+plot.precip(iono["precip"])
 
 plot.ver(iono)
 

@@ -17,12 +17,12 @@ Nbins = 250
 # %% monoenergetic beam
 Ebins = np.logspace(np.log10(Emin), np.log10(Emax), Nbins).astype(np.float32)
 Phitop = np.zeros_like(Ebins)
-Phitop[abs(Ebins-E0).argmin()] = 1.
+Phitop[abs(Ebins - E0).argmin()] = 1.0
 Phitop = Phitop.astype(np.float32)
 # %% run glow
 iono = glow.ebins(time, glat, glon, Ebins, Phitop)
 # %% simple plots
-plot.precip(iono['precip'])
+plot.precip(iono["precip"])
 
 plot.ver(iono)
 
