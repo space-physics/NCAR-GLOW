@@ -1,0 +1,42 @@
+name: ci_windows
+
+on: [push, pull_request]
+
+jobs:
+
+  cmake:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v1
+    - run: cmake -B build -G "MinGW Makefiles" -DCMAKE_SH="CMAKE_SH-NOTFOUND"
+      env:
+        FC: gfortran
+    - run: cmake --build build --parallel
+    - run: ctest --parallel -V
+      working-directory: build
+    - uses: actions/upload-artifact@v1
+      if: failure()
+      with:
+        name: Windows_Cmake_log
+        path: build/CMakeFiles/CMakeError.log
+
+  meson:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-python@v1
+      with:
+        python-version: '3.x'
+    - run: python -m pip install meson
+    - run: cinst -y ninja
+    - run: meson setup build
+      env:
+        FC: gfortran
+    - run: meson test -C build -v
+    - uses: actions/upload-artifact@v1
+      if: failure()
+      with:
+        name: Windows_Meson_Testlog
+        path: build/meson-logs/testlog.txt
+    - run: pip install -e .[tests]
+    - run: pytest -r a -v
