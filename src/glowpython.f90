@@ -131,9 +131,11 @@ case('-noprecip', '-nosource')
   call argv(10, nbins)
   allocate(ener(nbins), del(nbins), phitop(nbins))
 
-  !> what altitude to set temperature
-  call argv(11, Talt)  !< altitude to set temperature
-  call argv(12, Thot)  !< temperature to set
+  if(operating_mode == '-nosource') then
+    !> what altitude to set temperature
+    call argv(11, Talt)  !< altitude to set temperature
+    call argv(12, Thot)  !< temperature to set
+  endif
 
   !> setup energy grid
   call egrid(ener, del, nbins)

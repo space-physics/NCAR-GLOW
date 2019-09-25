@@ -6,6 +6,7 @@ import io
 import numpy as np
 import xarray
 import tempfile
+import pandas
 import shutil
 
 import geomagindices as gi
@@ -50,10 +51,7 @@ def maxwellian(time: datetime, glat: float, glon: float, Q: float, Echar: float,
 
     dat = subprocess.check_output(cmd, timeout=15, stderr=subprocess.DEVNULL, universal_newlines=True)
 
-    iono = glowparse(dat)
-    iono.attrs["geomag"] = ip
-
-    return iono
+    return glowparse(dat, time, ip)
 
 
 def no_precipitation(time: datetime, glat: float, glon: float, Nbins: int) -> xarray.Dataset:
@@ -78,10 +76,7 @@ def no_precipitation(time: datetime, glat: float, glon: float, Nbins: int) -> xa
 
     dat = subprocess.check_output(cmd, timeout=15, stderr=subprocess.DEVNULL, universal_newlines=True)
 
-    iono = glowparse(dat)
-    iono.attrs["geomag"] = ip
-
-    return iono
+    return glowparse(dat, time, ip)
 
 
 def no_source(time: datetime, glat: float, glon: float, Nbins: int, Talt: float, Thot: float) -> xarray.Dataset:
@@ -108,10 +103,7 @@ def no_source(time: datetime, glat: float, glon: float, Nbins: int, Talt: float,
 
     dat = subprocess.check_output(cmd, timeout=15, stderr=subprocess.DEVNULL, universal_newlines=True)
 
-    iono = glowparse(dat)
-    iono.attrs["geomag"] = ip
-
-    return iono
+    return glowparse(dat, time, ip)
 
 
 def ebins(time: datetime, glat: float, glon: float, Ebins: np.ndarray, Phitop: np.ndarray) -> xarray.Dataset:
@@ -156,10 +148,10 @@ def ebins(time: datetime, glat: float, glon: float, Ebins: np.ndarray, Phitop: n
         # this is also why we don't use a tempfile context manager for this application.
         pass
 
-    return glowparse(ret.stdout)
+    return glowparse(ret.stdout, time, ip)
 
 
-def glowparse(raw: str) -> xarray.Dataset:
+def glowparse(raw: str, time: datetime, ip: pandas.DataFrame) -> xarray.Dataset:
 
     table = io.StringIO(raw)
 
@@ -201,6 +193,9 @@ def glowparse(raw: str) -> xarray.Dataset:
     excite = xarray.Dataset(d, coords=prodloss.coords)
     # %% assemble output
     iono = xarray.merge((iono, ver, prodloss, precip, excite))
+
+    iono.attrs["time"] = time.isoformat()
+    iono.attrs["geomag"] = ip
 
     return iono
 
