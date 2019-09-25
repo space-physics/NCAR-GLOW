@@ -4,9 +4,10 @@ import xarray
 
 def precip(precip: xarray.DataArray):
     ax = figure().gca()
-    ax.plot(precip['energy'], precip)
-    ax.set_xlabel('Energy bin centers [eV]')
+    ax.plot(precip['energy']/1e3, precip)
+    ax.set_xlabel('Energy bin centers [keV]')
     ax.set_ylabel('hemispherical flux [cm$^{-2}$ s$^{-1}$ eV$^{-1}$]')
+    ax.set_title("precipitation: differential number flux")
     ax.grid(True)
 
 

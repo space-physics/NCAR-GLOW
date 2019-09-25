@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import ncarglow as glow
-import ncarglow.plots as gp
+import ncarglow.plots as plot
 from datetime import datetime
 from matplotlib.pyplot import show
 
@@ -17,8 +17,8 @@ Nbins = 250
 
 iono = glow.simple(time, glat, glon, Q, Echar, Nbins)
 # %% simple plots
-gp.precip(iono['precip'])
+plot.precip(iono['precip'])
 
-gp.ver(iono)
+plot.ver(iono)
 
 show()

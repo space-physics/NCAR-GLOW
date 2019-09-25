@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import ncarglow as glow
 from datetime import datetime
-import ncarglow.plots as gp
+import ncarglow.plots as plot
 import numpy as np
 from matplotlib.pyplot import show
 
@@ -22,8 +22,8 @@ Phitop = Phitop.astype(np.float32)
 # %% run glow
 iono = glow.ebins(time, glat, glon, Ebins, Phitop)
 # %% simple plots
-gp.precip(iono['precip'])
+plot.precip(iono['precip'])
 
-gp.ver(iono)
+plot.ver(iono)
 
 show()
