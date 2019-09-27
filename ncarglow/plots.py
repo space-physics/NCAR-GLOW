@@ -14,11 +14,28 @@ def precip(precip: xarray.DataArray):
     ax.grid(True)
 
 
+def temperature(iono: xarray.Dataset):
+    time = iono.time
+    location = iono.glatlon
+    tail = f"\n{time} {location}"
+    ax = figure().gca()
+    ax.plot(iono["Ti"], iono["Ti"].alt_km, label="Ti")
+    ax.plot(iono["Te"], iono["Te"].alt_km, label="Te")
+    ax.plot(iono["Tn"], iono["Tn"].alt_km, label="Tn")
+    ax.set_xlabel("Temperature [K]")
+    ax.set_ylabel("altitude [km]")
+    ax.set_title("Ion & Electron temperature" + tail)
+    ax.grid(True)
+    ax.legend()
+
+
 def ver(iono: xarray.Dataset):
     time = iono.time
-    ver_group(iono["ver"].loc[:, ["4278", "5577", "6300", "5200"]], f"Visible emissions  {time}")
-    ver_group(iono["ver"].loc[:, ["7320", "7774", "8446", "10400"]], f"IR emissions  {time}")
-    ver_group(iono["ver"].loc[:, ["3371", "3644", "3726", "1356", "1493", "1304", "LBH"]], f"UV emissions  {time}")
+    location = iono.glatlon
+    tail = f"\n{time} {location}"
+    ver_group(iono["ver"].loc[:, ["4278", "5577", "6300", "5200"]], "Visible emissions" + tail)
+    ver_group(iono["ver"].loc[:, ["7320", "7774", "8446", "10400"]], "IR emissions" + tail)
+    ver_group(iono["ver"].loc[:, ["3371", "3644", "3726", "1356", "1493", "1304", "LBH"]], "UV emissions" + tail)
 
 
 def ver_group(iono: xarray.Dataset, ttxt: str):
@@ -35,6 +52,5 @@ def ver_group(iono: xarray.Dataset, ttxt: str):
     ax.set_xlabel("Volume Emission Rate [Rayleigh]")
     ax.set_ylabel("altitude [km]")
     ax.set_title(ttxt)
-    ax.set_ylim((50, None))
     ax.grid(True)
     ax.legend()

@@ -51,7 +51,7 @@ def maxwellian(time: datetime, glat: float, glon: float, Q: float, Echar: float,
 
     dat = subprocess.check_output(cmd, timeout=15, stderr=subprocess.DEVNULL, universal_newlines=True)
 
-    return glowparse(dat, time, ip)
+    return glowparse(dat, time, ip, glat, glon)
 
 
 def no_precipitation(time: datetime, glat: float, glon: float, Nbins: int) -> xarray.Dataset:
@@ -76,7 +76,7 @@ def no_precipitation(time: datetime, glat: float, glon: float, Nbins: int) -> xa
 
     dat = subprocess.check_output(cmd, timeout=15, stderr=subprocess.DEVNULL, universal_newlines=True)
 
-    return glowparse(dat, time, ip)
+    return glowparse(dat, time, ip, glat, glon)
 
 
 def no_source(time: datetime, glat: float, glon: float, Nbins: int, Talt: float, Thot: float) -> xarray.Dataset:
@@ -103,7 +103,7 @@ def no_source(time: datetime, glat: float, glon: float, Nbins: int, Talt: float,
 
     dat = subprocess.check_output(cmd, timeout=15, stderr=subprocess.DEVNULL, universal_newlines=True)
 
-    return glowparse(dat, time, ip)
+    return glowparse(dat, time, ip, glat, glon)
 
 
 def ebins(time: datetime, glat: float, glon: float, Ebins: np.ndarray, Phitop: np.ndarray) -> xarray.Dataset:
@@ -148,10 +148,10 @@ def ebins(time: datetime, glat: float, glon: float, Ebins: np.ndarray, Phitop: n
         # this is also why we don't use a tempfile context manager for this application.
         pass
 
-    return glowparse(ret.stdout, time, ip)
+    return glowparse(ret.stdout, time, ip, glat, glon)
 
 
-def glowparse(raw: str, time: datetime, ip: pandas.DataFrame) -> xarray.Dataset:
+def glowparse(raw: str, time: datetime, ip: pandas.DataFrame, glat: float, glon: float) -> xarray.Dataset:
 
     table = io.StringIO(raw)
 
@@ -167,7 +167,7 @@ def glowparse(raw: str, time: datetime, ip: pandas.DataFrame) -> xarray.Dataset:
     iono = xarray.Dataset(d, coords={"alt_km": alt_km})
     # %% VER
     dat = np.genfromtxt(table, skip_header=1, max_rows=NALT)
-
+    assert dat[0, 0] == alt_km[0]
     wavelen = [3371, 4278, 5200, 5577, 6300, 7320, 10400, 3644, 7774, 8446, 3726, "LBH", 1356, 1493, 1304]
 
     ver = xarray.DataArray(dat[:, 1:], coords={"alt_km": alt_km, "wavelength": wavelen}, dims=["alt_km", "wavelength"], name="ver")
@@ -188,14 +188,21 @@ def glowparse(raw: str, time: datetime, ip: pandas.DataFrame) -> xarray.Dataset:
 
     assert E.size == Nbins
     # %% excited / ionized densities
-    dat = np.genfromtxt(table, skip_header=0, max_rows=NALT)[:, 1:]
-    d = {"excitedDensity": (("alt_km", "state"), dat)}
+    dat = np.genfromtxt(table, skip_header=1, max_rows=NALT)
+    assert dat[0, 0] == alt_km[0]
+    d = {"excitedDensity": (("alt_km", "state"), dat[:, 1:])}
     excite = xarray.Dataset(d, coords=prodloss.coords)
+    # %% Te, Ti
+    dat = np.genfromtxt(table, skip_header=1, max_rows=NALT)
+    assert dat[0, 0] == alt_km[0]
+    iono["Te"] = ("alt_km", dat[:, 1])
+    iono["Ti"] = ("alt_km", dat[:, 2])
     # %% assemble output
     iono = xarray.merge((iono, ver, prodloss, precip, excite))
 
     iono.attrs["time"] = time.isoformat()
     iono.attrs["geomag"] = ip
+    iono.attrs["glatlon"] = (glat, glon)
 
     return iono
 

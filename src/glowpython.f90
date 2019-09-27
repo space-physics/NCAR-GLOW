@@ -238,5 +238,9 @@ write(stdout,'(1000f15.1)') phitop
 write(stdout,'(A)') ' alt.   O+(2P)   O+(2D)   O+(4S)   N+   N2+   O2+   NO+    N2(A)    N(2P)   N(2D)    O(1S)   O(1D)'
 write(stdout, "(f5.1, 12f12.2)") (z(j), (zxden(ii,j), ii=1,nex), j=1,Nalt)
 
+!> Te, Ti
+write(stdout,'(A)') ' alt.    Te     Ti'
+write(stdout, '(f5.1, 2f9.2)') (z(j), zte(j), zti(j), j=1,Nalt)
+
 
 end program
