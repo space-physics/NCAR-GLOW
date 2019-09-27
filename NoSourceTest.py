@@ -14,7 +14,7 @@ glat = 65.1
 glon = -147.5
 # %% Number of energy bins
 Nbins = 250
-Talt = 200.0  # [km]
+Talt = 400.0  # [km]
 Thot = 4000  # [K}]
 
 iono = glow.no_source(time, glat, glon, Nbins, Talt=Talt, Thot=Thot)

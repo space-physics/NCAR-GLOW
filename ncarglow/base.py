@@ -201,7 +201,7 @@ def glowparse(raw: str, time: datetime, ip: pandas.DataFrame, glat: float, glon:
     iono = xarray.merge((iono, ver, prodloss, precip, excite))
 
     iono.attrs["time"] = time.isoformat()
-    iono.attrs["geomag"] = ip
+    iono.attrs["geomag_params"] = ip
     iono.attrs["glatlon"] = (glat, glon)
 
     return iono

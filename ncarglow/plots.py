@@ -29,6 +29,15 @@ def temperature(iono: xarray.Dataset):
     ax.legend()
 
 
+def altitude(iono: xarray.Dataset):
+    ax = figure().gca()
+    ax.plot(iono.alt_km)
+    ax.set_xlabel("altitude grid index #")
+    ax.set_ylabel("altitude [km]")
+    ax.set_title("altitude grid cells")
+    ax.grid(True)
+
+
 def ver(iono: xarray.Dataset):
     time = iono.time
     location = iono.glatlon
