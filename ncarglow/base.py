@@ -13,6 +13,7 @@ import geomagindices as gi
 from .build import build
 
 NALT = 250
+var = ["Tn", "O", "N2", "O2", "NO", "NeIn", "NeOut", "ionrate", "O+", "O2+", "NO+", "N2D", "pedersen", "hall"]
 
 src_path = Path(__file__).resolve().parents[1]
 exe_path = src_path / "build"
@@ -158,12 +159,10 @@ def glowparse(raw: str, time: datetime, ip: pandas.DataFrame, glat: float, glon:
     dat = np.genfromtxt(table, skip_header=2, max_rows=NALT)
     alt_km = dat[:, 0]
 
-    states = ["Tn", "O", "N2", "NO", "NeIn", "NeOut", "ionrate", "O+", "O2+", "NO+", "N2D", "pedersen", "hall"]
-
-    if len(states) != dat.shape[1] - 1:
+    if len(var) != dat.shape[1] - 1:
         raise ValueError("did not read raw output from GLOW correctly, please file a bug report.")
 
-    d: dict = {k: ("alt_km", v) for (k, v) in zip(states, dat[:, 1:].T)}
+    d: dict = {k: ("alt_km", v) for (k, v) in zip(var, dat[:, 1:].T)}
     iono = xarray.Dataset(d, coords={"alt_km": alt_km})
     # %% VER
     dat = np.genfromtxt(table, skip_header=1, max_rows=NALT)

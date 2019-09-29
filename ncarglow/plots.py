@@ -5,6 +5,32 @@ import numpy as np
 __all__ = ["precip", "ver"]
 
 
+def neutral_density(iono: xarray.Dataset):
+    ax = figure().gca()
+    for v in ("O", "N2", "O2", "NO"):
+        ax.plot(iono[v], iono[v].alt_km, label=v)
+    ax.set_xscale("log")
+    ax.set_ylabel("altitude [km]")
+    ax.set_xlabel("Density [cm$^{-3}$]")
+    ax.set_title("Number density")
+    ax.grid(True)
+    ax.set_xlim(1, None)
+    ax.legend(loc="best")
+
+
+def ion_density(iono: xarray.Dataset):
+    ax = figure().gca()
+    for v in ("O+", "O2+", "NO+", "N2D"):
+        ax.plot(iono[v], iono[v].alt_km, label=v)
+    ax.set_xscale("log")
+    ax.set_ylabel("altitude [km]")
+    ax.set_xlabel("Density [cm$^{-3}$]")
+    ax.set_title("Number density")
+    ax.grid(True)
+    ax.set_xlim(1, None)
+    ax.legend(loc="best")
+
+
 def precip(precip: xarray.DataArray):
     ax = figure().gca()
     ax.plot(precip["energy"] / 1e3, precip)

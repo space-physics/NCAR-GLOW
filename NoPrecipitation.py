@@ -18,7 +18,10 @@ iono = glow.no_precipitation(time, glat, glon, Nbins)
 # %% simple plots
 if False:
     plot.precip(iono["precip"])  # all zeros as intended
-plot.altitude(iono)
+    plot.altitude(iono)
+
+plot.neutral_density(iono)
+plot.ion_density(iono)
 
 plot.temperature(iono)
 

@@ -213,9 +213,9 @@ enddo
 !! Output
 
 write(stdout,"(1x,i7,9f8.1)") idate,utsec,glat,glong,f107a,f107,f107p,ap,ef,ec
-write(stdout,"('   Z     Tn       O        N2        NO      Ne(in)    Ne(out)  Ionrate" //&
+write(stdout,"('   Z     Tn       O        N2        O2        NO      Ne(in)    Ne(out)  Ionrate" //&
   "      O+       O2+      NO+       N(2D)    Pederson   Hall')")
-write(stdout,"(1x,0p,f5.1,f6.0,1p,12e10.2)") (z(j),ztn(j),zo(j),zn2(j),zno(j),ze(j), &
+write(stdout,"(1x,0p,f5.1,f6.0,1p,13e10.2)") (z(j),ztn(j),zo(j),zn2(j),zo2(j),zno(j),ze(j), &
   ecalc(j),tir(j),zxden(3,j),zxden(6,j),zxden(7,j),zxden(10,j),pedcond(j),hallcond(j),j=1,Nalt)
 
 !> Optical emissions  (Rayleighs)
