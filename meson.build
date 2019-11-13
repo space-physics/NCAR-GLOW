@@ -1,6 +1,6 @@
 project('GLOW', 'fortran',
   version : '0.981',
-  meson_version : '>= 0.50',
+  meson_version : '>= 0.51.2',
   default_options : ['default_library=static', 'buildtype=release'])
 
 fc = meson.get_compiler('fortran')
@@ -37,10 +37,7 @@ margs = {'matlab': '-batch', 'octave': '--eval'}
 
 foreach m : ['matlab', 'octave']
 
-  mexe = find_program(m, required : false)
-  if not mexe.found()
-    continue
-  endif
+  mexe = find_program(m, required : false, disabler: true)
 
   test('Simple-' + m, mexe,
     args : [margs[m], 'Simple'],

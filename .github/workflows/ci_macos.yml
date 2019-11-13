@@ -28,8 +28,8 @@ jobs:
     - uses: actions/setup-python@v1
       with:
         python-version: '3.x'
-    - run: python -m pip install meson
-    - run: brew install ninja gcc
+    - run: pip install -e .[tests]
+    - run: brew install gcc
     - run: meson setup build
       env:
         FC: gfortran
@@ -39,5 +39,4 @@ jobs:
       with:
         name: MacOS_Meson_Testlog
         path: build/meson-logs/testlog.txt
-    - run: pip install -e .[tests]
-    - run: pytest -r a -v
+    - run: pytest

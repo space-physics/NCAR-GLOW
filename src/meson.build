@@ -28,13 +28,11 @@ custom_target('glow_runtime_output_directory',
   depends: glowexe)
 # -- end hack
 
-mpi = dependency('mpi', language : 'fortran', required : false)
-netcdf = dependency('netcdf', required : false)
+mpi = dependency('mpi', language : 'fortran', required : false, disabler: true)
+netcdf = dependency('netcdf', required : false, disabler: true)
 
-if mpi.found() and netcdf.found()
 mpiglow = executable('mpi_glow.bin',
   'glowdriver.f90', 'readtgcm.f90', 'output.f90', 'tzgrid.f90','fsutils.f90',
   dependencies : [netcdf, mpi],
   link_with : cglow,
-  fortran_args : fargs_sold)
-endif
+  fortran_args : fargs_old)
