@@ -1,46 +1,28 @@
 project('GLOW', 'fortran',
   version : '0.981',
   meson_version : '>= 0.51.2',
-  default_options : ['default_library=static', 'buildtype=release'])
+  default_options : ['default_library=static', 'buildtype=release', 'warning_level=0'])
 
 fc = meson.get_compiler('fortran')
-fargs_old = []
-fargs_new = []
-if fc.get_id() == 'gcc'
-  if fc.version().version_compare('>=8')
-    fargs_old = ['-w', '-std=legacy']
-    fargs_new += '-std=f2018'
-  else
-    fargs_old += '-w'
-  endif
-elif fc.get_id() == 'intel'
-  fargs_old += '-w'
-  fargs_new = ['-stand f18', '-warn declarations', '-W1']
-elif fc.get_id() == 'intel-cl'
-  fargs_old += '/w'
-  fargs_new = ['/stand:f18', '/warn:declarations', '/W1']
-elif fc.get_id() == 'pgi'
-  fargs_old += '-w'
-  fargs_new +=  '-Mdclchk'
-elif fc.get_id() == 'flang'
-  fargs_old += '-w'
-endif
+fargs_old = fc.get_supported_arguments('-w', '-std=legacy', '-fno-implicit-none')
 
 subdir('src')
 
 # Octave and Matlab tests can be squirrely, make user request to test them.
-if meson.is_subproject() or not get_option('testmatlab')
+if meson.is_subproject()
   subdir_done()
 endif
 
-margs = {'matlab': '-batch', 'octave': '--eval'}
+# ------  Python Matlab command line driver -----------
 
-foreach m : ['matlab', 'octave']
+glowexe = executable('glow.bin', glowdriver_src, link_with : cglow)
 
-  mexe = find_program(m, required : false, disabler: true)
+foreach k, v : {'matlab': '-batch', 'octave': '--eval'}
 
-  test('Simple-' + m, mexe,
-    args : [margs[m], 'Simple'],
+  mexe = find_program(k, required : get_option('matlab'), disabler: true)
+
+  test('Simple-' + k, mexe,
+    args : [v, 'Simple'],
     workdir : meson.current_source_dir() / 'matlab',
     timeout: 60)
 

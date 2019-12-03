@@ -1,1 +1,1 @@
-option('testmatlab', type : 'boolean', value: false, description : 'test matlab / octave')
+option('matlab', type : 'feature', value: 'disabled', description : 'test matlab / octave')
