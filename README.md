@@ -89,10 +89,6 @@ Otherwise, -O3 works fine.
 
 The Matlab interface is in the [matlab](./matlab) directory, and passes data to / from Glow over stdin / stdout pipes.
 
-First, compile the Fortran code by running [setup.m](./matlab/setup.m)
-
-Then,
-
 * Use built-in energy and altitude bins: [Simple.m](./matlab/Simple.m)
 * user input energy grid: [Monoenergetic.m](./matlab/Monoenergetic.m)
 
