@@ -1,6 +1,22 @@
 name: ci_macos
 
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - "**/*.f"
+      - "**/*.f90"
+      - "**/*.py"
+      - "**/*.m"
+      - "**/meson.build"
+      - ".github/workflows/ci_macos.yml"
+  pull_request:
+    paths:
+      - "**/*.f"
+      - "**/*.f90"
+      - "**/*.py"
+      - "**/*.m"
+      - "**/meson.build"
+      - ".github/workflows/ci_macos.yml"
 
 jobs:
 
@@ -33,6 +49,7 @@ jobs:
     - run: meson setup build
       env:
         FC: gfortran
+    - run: ninja -C build
     - run: meson test -C build -v
     - uses: actions/upload-artifact@v1
       if: failure()

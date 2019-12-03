@@ -11,7 +11,7 @@ def test_maxwellian():
     glat = 65.1
     glon = -147.5
     # %% flux [erg cm-2 s-1 == mW m-2 s-1]
-    Q = 1
+    Q = 1.0
     # %% characteristic energy [eV]
     Echar = 100e3
     # %% Number of energy bins

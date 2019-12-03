@@ -1,1 +1,2 @@
 option('matlab', type : 'feature', value: 'disabled', description : 'test matlab / octave')
+option('mpiglow', type : 'feature', value: 'disabled', description : 'MPI Glow')

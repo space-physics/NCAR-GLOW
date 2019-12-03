@@ -4,21 +4,9 @@ snoem_src = files('snoem.f90', 'snoemint.f90', 'geomag.f90')
 utils_src = files('mzgrid.f90', 'conduct.f90', 'nrlmsise00.f', 'iri90.f')
 glowdriver_src = files('glowpython.f90', 'utils.f90', 'fsutils.f90')
 
-cglow = library('cglow',
-  sources: [cglow_src, snoem_src, utils_src],
-  fortran_args : fargs_old)
-
-if meson.is_subproject()
-  subdir_done()
-endif
-
 # --- Stan's MPI/NetCDF driver
 
-mpi = dependency('mpi', language : 'fortran', required : false, disabler: true)
-netcdf = dependency('netcdf', required : false, disabler: true)
+mpiglow_src = files('glowdriver.f90', 'readtgcm.f90', 'output.f90', 'tzgrid.f90','fsutils.f90')
 
-mpiglow = executable('mpi_glow.bin',
-  sources: ['glowdriver.f90', 'readtgcm.f90', 'output.f90', 'tzgrid.f90','fsutils.f90'],
-  dependencies : [netcdf, mpi],
-  link_with : cglow,
-  fortran_args : fargs_old)
+mpi = dependency('mpi', language : 'fortran', required : get_option('mpiglow'), disabler: true)
+netcdf = dependency('netcdf', required: get_option('mpiglow'), disabler: true)

@@ -1,10 +1,46 @@
 name: ci_linux
 
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - "**/*.f"
+      - "**/*.f90"
+      - "**/*.py"
+      - "**/*.m"
+      - "**/meson.build"
+      - ".github/workflows/ci_linux.yml"
+  pull_request:
+    paths:
+      - "**/*.f"
+      - "**/*.f90"
+      - "**/*.py"
+      - "**/*.m"
+      - "**/meson.build"
+      - ".github/workflows/ci_linux.yml"
 
 jobs:
 
-  # cmake was too old
+  cmake:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install Prereqs
+      run: |
+        sudo apt update -yq
+        sudo apt install -yq --no-install-recommends gfortran
+    - run: mkdir build
+    - run: cmake ..
+      working-directory: build
+      env:
+        FC: gfortran
+    - run: cmake --build build --parallel
+    - run: ctest --parallel -V
+      working-directory: build
+    - uses: actions/upload-artifact@v1
+      if: failure()
+      with:
+        name: Linux_Cmake_log
+        path: build/CMakeFiles/CMakeError.log
 
   meson:
     runs-on: ubuntu-latest
@@ -13,14 +49,15 @@ jobs:
     - uses: actions/setup-python@v1
       with:
         python-version: '3.x'
-    - run: python -m pip install -e .[tests,lint]
-    - name: Install Prerequisites
+    - run: pip install -e .[tests,lint]
+    - name: Install Prereqs
       run: |
         sudo apt update -yq
         sudo apt install -yq --no-install-recommends gfortran octave
     - run: meson setup build
       env:
         FC: gfortran
+    - run: ninja -C build
     - run: meson test -C build -v
     - uses: actions/upload-artifact@v1
       if: failure()
