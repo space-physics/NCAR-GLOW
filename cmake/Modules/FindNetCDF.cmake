@@ -75,8 +75,6 @@ endif()
 endfunction()
 
 #============================================================
-cmake_policy(VERSION 3.3)
-
 find_package(PkgConfig)
 
 netcdf_c()
