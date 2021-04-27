@@ -23,37 +23,28 @@ jobs:
   cmake:
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v1
-    - run: brew install gcc
+    - uses: actions/checkout@v2
+
     - run: cmake -B build
       env:
         FC: gfortran
     - run: cmake --build build --parallel
-    - run: ctest --parallel -V
-      working-directory: build
-    - uses: actions/upload-artifact@v1
-      if: failure()
-      with:
-        name: MacOS_Cmake_log
-        path: build/CMakeFiles/CMakeError.log
+    - run: ctest --test-dir build -V
 
   meson:
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v1
-    - uses: actions/setup-python@v1
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
       with:
         python-version: '3.x'
+
     - run: pip install -e .[tests]
-    - run: brew install gcc
+
     - run: meson setup build
       env:
         FC: gfortran
-    - run: ninja -C build
+
     - run: meson test -C build -v
-    - uses: actions/upload-artifact@v1
-      if: failure()
-      with:
-        name: MacOS_Meson_Testlog
-        path: build/meson-logs/testlog.txt
+
     - run: pytest

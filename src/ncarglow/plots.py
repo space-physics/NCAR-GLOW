@@ -70,15 +70,23 @@ def ver(iono: xarray.Dataset):
     tail = f"\n{time} {location}"
     ver_group(iono["ver"].loc[:, ["4278", "5577", "6300", "5200"]], "Visible emissions" + tail)
     ver_group(iono["ver"].loc[:, ["7320", "7774", "8446", "10400"]], "IR emissions" + tail)
-    ver_group(iono["ver"].loc[:, ["3371", "3644", "3726", "1356", "1493", "1304", "LBH"]], "UV emissions" + tail)
+    ver_group(
+        iono["ver"].loc[:, ["3371", "3644", "3726", "1356", "1493", "1304", "LBH"]],
+        "UV emissions" + tail,
+    )
 
 
-def ver_group(iono: xarray.Dataset, ttxt: str):
+def ver_group(iono: xarray.DataArray, ttxt: str):
     nm = np.nanmax(iono)
     if nm == 0 or np.isnan(nm):
         return
 
-    colors = {"4278": "blue", "5577": "xkcd:dark lime green", "5200": "xkcd:golden yellow", "6300": "red"}
+    colors = {
+        "4278": "blue",
+        "5577": "xkcd:dark lime green",
+        "5200": "xkcd:golden yellow",
+        "6300": "red",
+    }
 
     ax = figure().gca()
     for w in iono.wavelength:

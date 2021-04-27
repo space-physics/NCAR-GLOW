@@ -7,7 +7,7 @@ fc = meson.get_compiler('fortran')
 fargs_old = [fc.first_supported_argument(['-w', '-nowarn', '/nowarn']),
             fc.first_supported_argument(['-std=legacy', '-nostand', '/nostand'])]
 
-subdir('src')
+subdir('fortran')
 
 cglow = library('cglow',
   sources: [cglow_src, snoem_src, utils_src],

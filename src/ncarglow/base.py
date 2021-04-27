@@ -13,9 +13,24 @@ import geomagindices as gi
 from .build import build
 
 NALT = 250
-var = ["Tn", "O", "N2", "O2", "NO", "NeIn", "NeOut", "ionrate", "O+", "O2+", "NO+", "N2D", "pedersen", "hall"]
+var = [
+    "Tn",
+    "O",
+    "N2",
+    "O2",
+    "NO",
+    "NeIn",
+    "NeOut",
+    "ionrate",
+    "O+",
+    "O2+",
+    "NO+",
+    "N2D",
+    "pedersen",
+    "hall",
+]
 
-src_path = Path(__file__).resolve().parents[1]
+src_path = Path(__file__).resolve().parent
 exe_path = src_path / "build"
 exe_name = "glow.bin"
 EXE = shutil.which(exe_name, path=str(exe_path))
@@ -29,7 +44,9 @@ if not EXE:
     raise ImportError("GLOW executable not available. This is probably a Python package bug.")
 
 
-def maxwellian(time: datetime, glat: float, glon: float, Q: float, Echar: float, Nbins: int) -> xarray.Dataset:
+def maxwellian(
+    time: datetime, glat: float, glon: float, Q: float, Echar: float, Nbins: int
+) -> xarray.Dataset:
 
     idate, utsec = glowdate(time)
 
@@ -50,7 +67,7 @@ def maxwellian(time: datetime, glat: float, glon: float, Q: float, Echar: float,
         str(Nbins),
     ]
 
-    dat = subprocess.check_output(cmd, timeout=15, stderr=subprocess.DEVNULL, universal_newlines=True)
+    dat = subprocess.check_output(cmd, timeout=15, stderr=subprocess.DEVNULL, text=True)
 
     return glowparse(dat, time, ip, glat, glon)
 
@@ -75,13 +92,15 @@ def no_precipitation(time: datetime, glat: float, glon: float, Nbins: int) -> xa
         str(Nbins),
     ]
 
-    dat = subprocess.check_output(cmd, timeout=15, stderr=subprocess.DEVNULL, universal_newlines=True)
+    dat = subprocess.check_output(cmd, timeout=15, stderr=subprocess.DEVNULL, text=True)
 
     return glowparse(dat, time, ip, glat, glon)
 
 
-def no_source(time: datetime, glat: float, glon: float, Nbins: int, Talt: float, Thot: float) -> xarray.Dataset:
-    """ testing only, may give non-physical results"""
+def no_source(
+    time: datetime, glat: float, glon: float, Nbins: int, Talt: float, Thot: float
+) -> xarray.Dataset:
+    """testing only, may give non-physical results"""
     idate, utsec = glowdate(time)
 
     ip = gi.get_indices([time - timedelta(days=1), time], 81)
@@ -102,12 +121,14 @@ def no_source(time: datetime, glat: float, glon: float, Nbins: int, Talt: float,
         str(Thot),
     ]
 
-    dat = subprocess.check_output(cmd, timeout=15, stderr=subprocess.DEVNULL, universal_newlines=True)
+    dat = subprocess.check_output(cmd, timeout=15, stderr=subprocess.DEVNULL, text=True)
 
     return glowparse(dat, time, ip, glat, glon)
 
 
-def ebins(time: datetime, glat: float, glon: float, Ebins: np.ndarray, Phitop: np.ndarray) -> xarray.Dataset:
+def ebins(
+    time: datetime, glat: float, glon: float, Ebins: np.ndarray, Phitop: np.ndarray
+) -> xarray.Dataset:
 
     idate, utsec = glowdate(time)
 
@@ -139,7 +160,7 @@ def ebins(time: datetime, glat: float, glon: float, Ebins: np.ndarray, Phitop: n
         str(Efn),
     ]
 
-    ret = subprocess.run(cmd, timeout=15, universal_newlines=True, stdout=subprocess.PIPE)
+    ret = subprocess.run(cmd, timeout=15, text=True, stdout=subprocess.PIPE)
     if ret.returncode:
         raise RuntimeError(f"GLOW failed at {time}")
     try:
@@ -152,7 +173,9 @@ def ebins(time: datetime, glat: float, glon: float, Ebins: np.ndarray, Phitop: n
     return glowparse(ret.stdout, time, ip, glat, glon)
 
 
-def glowparse(raw: str, time: datetime, ip: pandas.DataFrame, glat: float, glon: float) -> xarray.Dataset:
+def glowparse(
+    raw: str, time: datetime, ip: pandas.DataFrame, glat: float, glon: float
+) -> xarray.Dataset:
 
     table = io.StringIO(raw)
 
@@ -167,18 +190,55 @@ def glowparse(raw: str, time: datetime, ip: pandas.DataFrame, glat: float, glon:
     # %% VER
     dat = np.genfromtxt(table, skip_header=1, max_rows=NALT)
     assert dat[0, 0] == alt_km[0]
-    wavelen = [3371, 4278, 5200, 5577, 6300, 7320, 10400, 3644, 7774, 8446, 3726, "LBH", 1356, 1493, 1304]
+    wavelen = [
+        3371,
+        4278,
+        5200,
+        5577,
+        6300,
+        7320,
+        10400,
+        3644,
+        7774,
+        8446,
+        3726,
+        "LBH",
+        1356,
+        1493,
+        1304,
+    ]
 
-    ver = xarray.DataArray(dat[:, 1:], coords={"alt_km": alt_km, "wavelength": wavelen}, dims=["alt_km", "wavelength"], name="ver")
+    ver = xarray.DataArray(
+        dat[:, 1:],
+        coords={"alt_km": alt_km, "wavelength": wavelen},
+        dims=["alt_km", "wavelength"],
+        name="ver",
+    )
     # %% production & loss
     d = {
-        "production": (("alt_km", "state"), np.genfromtxt(table, skip_header=0, max_rows=NALT)[:, 1:]),
+        "production": (
+            ("alt_km", "state"),
+            np.genfromtxt(table, skip_header=0, max_rows=NALT)[:, 1:],
+        ),
         "loss": (("alt_km", "state"), np.genfromtxt(table, max_rows=NALT)[:, 1:]),
     }
 
-    state = ["O+(2P)", "O+(2D)", "O+(4S)", "N+", "N2+", "O2+", "NO+", "N2(A)", "N(2P)", "N(2D)", "O(1S)", "O(1D)"]
+    state = [
+        "O+(2P)",
+        "O+(2D)",
+        "O+(4S)",
+        "N+",
+        "N2+",
+        "O2+",
+        "NO+",
+        "N2(A)",
+        "N(2P)",
+        "N(2D)",
+        "O(1S)",
+        "O(1D)",
+    ]
 
-    prodloss = xarray.Dataset(d, coords={"alt_km": alt_km, "state": state})
+    prodloss = xarray.Dataset(d, coords={"alt_km": alt_km, "state": state})  # type: ignore
     # %% precip input
     Nbins = int(np.genfromtxt(table, max_rows=1))
     E = np.genfromtxt(table, max_rows=1)
@@ -190,7 +250,7 @@ def glowparse(raw: str, time: datetime, ip: pandas.DataFrame, glat: float, glon:
     dat = np.genfromtxt(table, skip_header=1, max_rows=NALT)
     assert dat[0, 0] == alt_km[0]
     d = {"excitedDensity": (("alt_km", "state"), dat[:, 1:])}
-    excite = xarray.Dataset(d, coords=prodloss.coords)
+    excite = xarray.Dataset(d, coords=prodloss.coords)  # type: ignore
     # %% Te, Ti
     dat = np.genfromtxt(table, skip_header=1, max_rows=NALT)
     assert dat[0, 0] == alt_km[0]

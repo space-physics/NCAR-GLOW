@@ -23,47 +23,27 @@ jobs:
   cmake:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Install Prereqs
-      run: |
-        sudo apt update -yq
-        sudo apt install -yq --no-install-recommends gfortran
-    - run: mkdir build
-    - run: cmake ..
-      working-directory: build
-      env:
-        FC: gfortran
+    - uses: actions/checkout@v2
+
+
+    - run: cmake -B build
     - run: cmake --build build --parallel
-    - run: ctest --parallel -V
-      working-directory: build
-    - uses: actions/upload-artifact@v1
-      if: failure()
-      with:
-        name: Linux_Cmake_log
-        path: build/CMakeFiles/CMakeError.log
+    - run: ctest --test-dir build -V
 
   meson:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - uses: actions/setup-python@v1
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
       with:
         python-version: '3.x'
+
     - run: pip install -e .[tests,lint]
-    - name: Install Prereqs
-      run: |
-        sudo apt update -yq
-        sudo apt install -yq --no-install-recommends gfortran octave
+
     - run: meson setup build
-      env:
-        FC: gfortran
-    - run: ninja -C build
+
     - run: meson test -C build -v
-    - uses: actions/upload-artifact@v1
-      if: failure()
-      with:
-        name: Linux_Meson_Testlog
-        path: build/meson-logs/testlog.txt
+
     - run: flake8
     - run: mypy .
     - run: pytest
