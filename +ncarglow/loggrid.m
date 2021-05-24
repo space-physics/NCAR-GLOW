@@ -5,10 +5,11 @@ function Ebins = loggrid(Emin, Emax, N)
 % * N: number of log-spaced energy bins
 %% outputs
 % * Ebins: energy bin centers [eV]
-
-validateattributes(Emin, {'numeric'}, {'positive','scalar'})
-validateattributes(Emax, {'numeric'}, {'positive','scalar'})
-validateattributes(N, {'numeric'}, {'positive','scalar','integer'})
+arguments
+  Emin (1,1) {mustBeReal,mustBePositive}
+  Emax (1,1) {mustBeReal,mustBePositive}
+  N (1,1) {mustBePositive,mustBeInteger}
+end
 
 Ebins = logspace(log10(Emin), log10(Emax), N);
 

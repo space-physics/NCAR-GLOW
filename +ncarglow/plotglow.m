@@ -1,8 +1,11 @@
 function plotglow(iono, times, glat, glon)
+arguments
+  iono (1,1) struct
+  times (1,1) datetime
+  glat (1,1) {mustBeFinite}
+  glon (1,1) {mustBeFinite}
+end
 
-validateattributes(iono, {'struct'}, {'scalar'})
-validateattributes(glat, {'numeric'}, {'finite'})
-validateattributes(glon, {'numeric'}, {'finite'})
 %% Density profiles
 hp=figure(1); clf(1)
 set(hp, 'Name', 'Density')

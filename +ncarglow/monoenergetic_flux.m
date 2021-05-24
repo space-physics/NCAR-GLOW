@@ -4,9 +4,10 @@ function flux = monoenergetic_flux(Ebins, E0)
 % * Ebins: energy bin centers [eV]
 %% Outputs
 % * flux: normalized particle flux by energy bin
-
-validateattributes(Ebins, {'numeric'}, {'positive','vector'})
-validateattributes(E0, {'numeric'}, {'positive','scalar'})
+arguments
+  Ebins (1,:) {mustBeReal,mustBePositive}
+  E0 (1,1) {mustBePositive}
+end
 
 [~, i] = min(abs(Ebins-E0));
 
