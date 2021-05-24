@@ -20,8 +20,7 @@ Thot = 4000  # [K}]
 iono = glow.no_source(time, glat, glon, Nbins, Talt=Talt, Thot=Thot)
 # %% simple plots
 # plot.precip(iono["precip"])
-plot.neutral_density(iono)
-plot.ion_density(iono)
+plot.density(iono)
 
 plot.temperature(iono)
 

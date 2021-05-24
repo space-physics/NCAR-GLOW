@@ -19,9 +19,10 @@ Echar = 100e3
 Nbins = 250
 
 iono = glow.maxwellian(time, glat, glon, Q, Echar, Nbins)
-# %% simple plots
+# %% plots
 plot.precip(iono["precip"])
-
 plot.ver(iono)
+plot.density(iono)
+plot.temperature(iono)
 
 show()

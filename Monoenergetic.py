@@ -23,7 +23,7 @@ Phitop = Phitop.astype(np.float32)
 iono = glow.ebins(time, glat, glon, Ebins, Phitop)
 # %% simple plots
 plot.precip(iono["precip"])
-
 plot.ver(iono)
+plot.density(iono)
 
 show()

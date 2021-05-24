@@ -117,8 +117,11 @@ legend(ax, 'show','location','northeast')
 %% Temperature Profiles
 
 ax = nexttile(t);
+hold(ax, 'on')
 
 plot(ax, iono.Tn, iono.altkm, 'DisplayName', 'T_n')
+plot(ax, iono.Ti, iono.altkm, "DisplayName", "T_i")
+plot(ax, iono.Te, iono.altkm, "DisplayName", "T_e")
 
 title(ax, 'Temperature')
 xlabel(ax, 'Temperature [K]')

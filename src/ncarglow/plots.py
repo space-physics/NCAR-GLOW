@@ -5,27 +5,28 @@ import numpy as np
 __all__ = ["precip", "ver"]
 
 
-def neutral_density(iono: xarray.Dataset):
-    ax = figure().gca()
+def density(iono: xarray.Dataset):
+    fig = figure()
+    axs = fig.subplots(1, 2, sharey=True)
+
+    fig.suptitle("Number Density")
+
+    ax = axs[0]
     for v in ("O", "N2", "O2", "NO"):
         ax.plot(iono[v], iono[v].alt_km, label=v)
     ax.set_xscale("log")
     ax.set_ylabel("altitude [km]")
     ax.set_xlabel("Density [cm$^{-3}$]")
-    ax.set_title("Number density")
+    ax.set_title("Neutrals")
     ax.grid(True)
     ax.set_xlim(1, None)
     ax.legend(loc="best")
 
-
-def ion_density(iono: xarray.Dataset):
-    ax = figure().gca()
+    ax = axs[1]
     for v in ("O+", "O2+", "NO+", "N2D"):
         ax.plot(iono[v], iono[v].alt_km, label=v)
     ax.set_xscale("log")
-    ax.set_ylabel("altitude [km]")
-    ax.set_xlabel("Density [cm$^{-3}$]")
-    ax.set_title("Number density")
+    ax.set_title("Ions")
     ax.grid(True)
     ax.set_xlim(1, None)
     ax.legend(loc="best")
@@ -45,12 +46,12 @@ def temperature(iono: xarray.Dataset):
     location = iono.glatlon
     tail = f"\n{time} {location}"
     ax = figure().gca()
-    ax.plot(iono["Ti"], iono["Ti"].alt_km, label="Ti")
-    ax.plot(iono["Te"], iono["Te"].alt_km, label="Te")
-    ax.plot(iono["Tn"], iono["Tn"].alt_km, label="Tn")
+    ax.plot(iono["Ti"], iono["Ti"].alt_km, label="$T_i$")
+    ax.plot(iono["Te"], iono["Te"].alt_km, label="$T_e$")
+    ax.plot(iono["Tn"], iono["Tn"].alt_km, label="$T_n$")
     ax.set_xlabel("Temperature [K]")
     ax.set_ylabel("altitude [km]")
-    ax.set_title("Ion & Electron temperature" + tail)
+    ax.set_title("Ion, Electron, Neutral temperatures" + tail)
     ax.grid(True)
     ax.legend()
 
@@ -68,15 +69,23 @@ def ver(iono: xarray.Dataset):
     time = iono.time
     location = iono.glatlon
     tail = f"\n{time} {location}"
-    ver_group(iono["ver"].loc[:, ["4278", "5577", "6300", "5200"]], "Visible emissions" + tail)
-    ver_group(iono["ver"].loc[:, ["7320", "7774", "8446", "10400"]], "IR emissions" + tail)
+
+    fig = figure(constrained_layout=True)
+    axs = fig.subplots(1, 3, sharey=True)
+
+    fig.suptitle(tail)
+    ver_group(iono["ver"].loc[:, ["4278", "5577", "6300", "5200"]], "Visible", axs[0])
+    ver_group(iono["ver"].loc[:, ["7320", "7774", "8446", "10400"]], "Infrared", axs[1])
     ver_group(
         iono["ver"].loc[:, ["3371", "3644", "3726", "1356", "1493", "1304", "LBH"]],
-        "UV emissions" + tail,
+        "Ultraviolet",
+        axs[2],
     )
+    axs[0].set_ylabel("altitude [km]")
+    axs[0].set_xlabel("Volume Emission Rate [Rayleigh]")
 
 
-def ver_group(iono: xarray.DataArray, ttxt: str):
+def ver_group(iono: xarray.DataArray, ttxt: str, ax):
     nm = np.nanmax(iono)
     if nm == 0 or np.isnan(nm):
         return
@@ -88,12 +97,10 @@ def ver_group(iono: xarray.DataArray, ttxt: str):
         "6300": "red",
     }
 
-    ax = figure().gca()
     for w in iono.wavelength:
         ax.plot(iono.loc[:, w], iono.alt_km, label=w.item(), color=colors.get(w.item()))
     ax.set_xscale("log")
-    ax.set_xlabel("Volume Emission Rate [Rayleigh]")
-    ax.set_ylabel("altitude [km]")
+    ax.set_ylim(90, 500)
     ax.set_title(ttxt)
     ax.grid(True)
     ax.legend()

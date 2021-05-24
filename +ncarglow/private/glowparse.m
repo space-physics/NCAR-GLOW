@@ -68,4 +68,12 @@ irow = irow + 1;
 iono.Eflux = cell2mat(textscan(dat, '%f',Nbins, 'HeaderLines', irow));
 irow = irow + 1;
 assert(length(iono.Eflux)==Nbins, 'incorrect read of stdout from GLOW')
+%% excited states
+iono.excitedDensity = cell2mat(textscan(dat, '%f %f %f %f %f %f %f %f %f %f %f %f %f',Nbins, 'HeaderLines', irow));
+irow = irow + 1;
+%% Te, Ti
+irow = irow + Nalt + 1;
+arr = cell2mat(textscan(dat, '%f %f %f', Nbins, 'HeaderLines', irow));
+iono.Te = arr(:,2);
+iono.Ti = arr(:,3);
 end

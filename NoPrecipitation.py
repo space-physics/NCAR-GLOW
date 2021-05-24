@@ -20,8 +20,7 @@ if False:
     plot.precip(iono["precip"])  # all zeros as intended
     plot.altitude(iono)
 
-plot.neutral_density(iono)
-plot.ion_density(iono)
+plot.density(iono)
 
 plot.temperature(iono)
 
