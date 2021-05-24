@@ -14,8 +14,8 @@ end
 Nbins = length(Ebins);
 assert(Nbins == length(Phitop), 'Phitop and Ebins must be same length')
 %% binary
-exe = glowpath();
-[idate, utsec] = glowdate(time);
+exe = exepath("glow.bin");
+[idate, utsec] = dt2utsec(time);
 
 %% workaround Windows
 % 8192 cmd line limit AND lack of stdin
@@ -26,9 +26,9 @@ fwrite(fid, Ebins, 'float32');
 fwrite(fid, Phitop, 'float32');
 fclose(fid);
 
-cmd = [exe, ' ', idate,' ',utsec,' ',...
-       num2str([glat, glon, f107a, f107, f107p, Ap]),...
-       ' -e ', int2str(Nbins), ' ', Efn];
+cmd = exe + " " + idate + " " + utsec + " " + ...
+       num2str([glat, glon, f107a, f107, f107p, Ap]) + ...
+       " -e " + int2str(Nbins) + " " + Efn;
 
 if ispc && length(cmd) > 8000
   warning('Windows has an 8k character limit on the command line')
