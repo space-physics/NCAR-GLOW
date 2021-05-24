@@ -8,23 +8,24 @@ Nalt = 250;  % jmax in Fortran
 irow = 2;
 if ispc; irow=4; end
 
-arr = cell2mat(textscan(dat, '%f %f %f %f %f %f %f %f %f %f %f %f %f %f', Nalt, ...
+arr = cell2mat(textscan(dat, '%f %f %f %f %f %f %f %f %f %f %f %f %f %f %f', Nalt, ...
   'ReturnOnError', false, 'HeaderLines', irow));
 
 iono.altkm = arr(:,1);
 iono.Tn = arr(:,2);
 iono.O = arr(:,3);
 iono.N2 = arr(:,4);
-iono.NO = arr(:,5);
-iono.NeIn = arr(:,6);
-iono.NeOut = arr(:,7);
-iono.ionrate = arr(:,8);
-iono.Oplus = arr(:,9);
-iono.O2plus = arr(:,10);
-iono.NOplus = arr(:,11);
-iono.N2D = arr(:,12);
-iono.pederson = arr(:,13);
-iono.hall = arr(:,14);
+iono.O2 = arr(:,5);
+iono.NO = arr(:,6);
+iono.NeIn = arr(:,7);
+iono.NeOut = arr(:,8);
+iono.ionrate = arr(:,9);
+iono.Oplus = arr(:,10);
+iono.O2plus = arr(:,11);
+iono.NOplus = arr(:,12);
+iono.N2D = arr(:,13);
+iono.pederson = arr(:,14);
+iono.hall = arr(:,15);
 
 irow = irow + Nalt + 1;
 %% optical emissions (Rayleighs)
