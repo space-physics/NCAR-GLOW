@@ -15,12 +15,16 @@ cglow = library('cglow',
   install: true)
 
 # -- optional MPI glow driver
-mpiglow = executable('mpi_glow.bin',
-  sources: mpiglow_src,
-  dependencies : [netcdf, mpi],
-  link_with : cglow,
-  fortran_args : fargs_old)
+if get_option('mpiglow').enabled()
+  netcdf = dependencies('netcdf')
+  mpi = dependencies('mpi')
 
+  mpiglow_bin = executable('mpi_glow.bin',
+    sources: mpiglow_src,
+    dependencies : [netcdf, mpi],
+    link_with : cglow,
+    fortran_args : fargs_old)
+endif
 # ------  Python Matlab command line driver -----------
 
 glowexe = executable('glow.bin', glowdriver_src,
