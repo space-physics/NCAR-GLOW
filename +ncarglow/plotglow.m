@@ -60,27 +60,33 @@ w = get(ho, 'position');
 if w(3) < 0.5
   set(ho, 'position', [0.1, 0.1, 0.8, 0.5])
 end
-ax = subplot(1,3,1,'parent', ho, 'nextplot', 'add');
+
+t = tiledlayout(1, 3, 'parent', ho);
+ax = nexttile(t);
+
 semilogx(ax, iono.A4278, iono.altkm, 'displayname', '4278', 'color','blue')
 semilogx(ax, iono.A5577, iono.altkm, 'displayname', '5577', 'color', 'green')
 semilogx(ax, iono.A6300, iono.altkm, 'displayname', '6300', 'color', 'red')
 semilogx(ax, iono.A5200, iono.altkm, 'displayname', '5200')
 %xlim(ax, [0, 3])
 set(ax, 'xscale', 'log')
+ylim(ax, [90,500])
 title(ax, 'visible')
 labelax(ax)
+ylabel(ax, 'altitude [km]')
 
-ax = subplot(1,3,2,'parent', ho, 'nextplot', 'add');
+ax = nexttile(t);
 semilogx(ax, iono.A7774, iono.altkm, 'displayname', '7774')
 semilogx(ax, iono.A8446, iono.altkm, 'displayname', '8446')
 semilogx(ax, iono.A7320, iono.altkm, 'displayname', '7320')
 semilogx(ax, iono.A10400, iono.altkm, 'displayname', '10400')
 %xlim(ax, [0, 0.1])
 set(ax, 'xscale', 'log')
+ylim(ax, [90,500])
 title(ax, 'infrared')
 labelax(ax)
 
-ax = subplot(1,3,3,'parent', ho, 'nextplot', 'add');
+ax = nexttile(t);
 semilogx(ax, iono.A3371, iono.altkm, 'displayname', '3371')
 semilogx(ax, iono.A3644, iono.altkm, 'displayname', '3644')
 semilogx(ax, iono.A3726, iono.altkm, 'displayname', '3726')
@@ -90,6 +96,7 @@ semilogx(ax, iono.A1493, iono.altkm, 'displayname', '1493')
 semilogx(ax, iono.A1304, iono.altkm, 'displayname', '1304')
 %xlim(ax, [0, 1])
 set(ax, 'xscale', 'log')
+ylim(ax, [90,500])
 title(ax, 'ultraviolet')
 labelax(ax)
 
@@ -123,6 +130,5 @@ end
 function labelax(ax)
 grid(ax,'on')
 legend(ax, 'show')
-ylabel(ax, 'altitude [km]')
 xlabel(ax, 'intensity [R]')
 end
