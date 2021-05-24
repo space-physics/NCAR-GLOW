@@ -8,6 +8,7 @@ import xarray
 import tempfile
 import pandas
 import shutil
+import importlib.resources
 
 import geomagindices as gi
 from .build import build
@@ -30,18 +31,28 @@ var = [
     "hall",
 ]
 
-src_path = Path(__file__).resolve().parent
-exe_path = src_path / "build"
-exe_name = "glow.bin"
-EXE = shutil.which(exe_name, path=str(exe_path))
-if not EXE:
-    try:
-        build("meson", src_path, exe_path)
-    except Exception:
-        build("cmake", src_path, exe_path)
-EXE = shutil.which(exe_name, path=str(exe_path))
-if not EXE:
-    raise ImportError("GLOW executable not available. This is probably a Python package bug.")
+BINPATH = "build"
+
+
+def get_exe(name: str = "glow.bin") -> Path:
+
+    with importlib.resources.path(__package__, "CMakeLists.txt") as cml:
+        src_dir = cml.parent
+        bin_dir = src_dir / BINPATH
+        exe = shutil.which(name, path=str(bin_dir))
+        if not exe:
+            try:
+                build("meson")
+            except Exception:
+                build("cmake")
+
+        exe = shutil.which(name, path=str(bin_dir))
+        if not exe:
+            raise ImportError(
+                "GLOW executable not available. This is probably a Python package bug."
+            )
+
+    return Path(exe)
 
 
 def maxwellian(
@@ -53,7 +64,7 @@ def maxwellian(
     ip = gi.get_indices([time - timedelta(days=1), time], 81)
 
     cmd = [
-        str(EXE),
+        str(get_exe()),
         idate,
         utsec,
         str(glat),
@@ -79,7 +90,7 @@ def no_precipitation(time: datetime, glat: float, glon: float, Nbins: int) -> xa
     ip = gi.get_indices([time - timedelta(days=1), time], 81)
 
     cmd = [
-        str(EXE),
+        str(get_exe()),
         idate,
         utsec,
         str(glat),
@@ -106,7 +117,7 @@ def no_source(
     ip = gi.get_indices([time - timedelta(days=1), time], 81)
 
     cmd = [
-        str(EXE),
+        str(get_exe()),
         idate,
         utsec,
         str(glat),
@@ -146,7 +157,7 @@ def ebins(
     ip = gi.get_indices([time - timedelta(days=1), time], 81)
 
     cmd = [
-        str(EXE),
+        str(get_exe()),
         idate,
         utsec,
         str(glat),

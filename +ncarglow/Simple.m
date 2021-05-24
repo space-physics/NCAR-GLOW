@@ -1,4 +1,4 @@
-time = datenum(2015,12,13,10,0,0);
+time = datetime(2015,12,13,10,0,0);
 glat = 65.1;
 glon = -147.5;
 Ap = 4;
@@ -15,8 +15,6 @@ Nbins = 250;
 %% glow model
 % Axxxx wavelength in angstrom, intensity in Rayleigh 10^6 photons cm-2
 % density cgs cm-3
-iono = glow(time, glat, glon, f107a, f107, f107p, Ap, Q, Echar, Nbins);
+iono = ncarglow.glow(time, glat, glon, f107a, f107, f107p, Ap, Q, Echar, Nbins);
 
-if interactive
-  plotglow(iono, time, glat, glon)
-end
+ncarglow.plotglow(iono, time, glat, glon)

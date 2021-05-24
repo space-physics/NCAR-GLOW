@@ -14,7 +14,13 @@ subroutine argv(i, val)
 integer, intent(in) :: i
 class(*), intent(out) :: val
 character(1024) :: buf
-integer :: j
+integer :: j, narg
+
+narg = command_argument_count()
+if(narg < i) then
+  write(stderr,'(A,I0,A,I0)') "Only ",narg, " arguments given, but you requested argument # ", i
+  error stop
+endif
 
 call get_command_argument(i, buf)
 
@@ -28,7 +34,7 @@ select type(val)
 end select
 
 if(j/=0) then
-  write(stderr,*) 'failed to read value #',i
+  write(stderr,*) 'argv: failed to read command line value #',i
   error stop
 endif
 

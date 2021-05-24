@@ -8,4 +8,6 @@ project(GLOW
   LANGUAGES Fortran
   VERSION 0.981)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
+
 add_subdirectory(src/ncarglow)

@@ -1,13 +1,15 @@
 function iono = glowenergy(time, glat, glon, f107a, f107, f107p, Ap, Ebins, Phitop)
-
-validateattributes(glat, {'numeric'}, {'scalar'})
-validateattributes(glon, {'numeric'}, {'scalar'})
-validateattributes(f107, {'numeric'}, {'positive', 'scalar'})
-validateattributes(f107a, {'numeric'}, {'positive', 'scalar'})
-validateattributes(f107p, {'numeric'}, {'positive', 'scalar'})
-validateattributes(Ap, {'numeric'}, {'positive', 'scalar'})
-validateattributes(Ebins, {'numeric'}, {'positive', 'vector'})
-validateattributes(Phitop, {'numeric'}, {'nonnegative', 'vector'})
+arguments
+  time (1,1) datetime
+  glat (1,1) double {mustBeReal}
+  glon (1,1) double {mustBeReal}
+  f107a (1,1) double {mustBeReal,mustBePositive}
+  f107 (1,1) double {mustBeReal,mustBePositive}
+  f107p (1,1) double {mustBeReal,mustBePositive}
+  Ap (1,1) double {mustBeReal,mustBePositive}
+  Ebins (1,:) double {mustBeReal,mustBeNonnegative}
+  Phitop (1,:) {mustBeReal,mustBeNonnegative}
+end
 
 Nbins = length(Ebins);
 assert(Nbins == length(Phitop), 'Phitop and Ebins must be same length')
@@ -33,7 +35,7 @@ if ispc && length(cmd) > 8000
 end
 
 [status,dat] = system(cmd);
-if status ~= 0, error(dat), end
+assert(status == 0, dat)
 
 iono = glowparse(dat);
 end

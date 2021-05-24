@@ -25,6 +25,7 @@ if get_option('mpiglow').enabled()
     link_with : cglow,
     fortran_args : fargs_old)
 endif
+
 # ------  Python Matlab command line driver -----------
 
 glowexe = executable('glow.bin', glowdriver_src,

@@ -1,11 +1,12 @@
 function iono = glowparse(dat)
+arguments
+  dat (1,1) string
+end
 
 Nalt = 250;  % jmax in Fortran
 
-validateattributes(dat, {'char'}, {'vector'})
-
 irow = 2;
-if ~isoctave && ispc; irow=4; end
+if ispc; irow=4; end
 
 arr = cell2mat(textscan(dat, '%f %f %f %f %f %f %f %f %f %f %f %f %f %f', Nalt, ...
   'ReturnOnError', false, 'HeaderLines', irow));

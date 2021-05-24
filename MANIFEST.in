@@ -1,0 +1,3 @@
+include src/ncarglow/meson.build src/ncarglow/fortran/meson.build
+include src/ncarglow/CMakeLists.txt src/ncarglow/fortran/CMakeLists.txt
+graft src/ncarglow/data

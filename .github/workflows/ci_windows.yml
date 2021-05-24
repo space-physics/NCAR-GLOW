@@ -10,13 +10,6 @@ on:
       - "**/meson.build"
       - ".github/workflows/ci_windows.yml"
   pull_request:
-    paths:
-      - "**/*.f"
-      - "**/*.f90"
-      - "**/*.py"
-      - "**/*.m"
-      - "**/meson.build"
-      - ".github/workflows/ci_windows.yml"
 
 jobs:
 
@@ -24,24 +17,10 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: 3.x
 
-    - run: cmake -B build -G "MinGW Makefiles"
+    - run: pip install .[tests]
 
-    - run: cmake --build build --parallel
-    - run: ctest --test-dir build
-
-  # meson:
-  #   runs-on: windows-latest
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - uses: actions/setup-python@v2
-  #     with:
-  #       python-version: '3.x'
-
-  #   - run: pip install -e .[tests]
-
-  #   - run: meson setup build
-
-  #   - run: meson test -C build -v
-
-  #   - run: pytest
+    - run: pytest

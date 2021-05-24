@@ -1,6 +1,5 @@
-#!/usr/bin/env python
 import ncarglow as glow
-import pytest
+
 from pytest import approx
 from datetime import datetime
 import numpy as np
@@ -17,16 +16,13 @@ def test_maxwellian():
     # %% Number of energy bins
     Nbins = 250
 
-    try:
-        iono = glow.maxwellian(time, glat, glon, Q, Echar, Nbins)
-    except ConnectionError:
-        pytest.skip("CI internet FTP issue")
+    iono = glow.maxwellian(time, glat, glon, Q, Echar, Nbins)
 
     assert iono["alt_km"].size == Nbins
     i = 32
     assert iono.alt_km[i] == approx(101.8)
     assert iono["Tn"][i] == approx(188.0)
-    assert iono["ver"].loc[:, "5577"][i] == approx(20.45)
+    assert iono["ver"].loc[:, "5577"][i] == approx(20.54)
     assert iono["ionrate"][i] == approx(335.0)
     assert iono["hall"][i].item() == approx(6.98e-05)
 
@@ -37,10 +33,7 @@ def test_noprecip():
     glon = -147.5
     N_energy_bins = 250
 
-    try:
-        iono = glow.no_precipitation(time, glat, glon, N_energy_bins)
-    except ConnectionError:
-        pytest.skip("CI internet FTP issue")
+    iono = glow.no_precipitation(time, glat, glon, N_energy_bins)
 
     assert iono["alt_km"].size == N_energy_bins
     i = 32
@@ -67,15 +60,8 @@ def test_ebins():
     Phitop[abs(Ebins - E0).argmin()] = 1.0
     Phitop = Phitop.astype(np.float32)
     # %% run glow
-    try:
-        iono = glow.ebins(time, glat, glon, Ebins, Phitop)
-    except ConnectionError:
-        pytest.skip("CI internet FTP issue")
+    iono = glow.ebins(time, glat, glon, Ebins, Phitop)
 
     assert iono["alt_km"].size == Nbins
     assert iono["Tn"][32] == approx(188.0)
     assert iono["ver"].loc[:, "5577"][32] == approx(0.04)
-
-
-if __name__ == "__main__":
-    pytest.main([__file__])
