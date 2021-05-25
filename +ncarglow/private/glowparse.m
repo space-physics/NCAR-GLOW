@@ -59,7 +59,7 @@ irow = irow + Nalt;
 iono.loss = cell2mat(textscan(dat, '%f %f %f %f %f %f %f %f %f %f %f %f %f', Nalt,...
   'ReturnOnError', false, 'HeaderLines', irow));
 irow = irow + Nalt;
-assert(all(size(iono.loss)==[Nalt, 12+1]), 'incorrect read of stdout from GLOW')
+assert(all(size(iono.loss)==[Nalt, 12+1]), 'Prod/loss: incorrect read of stdout from GLOW')
 %% energy grid (eV)
 Nbins = cell2mat(textscan(dat, '%d',1, 'HeaderLines',irow));
 irow = irow + 1;
@@ -67,13 +67,19 @@ iono.energy_bin_centers = cell2mat(textscan(dat, '%f',Nbins, 'HeaderLines', irow
 irow = irow + 1;
 iono.Eflux = cell2mat(textscan(dat, '%f',Nbins, 'HeaderLines', irow));
 irow = irow + 1;
-assert(length(iono.Eflux)==Nbins, 'incorrect read of stdout from GLOW')
+assert(length(iono.Eflux)==Nbins, 'energy: incorrect read of stdout from GLOW')
 %% excited states
-iono.excitedDensity = cell2mat(textscan(dat, '%f %f %f %f %f %f %f %f %f %f %f %f %f',Nbins, 'HeaderLines', irow));
 irow = irow + 1;
+arr = cell2mat(textscan(dat, '%f %f %f %f %f %f %f %f %f %f %f %f %f',Nbins, 'HeaderLines', irow));
+iono.excitedDensity = arr(:, 2:end);
+iono.states = ["O+(2P)", "O+(2D)", "O+(4S)", "N+", "N2+", "O2+", "NO+", "N2(A)", "N(2P)", "N(2D)", "O(1S)", "O(1D)"];
+irow = irow + 1;
+assert(size(iono.excitedDensity, 1)==Nbins, 'states: incorrect read of stdout from GLOW')
+assert(length(iono.states) == size(iono.excitedDensity,2), "states: incorrect read")
 %% Te, Ti
-irow = irow + Nalt + 1;
+irow = irow + Nalt;
 arr = cell2mat(textscan(dat, '%f %f %f', Nbins, 'HeaderLines', irow));
+assert(size(arr, 1)==Nbins, 'temperature: incorrect read of stdout from GLOW')
 iono.Te = arr(:,2);
 iono.Ti = arr(:,3);
 end
