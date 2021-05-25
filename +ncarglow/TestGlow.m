@@ -21,7 +21,7 @@ glat = 65.1;
 glon = -147.5;
 Ap = 7;
 f107 = 118.7;
-f107a = 78.7;
+f107a = 106.2;
 f107p = 113.1;
 Q = 1;
 Echar = 100e3;
@@ -34,9 +34,9 @@ i = 32+1;
 
 tc.assertEqual(iono.altkm(i), 101.8, "absTol", 0.1)
 tc.verifyEqual(iono.Tn(i), 188., "absTol", 0.01)
-tc.verifyEqual(iono.A5577(i), 20.45, "absTol", 0.0001)
-tc.verifyEqual(iono.ionrate(i), 335., "absTol", 0.01)
-tc.verifyEqual(iono.hall(i), 6.98e-5, "absTol", 1e-7)
+tc.verifyEqual(iono.A5577(i), 20.54, "absTol", 0.0001)
+tc.verifyEqual(iono.ionrate(i), 329., "absTol", 0.01)
+tc.verifyEqual(iono.hall(i), 6.92e-5, "absTol", 1e-7)
 
 end
 

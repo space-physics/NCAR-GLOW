@@ -23,8 +23,8 @@ def test_maxwellian():
     assert iono.alt_km[i] == approx(101.8)
     assert iono["Tn"][i] == approx(188.0)
     assert iono["ver"].loc[:, "5577"][i] == approx(20.54)
-    assert iono["ionrate"][i] == approx(335.0)
-    assert iono["hall"][i].item() == approx(6.98e-05)
+    assert iono["ionrate"][i] == approx(329.0)
+    assert iono["hall"][i].item() == approx(6.92e-05)
 
 
 def test_noprecip():
@@ -40,9 +40,9 @@ def test_noprecip():
     assert iono.alt_km[i] == approx(101.8)
     assert iono["Tn"][i] == approx(188.0)
     assert iono["ver"].loc[:, "5577"][i] == approx(0.0)
-    assert iono["ver"].loc[:, "5577"][70] == approx(0.09)
-    assert iono["ionrate"][i] == approx(8.35)
-    assert iono["hall"][i].item() == approx(1.08e-05)
+    assert iono["ver"].loc[:, "5577"][70] == approx(0.12)
+    assert iono["ionrate"][i] == approx(8.51)
+    assert iono["hall"][i].item() == approx(1.09e-05)
 
 
 def test_ebins():

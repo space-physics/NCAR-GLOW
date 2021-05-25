@@ -1,7 +1,7 @@
+from __future__ import annotations
 import subprocess
 from pathlib import Path
 from datetime import datetime, timedelta
-from typing import Tuple
 import io
 import numpy as np
 import xarray
@@ -80,7 +80,7 @@ def maxwellian(
 
     dat = subprocess.check_output(cmd, timeout=15, stderr=subprocess.DEVNULL, text=True)
 
-    return glowparse(dat, time, ip, glat, glon)
+    return glowread(dat, time, ip, glat, glon)
 
 
 def no_precipitation(time: datetime, glat: float, glon: float, Nbins: int) -> xarray.Dataset:
@@ -105,7 +105,7 @@ def no_precipitation(time: datetime, glat: float, glon: float, Nbins: int) -> xa
 
     dat = subprocess.check_output(cmd, timeout=15, stderr=subprocess.DEVNULL, text=True)
 
-    return glowparse(dat, time, ip, glat, glon)
+    return glowread(dat, time, ip, glat, glon)
 
 
 def no_source(
@@ -134,7 +134,7 @@ def no_source(
 
     dat = subprocess.check_output(cmd, timeout=15, stderr=subprocess.DEVNULL, text=True)
 
-    return glowparse(dat, time, ip, glat, glon)
+    return glowread(dat, time, ip, glat, glon)
 
 
 def ebins(
@@ -181,12 +181,22 @@ def ebins(
         # this is also why we don't use a tempfile context manager for this application.
         pass
 
-    return glowparse(ret.stdout, time, ip, glat, glon)
+    return glowread(ret.stdout, time, ip, glat, glon)
 
 
-def glowparse(
+def glowread(
     raw: str, time: datetime, ip: pandas.DataFrame, glat: float, glon: float
 ) -> xarray.Dataset:
+
+    iono = glowparse(raw)
+    iono.attrs["geomag_params"] = ip
+    iono.attrs["time"] = time.isoformat()
+    iono.attrs["glatlon"] = (glat, glon)
+
+    return iono
+
+
+def glowparse(raw: str) -> xarray.Dataset:
 
     table = io.StringIO(raw)
 
@@ -270,14 +280,10 @@ def glowparse(
     # %% assemble output
     iono = xarray.merge((iono, ver, prodloss, precip, excite))
 
-    iono.attrs["time"] = time.isoformat()
-    iono.attrs["geomag_params"] = ip
-    iono.attrs["glatlon"] = (glat, glon)
-
     return iono
 
 
-def glowdate(t: datetime) -> Tuple[str, str]:
+def glowdate(t: datetime) -> tuple[str, str]:
 
     idate = f'{t.year}{t.strftime("%j")}'
     utsec = str(t.hour * 3600 + t.minute * 60 + t.second)
