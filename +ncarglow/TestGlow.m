@@ -1,12 +1,8 @@
 classdef TestGlow < matlab.unittest.TestCase
 
-properties
-  TestData
-end
-
 methods(TestMethodSetup)
 
-function add_path(tc)
+function add_path(tc) %#ok<MANU>
 addpath(fullfile(fileparts(mfilename('fullpath')), '../..'))
 end
 
