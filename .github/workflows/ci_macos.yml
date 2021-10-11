@@ -1,5 +1,8 @@
 name: ci_macos
 
+env:
+  CMAKE_BUILD_TYPE: Release
+
 on:
   push:
     paths:
@@ -17,7 +20,7 @@ jobs:
   python:
     runs-on: macos-latest
     env:
-        FC: gfortran-10
+        FC: gfortran-11
     timeout-minutes: 10
 
     steps:
