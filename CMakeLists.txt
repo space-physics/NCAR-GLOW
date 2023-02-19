@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.14...3.21)
+cmake_minimum_required(VERSION 3.14...3.26)
 
 project(GLOW
-  LANGUAGES Fortran
-  VERSION 0.981
+LANGUAGES Fortran
+VERSION 0.981
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})

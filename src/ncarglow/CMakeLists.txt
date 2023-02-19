@@ -1,16 +1,17 @@
-cmake_minimum_required(VERSION 3.14...3.21)
+cmake_minimum_required(VERSION 3.14...3.26)
 
 project(GLOW
   LANGUAGES Fortran
   VERSION 0.981)
+
 enable_testing()
 
 option(mpiglow "build MPI driver")
 
-if(CMAKE_Fortran_COMPILER_ID STREQUAL GNU)
+if(CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
   set(old -w -std=legacy)
   set(new -fimplicit-none -fno-backtrace)
-elseif(CMAKE_Fortran_COMPILER_ID STREQUAL Intel)
+elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
   if(WIN32)
     set(old /w)
     set(new /warn:declarations /W1)
@@ -18,10 +19,7 @@ elseif(CMAKE_Fortran_COMPILER_ID STREQUAL Intel)
     set(old -w)
     set(new -warn declarations -W1)
   endif()
-elseif(CMAKE_Fortran_COMPILER_ID STREQUAL PGI)
-  set(old -w)
-  set(new -Mdclchk)
-elseif(CMAKE_Fortran_COMPILER_ID STREQUAL Flang)
+else()
   set(old -w)
 endif()
 

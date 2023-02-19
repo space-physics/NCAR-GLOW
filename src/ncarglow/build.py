@@ -1,8 +1,7 @@
 """
 A generic, clean way to build C/C++/Fortran code from setup.py or manually
 
-Michael Hirsch, Ph.D.
-https://www.scivision.dev
+SciVision, Inc.
 """
 
 import shutil

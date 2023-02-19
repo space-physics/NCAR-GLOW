@@ -1,0 +1,46 @@
+name: ci
+
+env:
+  CMAKE_BUILD_TYPE: Release
+  HOMEBREW_NO_INSTALL_CLEANUP: 1
+  CTEST_NO_TESTS_ACTION: error
+
+on:
+  push:
+    paths:
+      - "**/*.f"
+      - "**/*.f90"
+      - "**/*.py"
+      - "**/*.m"
+      - "**/meson.build"
+      - "**/CMakeLists.txt"
+      - "**.cmake"
+      - ".github/workflows/ci.yml"
+
+
+jobs:
+
+  cmake:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/setup-python@v4
+      with:
+        python-version: 3.x
+
+    - name: Gfortran (macOS)
+      if: runner.os == 'macOS'
+      run: brew reinstall gcc
+
+    - uses: actions/checkout@v3
+
+    - run: pip install .[tests,lint]
+
+    - run: flake8
+    - run: mypy
+
+    - run: pytest

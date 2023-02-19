@@ -17,7 +17,7 @@ if(mpiglow)
     target_include_directories(mpi_glow.bin PRIVATE ${NetCDF_INCLUDE_DIRS})
     target_link_libraries(mpi_glow.bin cglow MPI::MPI_Fortran ${NetCDF_LIBRARIES})
     target_compile_options(mpi_glow.bin PRIVATE ${new})
-    set_target_properties(mpi_glow.bin PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
+    set_property(TARGET mpi_glow.bin PROPERTY RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
   endif()
 endif(mpiglow)
 #-------- tests --------------
@@ -26,8 +26,8 @@ if(matlab)
 # ------  Matlab command line driver -----------
   find_package(Matlab COMPONENTS MAIN_PROGRAM)
   if(Matlab_FOUND)
-    add_test(NAME SimpleMatlab COMMAND ${Matlab_MAIN_PROGRAM} -batch Simple
+    add_test(NAME SimpleMatlab
+      COMMAND ${Matlab_MAIN_PROGRAM} -batch Simple
       WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/matlab)
-    set_tests_properties(SimpleMatlab PROPERTIES TIMEOUT 90)
   endif()
 endif(matlab)

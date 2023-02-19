@@ -1,18 +1,10 @@
-[![DOI](https://zenodo.org/badge/162534283.svg)](https://zenodo.org/badge/latestdoi/162534283)
-
-[![Actions Status](https://github.com/scivision/NCAR-GLOW/workflows/ci_linux/badge.svg)](https://github.com/scivision/NCAR-GLOW/actions)
-[![Actions Status](https://github.com/scivision/NCAR-GLOW/workflows/ci_macos/badge.svg)](https://github.com/scivision/NCAR-GLOW/actions)
-[![Actions Status](https://github.com/scivision/NCAR-GLOW/workflows/ci_windows/badge.svg)](https://github.com/scivision/NCAR-GLOW/actions)
-
 # GLOW
 
-The GLobal airglOW Model, independently and easily accessed from **Fortran 2003** compiler.
-Optionally available from scripting languages including:
+[![DOI](https://zenodo.org/badge/162534283.svg)](https://zenodo.org/badge/latestdoi/162534283)
+[![Actions Status](https://github.com/scivision/NCAR-GLOW/workflows/ci/badge.svg)](https://github.com/scivision/NCAR-GLOW/actions)
 
-* Python &ge; 3.6
-* Matlab
-* GNU Octave &ge; 4.2
-* IDL / GDL
+The GLobal airglOW Model, independently and easily accessed from **Fortran 2003** compiler.
+Optionally available from scripting languages including Python and Matlab.
 
 We describe each language below; pick the one(s) that apply for you.
 Python is the easiest and recommennded choice.
@@ -62,14 +54,6 @@ You can call this repo from a Meson wrap or CMake Fetch.
 To build Fortran code by itself, do either:
 
 ```sh
-meson build
-
-meson test -C build
-```
-
-or
-
-```sh
 cmake -B build
 
 cmake --build build
@@ -93,8 +77,3 @@ The Matlab interface is in the [matlab](./matlab) directory, and passes data to 
 * user input energy grid: [Monoenergetic.m](./matlab/Monoenergetic.m)
 
 NOTE: if using GNU Octave, version &ge; 4.2 is required for proper [textscan() functionality](https://www.gnu.org/software/octave/NEWS-4.2.html)
-
-## IDL / GDL
-
-We have a small script for IDL / GDL thanks to Guy Grubbs.
-Let us know if you want this, we haven't taken the time to upload it yet.
