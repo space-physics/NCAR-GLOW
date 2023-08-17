@@ -28,10 +28,11 @@ pytest ncar-glow
 
 Then use examples such as:
 
-* Simple.py:  Maxwellian precipiation, specify Q and E0.
-* Monoenergetic.py: Specify unit flux for one energy bin, all other energy bins are zero flux.
+* [Maxwellian.py](https://github.com/space-physics/NCAR-GLOW/blob/main/Examples/Maxwellian.py): Maxwellian precipiation, specify Q and E0.
+* [Monoenergetic.py](https://github.com/space-physics/NCAR-GLOW/blob/main/Examples/Monoenergetic.py): Specify unit flux for one energy bin, all other energy bins are zero flux.
 
 or use GLOW in your own Python program by:
+
 ```python
 import ncarglow as glow
 
@@ -39,7 +40,7 @@ iono = glow.simple(time, glat, glon, Q, Echar, Nbins)
 ```
 
 `iono` is an
-[xarray.Dataset](http://xarray.pydata.org/en/stable/generated/xarray.Dataset.html)
+[xarray.Dataset](https://docs.xarray.dev/en/stable/generated/xarray.Dataset.html)
 containing outputs from GLOW, including:
 
 * number densities of neutrals, ions and electrons
