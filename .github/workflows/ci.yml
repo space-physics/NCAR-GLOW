@@ -25,16 +25,15 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
 
+    env:
+      FC: gfortran-12
+
     runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/setup-python@v4
       with:
         python-version: 3.x
-
-    - name: Gfortran (macOS)
-      if: runner.os == 'macOS'
-      run: brew reinstall gcc
 
     - uses: actions/checkout@v3
 
