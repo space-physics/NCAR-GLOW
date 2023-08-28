@@ -14,7 +14,7 @@ glon = -147.5
 # %% flux [erg cm-2 s-1 == mW m-2 s-1]
 Q = 1
 # %% characteristic energy [eV]
-Echar = 100e3
+Echar = 10e3
 # %% Number of energy bins
 Nbins = 250
 
