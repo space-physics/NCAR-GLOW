@@ -74,7 +74,7 @@ Otherwise, -O3 works fine.
 
 The Matlab interface is in
 [+ncarglow](./+ncarglow/)
-passing data to / from Glow over stdin / stdout pipes.
+passing data to / from Glow over scratch disk binary files.
 
 * Use built-in energy and altitude bins: [Maxwellian.m](./Examples/Maxwellian.m)
 * user input energy grid: [Monoenergetic.m](./Examples/Monoenergetic.m)
