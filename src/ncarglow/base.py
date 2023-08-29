@@ -35,7 +35,6 @@ BINPATH = "build"
 
 
 def get_exe(name: str = "glow.bin") -> Path:
-
     with importlib.resources.path(__package__, "CMakeLists.txt") as cml:
         src_dir = cml.parent
         bin_dir = src_dir / BINPATH
@@ -58,7 +57,6 @@ def get_exe(name: str = "glow.bin") -> Path:
 def maxwellian(
     time: datetime, glat: float, glon: float, Q: float, Echar: float, Nbins: int
 ) -> xarray.Dataset:
-
     idate, utsec = glowdate(time)
 
     ip = gi.get_indices([time - timedelta(days=1), time], 81)
@@ -84,7 +82,6 @@ def maxwellian(
 
 
 def no_precipitation(time: datetime, glat: float, glon: float, Nbins: int) -> xarray.Dataset:
-
     idate, utsec = glowdate(time)
 
     ip = gi.get_indices([time - timedelta(days=1), time], 81)
@@ -140,7 +137,6 @@ def no_source(
 def ebins(
     time: datetime, glat: float, glon: float, Ebins: np.ndarray, Phitop: np.ndarray
 ) -> xarray.Dataset:
-
     idate, utsec = glowdate(time)
 
     # %% Matlab compatible workaround (may change to use stdin in future)
@@ -187,7 +183,6 @@ def ebins(
 def glowread(
     raw: str, time: datetime, ip: pandas.DataFrame, glat: float, glon: float
 ) -> xarray.Dataset:
-
     iono = glowparse(raw)
     iono.attrs["geomag_params"] = ip
     iono.attrs["time"] = time.isoformat()
@@ -197,7 +192,6 @@ def glowread(
 
 
 def glowparse(raw: str) -> xarray.Dataset:
-
     table = io.StringIO(raw)
 
     dat = np.genfromtxt(table, skip_header=2, max_rows=NALT)
@@ -284,7 +278,6 @@ def glowparse(raw: str) -> xarray.Dataset:
 
 
 def glowdate(t: datetime) -> tuple[str, str]:
-
     idate = f'{t.year}{t.strftime("%j")}'
     utsec = str(t.hour * 3600 + t.minute * 60 + t.second)
 
