@@ -1,17 +1,17 @@
 function meson(srcdir, bindir)
 arguments
-  srcdir (1,1) string
+  srcdir (1,1) string {mustBeFolder}
   bindir (1,1) string
 end
 
-cmd = ['meson setup ',bindir,' ',srcdir];
-if is_file([bindir, '/build.ninja'])
-  cmd = [cmd, ' --wipe'];
+cmd = "meson setup " + bindir + " " + srcdir;
+if isfile(fullfile(bindir, 'build.ninja'))
+  cmd = cmd + " --wipe";
 end
 
 
 runcmd(cmd)
 
-runcmd(['meson test -C' ,bindir])
+runcmd("meson compile -C " + bindir)
 
 end

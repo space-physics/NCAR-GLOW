@@ -1,6 +1,6 @@
 function cmake(srcdir, bindir)
 arguments
-  srcdir (1,1) string
+  srcdir (1,1) string {mustBeFolder}
   bindir (1,1) string
 end
 

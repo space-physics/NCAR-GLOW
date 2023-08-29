@@ -3,8 +3,8 @@
 [![DOI](https://zenodo.org/badge/162534283.svg)](https://zenodo.org/badge/latestdoi/162534283)
 [![Actions Status](https://github.com/scivision/NCAR-GLOW/workflows/ci/badge.svg)](https://github.com/scivision/NCAR-GLOW/actions)
 
-The GLobal airglOW Model, independently and easily accessed from **Fortran 2003** compiler.
-Optionally available from scripting languages including Python and Matlab.
+The GLobal airglOW Model, independently and easily accessed using Fortran compiler.
+Available from scripting languages including Python and Matlab.
 
 We describe each language below; pick the one(s) that apply for you.
 Python is the easiest and recommennded choice.
@@ -49,9 +49,9 @@ containing outputs from GLOW, including:
 * precipitating flux vs. energy
 * many more, request if you want it.
 
-## Fortran
+## Fortran standalone
 
-You can call this repo from a Meson wrap or CMake Fetch.
+You can call this repo from a Meson wrap or CMake FetchContent.
 To build Fortran code by itself, do either:
 
 ```sh
@@ -70,11 +70,11 @@ mpirun -np 2 ./mpi_glow.bin < ~/data/in.namelist.tgcm
 Note, for an unknown reason, `in.namelist.msis` only works with -O0 or -O1 with gfortran 7. We didn't look into why.
 Otherwise, -O3 works fine.
 
-## Matlab / GNU Octave
+## Matlab
 
-The Matlab interface is in the [matlab](./matlab) directory, and passes data to / from Glow over stdin / stdout pipes.
+The Matlab interface is in
+[+ncarglow](./+ncarglow/)
+passing data to / from Glow over stdin / stdout pipes.
 
-* Use built-in energy and altitude bins: [Simple.m](./matlab/Simple.m)
-* user input energy grid: [Monoenergetic.m](./matlab/Monoenergetic.m)
-
-NOTE: if using GNU Octave, version &ge; 4.2 is required for proper [textscan() functionality](https://www.gnu.org/software/octave/NEWS-4.2.html)
+* Use built-in energy and altitude bins: [Maxwellian.m](./Examples/Maxwellian.m)
+* user input energy grid: [Monoenergetic.m](./Examples/Monoenergetic.m)

@@ -5,8 +5,8 @@ end
 
 [status, ret] = system(cmd);
 
-assert(status == 0, ret)
-
 disp(ret)
+
+assert(status == 0, ret)
 
 end

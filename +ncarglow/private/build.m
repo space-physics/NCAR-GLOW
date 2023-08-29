@@ -1,6 +1,6 @@
 function build(srcdir, builddir, build_sys)
 arguments
-  srcdir (1,1) string = fullfile(fileparts(mfilename('fullpath')), "../../src/ncarglow")
+  srcdir (1,1) string {mustBeFolder}
   builddir (1,1) string = fullfile(srcdir, "build")
   build_sys string {mustBeScalarOrEmpty} = string.empty
 end

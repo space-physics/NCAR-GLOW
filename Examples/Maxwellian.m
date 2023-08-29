@@ -15,6 +15,9 @@ Nbins = 250;
 %% glow model
 % Axxxx wavelength in angstrom, intensity in Rayleigh 10^6 photons cm-2
 % density cgs cm-3
+cwd = fullfile(fileparts(mfilename("fullpath")), "..");
+addpath(cwd)
+
 iono = ncarglow.glow(time, glat, glon, f107a, f107, f107p, Ap, Q, Echar, Nbins);
 
 ncarglow.plotglow(iono, time, glat, glon)
