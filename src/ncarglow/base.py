@@ -8,7 +8,8 @@ import xarray
 import tempfile
 import pandas
 import shutil
-import importlib.resources
+import importlib.resources as impr
+import functools
 
 import geomagindices as gi
 from .build import build
@@ -34,9 +35,9 @@ var = [
 BINPATH = "build"
 
 
+@functools.cache
 def get_exe(name: str = "glow.bin") -> Path:
-    with importlib.resources.path(__package__, "CMakeLists.txt") as cml:
-        src_dir = cml.parent
+    with impr.as_file(impr.files(__package__)) as src_dir:
         bin_dir = src_dir / BINPATH
         exe = shutil.which(name, path=str(bin_dir))
         if not exe:

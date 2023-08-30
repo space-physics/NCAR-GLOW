@@ -7,7 +7,7 @@ SciVision, Inc.
 import shutil
 import subprocess
 import os
-import importlib.resources
+import importlib.resources as impr
 
 
 BINDIR = "build"
@@ -36,11 +36,10 @@ def cmake_setup():
 
     wopts = ["-G", "MinGW Makefiles"] if os.name == "nt" else []
 
-    with importlib.resources.path(__package__, "CMakeLists.txt") as cml:
-        src_dir = cml.parent
+    with impr.as_file(impr.files(__package__)) as src_dir:
         bin_dir = src_dir / BINDIR
 
-        subprocess.check_call([cmake_exe, "-S", str(src_dir), "-B", str(bin_dir)] + wopts)
+        subprocess.check_call([cmake_exe, f"-S{src_dir}", f"-B{bin_dir}"] + wopts)
 
         subprocess.check_call([cmake_exe, "--build", str(bin_dir), "--parallel"])
 
@@ -54,8 +53,7 @@ def meson_setup():
     if not meson_exe:
         raise FileNotFoundError("Meson not available")
 
-    with importlib.resources.path(__package__, "meson.build") as cml:
-        src_dir = cml.parent
+    with impr.as_file(impr.files(__package__)) as src_dir:
         bin_dir = src_dir / BINDIR
 
         if not (bin_dir / "build.ninja").is_file():
