@@ -141,6 +141,8 @@ def ebins(
     cannot use tempfile.NamedTemporaryFile() context manager because Windows
     needs the file to be closed,
     else Fortran code crashes with "Permission Denied"
+    Windows sometimes does this if something else is holding the file open.
+    This is also why we don't use a tempfile context manager for this application.
     """
     Efn = Path(tempfile.mkstemp(".dat")[1])
     with Efn.open("wb") as f:
@@ -174,8 +176,6 @@ def ebins(
     try:
         Efn.unlink()
     except PermissionError:
-        # Windows sometimes does this if something else is holding the file open.
-        # this is also why we don't use a tempfile context manager for this application.
         pass
 
     return glowread(ret, time, ip, glat, glon)

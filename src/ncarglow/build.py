@@ -1,7 +1,5 @@
 """
-A generic, clean way to build C/C++/Fortran code from setup.py or manually
-
-SciVision, Inc.
+A generic, clean way to build C/C++/Fortran code with Meson or CMake.
 """
 
 import shutil
