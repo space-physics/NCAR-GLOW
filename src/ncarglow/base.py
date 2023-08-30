@@ -39,18 +39,14 @@ BINPATH = "build"
 def get_exe(name: str = "glow.bin") -> Path:
     with impr.as_file(impr.files(__package__)) as src_dir:
         bin_dir = src_dir / BINPATH
-        exe = shutil.which(name, path=str(bin_dir))
-        if not exe:
+        if not (exe := shutil.which(name, path=bin_dir)):
             try:
                 build("meson")
             except Exception:
                 build("cmake")
 
-        exe = shutil.which(name, path=str(bin_dir))
-        if not exe:
-            raise ImportError(
-                "GLOW executable not available. This is probably a Python package bug."
-            )
+        if not (exe := shutil.which(name, path=bin_dir)):
+            raise RuntimeError("GLOW executable not available.")
 
     return Path(exe)
 

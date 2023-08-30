@@ -34,7 +34,9 @@ def cmake_setup():
     if not cmake_exe:
         raise FileNotFoundError("CMake not available")
 
-    wopts = ["-G", "MinGW Makefiles"] if os.name == "nt" else []
+    wopts = []
+    if os.name == "nt" and not os.environ.get("CMAKE_GENERATOR"):
+        wopts = ["-G", "MinGW Makefiles"]
 
     with impr.as_file(impr.files(__package__)) as src_dir:
         bin_dir = src_dir / BINDIR
