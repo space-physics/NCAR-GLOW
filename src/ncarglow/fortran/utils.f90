@@ -30,13 +30,13 @@ select type(val)
   type is (integer)
     read(buf, *, iostat=j) val
   class default
-    error stop 'unknown value type'
+    error stop 'ERROR:argv: unknown value type'
 end select
 
-if(j/=0) then
-  write(stderr,*) 'argv: failed to read command line value #',i
-  error stop
-endif
+if(j == 0) return
+
+write(stderr,'(a,i0)') 'argv: failed to read command line value # ',i
+error stop
 
 end subroutine argv
 

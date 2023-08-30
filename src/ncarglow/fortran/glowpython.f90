@@ -1,3 +1,4 @@
+program python_glow
 ! Basic single-processor driver for the GLOW model.
 ! Uses MSIS/IRI for input.
 ! Runs GLOW for designated inputs once, or multiple times.
@@ -178,6 +179,7 @@ stl = modulo(stl, 24.)
 !   630., 640. ]
 
 
+!> altitude grid creation
 z = alt_grid(Nalt=Nalt, minalt=60., dmin=0.5, dmax=4.)
 !! Nalt: number of altitude bins
 !! minalt: lowest altitude in grid [km]
