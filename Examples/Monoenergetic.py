@@ -22,6 +22,7 @@ Phitop = Phitop.astype(np.float32)
 # %% run glow
 iono = glow.ebins(time, glat, glon, Ebins, Phitop)
 # %% simple plots
+plot.altitude(iono.alt_km)
 plot.precip(iono["precip"])
 plot.ver(iono)
 plot.density(iono)

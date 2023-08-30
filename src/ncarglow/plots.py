@@ -2,7 +2,7 @@ from matplotlib.pyplot import figure
 import xarray
 import numpy as np
 
-__all__ = ["precip", "ver"]
+__all__ = ["altitude", "density", "precip", "temperature", "ver"]
 
 
 def density(iono: xarray.Dataset):
@@ -56,12 +56,14 @@ def temperature(iono: xarray.Dataset):
     ax.legend()
 
 
-def altitude(iono: xarray.Dataset):
+def altitude(alt_km):
     ax = figure().gca()
-    ax.plot(iono.alt_km)
+    ax.plot(alt_km, marker=".", linestyle="none")
     ax.set_xlabel("altitude grid index #")
     ax.set_ylabel("altitude [km]")
-    ax.set_title("altitude grid cells")
+    ax.set_title(
+        f"altitude grid [km]: min {alt_km[0]:.1f}, max {alt_km[-1]:.1f}, # of points {alt_km.size}"
+    )
     ax.grid(True)
 
 
