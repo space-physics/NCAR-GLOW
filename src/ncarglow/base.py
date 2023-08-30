@@ -139,7 +139,12 @@ def ebins(
 ) -> xarray.Dataset:
     idate, utsec = glowdate(time)
 
-    # %% Matlab compatible workaround (may change to use stdin in future)
+    # %% Matlab compatible (files instead of stdin/stdout)
+    """
+    cannot use tempfile.NamedTemporaryFile() context manager because Windows
+    needs the file to be closed,
+    else Fortran code crashes with "Permission Denied"
+    """
     Efn = Path(tempfile.mkstemp(".dat")[1])
     with Efn.open("wb") as f:
         Ebins.tofile(f)
@@ -167,9 +172,8 @@ def ebins(
         str(Efn),
     ]
 
-    ret = subprocess.run(cmd, timeout=15, text=True, stdout=subprocess.PIPE)
-    if ret.returncode:
-        raise RuntimeError(f"GLOW failed at {time}")
+    ret = subprocess.check_output(cmd, timeout=15, text=True)
+
     try:
         Efn.unlink()
     except PermissionError:
@@ -177,7 +181,7 @@ def ebins(
         # this is also why we don't use a tempfile context manager for this application.
         pass
 
-    return glowread(ret.stdout, time, ip, glat, glon)
+    return glowread(ret, time, ip, glat, glon)
 
 
 def glowread(
