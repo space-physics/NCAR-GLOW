@@ -42,7 +42,9 @@ def density(iono: xarray.Dataset) -> None:
 
 def precip(precip: xarray.DataArray) -> None:
     ax = figure().gca()
-    ax.plot(precip["energy"] / 1e3, precip)
+    ax.plot(precip["energy"] / 1e3, precip, marker=".", linestyle="none")
+    ax.set_xscale("log")
+
     ax.set_xlabel("Energy bin centers [keV]")
     ax.set_ylabel("hemispherical flux [cm$^{-2}$ s$^{-1}$ eV$^{-1}$]")
     ax.set_title("precipitation: differential number flux")
@@ -71,10 +73,10 @@ def altitude(alt_km) -> None:
     ax.plot(alt_km, marker=".", linestyle="none")
     ax.set_xlabel("altitude grid index #")
     ax.set_ylabel("altitude [km]")
-    ax.set_title(
-        f"altitude grid [km]: min {alt_km[0]:.1f}, max {alt_km[-1]:.1f}, # of points {alt_km.size}"
-    )
+    ax.set_title(f"altitude grid [km]: # of points {alt_km.size}")
     ax.grid(True)
+
+    _tick_extrema(ax, alt_km)
 
 
 def ver(iono: xarray.Dataset) -> None:
