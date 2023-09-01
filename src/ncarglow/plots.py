@@ -5,7 +5,13 @@ import numpy as np
 __all__ = ["altitude", "density", "precip", "temperature", "ver"]
 
 
-def density(iono: xarray.Dataset):
+def _tick_extrema(ax, alt_km) -> None:
+    # tick label minimum altitude for clarity
+    ax.set_yticks(np.append(ax.get_yticks(), [alt_km[0], alt_km[-1]]))
+    ax.set_ylim(alt_km[0], alt_km[-1])
+
+
+def density(iono: xarray.Dataset) -> None:
     fig = figure()
     axs = fig.subplots(1, 2, sharey=True)
 
@@ -31,12 +37,10 @@ def density(iono: xarray.Dataset):
     ax.set_xlim(1, None)
     ax.legend(loc="best")
 
-    # tick label minimum altitude for clarity
-    ax.set_yticks(np.append(ax.get_yticks(), [iono.alt_km[0], iono.alt_km[-1]]))
-    ax.set_ylim(iono.alt_km[0], iono.alt_km[-1])
+    _tick_extrema(ax, iono.alt_km)
 
 
-def precip(precip: xarray.DataArray):
+def precip(precip: xarray.DataArray) -> None:
     ax = figure().gca()
     ax.plot(precip["energy"] / 1e3, precip)
     ax.set_xlabel("Energy bin centers [keV]")
@@ -45,7 +49,7 @@ def precip(precip: xarray.DataArray):
     ax.grid(True)
 
 
-def temperature(iono: xarray.Dataset):
+def temperature(iono: xarray.Dataset) -> None:
     time = iono.time
     location = iono.glatlon
     tail = f"\n{time} {location}"
@@ -59,12 +63,10 @@ def temperature(iono: xarray.Dataset):
     ax.grid(True)
     ax.legend()
 
-    # tick label minimum altitude for clarity
-    ax.set_yticks(np.append(ax.get_yticks(), [iono.alt_km[0], iono.alt_km[-1]]))
-    ax.set_ylim(iono.alt_km[0], iono.alt_km[-1])
+    _tick_extrema(ax, iono.alt_km)
 
 
-def altitude(alt_km):
+def altitude(alt_km) -> None:
     ax = figure().gca()
     ax.plot(alt_km, marker=".", linestyle="none")
     ax.set_xlabel("altitude grid index #")
@@ -75,7 +77,7 @@ def altitude(alt_km):
     ax.grid(True)
 
 
-def ver(iono: xarray.Dataset):
+def ver(iono: xarray.Dataset) -> None:
     time = iono.time
     location = iono.glatlon
     tail = f"\n{time} {location}"
@@ -96,12 +98,10 @@ def ver(iono: xarray.Dataset):
     ax.set_ylabel("altitude [km]")
     ax.set_xlabel("Volume Emission Rate [Rayleigh]")
 
-    # tick label minimum altitude for clarity
-    ax.set_yticks(np.append(ax.get_yticks(), [iono.alt_km[0], iono.alt_km[-1]]))
-    ax.set_ylim(iono.alt_km[0], iono.alt_km[-1])
+    _tick_extrema(ax, iono.alt_km)
 
 
-def ver_group(iono: xarray.DataArray, ttxt: str, ax):
+def ver_group(iono: xarray.DataArray, ttxt: str, ax) -> None:
     nm = np.nanmax(iono)
     if nm == 0 or np.isnan(nm):
         return
@@ -120,6 +120,4 @@ def ver_group(iono: xarray.DataArray, ttxt: str, ax):
     ax.grid(True)
     ax.legend()
 
-    # tick label minimum altitude for clarity
-    ax.set_yticks(np.append(ax.get_yticks(), [iono.alt_km[0], iono.alt_km[-1]]))
-    ax.set_ylim(iono.alt_km[0], iono.alt_km[-1])
+    _tick_extrema(ax, iono.alt_km)
