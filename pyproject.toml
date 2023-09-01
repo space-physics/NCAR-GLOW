@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ncarglow"
-version = "1.3.0"
+version = "1.4.0"
 description = "NCAR GLOW model 0.981"
 keywords = ["thermosphere", "ionosphere"]
 classifiers = [
