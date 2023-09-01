@@ -29,13 +29,16 @@ function homedir()
 
 character(:), allocatable :: homedir
 character(256) :: buf
+integer :: i
 
 ! assume MacOS/Linux/BSD/Cygwin/WSL
-call get_environment_variable("HOME", buf)
+call get_environment_variable("HOME", buf, status=i)
 
-if (len_trim(buf) == 0) then  ! Windows
-  call get_environment_variable("USERPROFILE", buf)
+if (i /= 0) then  ! Windows
+  call get_environment_variable("USERPROFILE", buf, status=i)
 endif
+
+if (i/=0) error stop 'could not determine home directory'
 
 homedir = trim(buf)
 
