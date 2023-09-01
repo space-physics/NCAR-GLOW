@@ -31,6 +31,10 @@ def density(iono: xarray.Dataset):
     ax.set_xlim(1, None)
     ax.legend(loc="best")
 
+    # tick label minimum altitude for clarity
+    ax.set_yticks(np.append(ax.get_yticks(), [iono.alt_km[0], iono.alt_km[-1]]))
+    ax.set_ylim(iono.alt_km[0], iono.alt_km[-1])
+
 
 def precip(precip: xarray.DataArray):
     ax = figure().gca()
@@ -54,6 +58,10 @@ def temperature(iono: xarray.Dataset):
     ax.set_title("Ion, Electron, Neutral temperatures" + tail)
     ax.grid(True)
     ax.legend()
+
+    # tick label minimum altitude for clarity
+    ax.set_yticks(np.append(ax.get_yticks(), [iono.alt_km[0], iono.alt_km[-1]]))
+    ax.set_ylim(iono.alt_km[0], iono.alt_km[-1])
 
 
 def altitude(alt_km):
@@ -83,8 +91,14 @@ def ver(iono: xarray.Dataset):
         "Ultraviolet",
         axs[2],
     )
-    axs[0].set_ylabel("altitude [km]")
-    axs[0].set_xlabel("Volume Emission Rate [Rayleigh]")
+
+    ax = axs[0]
+    ax.set_ylabel("altitude [km]")
+    ax.set_xlabel("Volume Emission Rate [Rayleigh]")
+
+    # tick label minimum altitude for clarity
+    ax.set_yticks(np.append(ax.get_yticks(), [iono.alt_km[0], iono.alt_km[-1]]))
+    ax.set_ylim(iono.alt_km[0], iono.alt_km[-1])
 
 
 def ver_group(iono: xarray.DataArray, ttxt: str, ax):
@@ -102,7 +116,10 @@ def ver_group(iono: xarray.DataArray, ttxt: str, ax):
     for w in iono.wavelength:
         ax.plot(iono.loc[:, w], iono.alt_km, label=w.item(), color=colors.get(w.item()))
     ax.set_xscale("log")
-    ax.set_ylim(90, 500)
     ax.set_title(ttxt)
     ax.grid(True)
     ax.legend()
+
+    # tick label minimum altitude for clarity
+    ax.set_yticks(np.append(ax.get_yticks(), [iono.alt_km[0], iono.alt_km[-1]]))
+    ax.set_ylim(iono.alt_km[0], iono.alt_km[-1])
