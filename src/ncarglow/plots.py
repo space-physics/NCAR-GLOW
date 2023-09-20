@@ -98,7 +98,7 @@ def ver(iono: xarray.Dataset) -> None:
 
     ax = axs[0]
     ax.set_ylabel("altitude [km]")
-    ax.set_xlabel("Volume Emission Rate [Rayleigh]")
+    ax.set_xlabel("Volume Emission Rate [photons cm^{-3} s^{-1}]")
 
     _tick_extrema(ax, iono.alt_km)
 

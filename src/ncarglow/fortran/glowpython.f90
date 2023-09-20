@@ -220,7 +220,7 @@ write(stdout,"('   Z     Tn       O        N2        O2        NO      Ne(in)   
 write(stdout,"(1x,0p,f5.1,f6.0,1p,13e10.2)") (z(j),ztn(j),zo(j),zn2(j),zo2(j),zno(j),ze(j), &
   ecalc(j),tir(j),zxden(3,j),zxden(6,j),zxden(7,j),zxden(10,j),pedcond(j),hallcond(j),j=1,Nalt)
 
-!> Optical emissions  (Rayleighs)
+!> ZETA    array of volume emission rates at each altitude; cm-3 s-1:
 write(stdout,'(A)') "   Z      3371    4278    5200    5577    6300    7320   10400    " //&
   "3644    7774    8446    3726    LBH     1356    1493    1304"
 write(stdout,"(1x,f5.1,15f8.2)") (z(j),(zeta(ii,j),ii=1,nw),j=1,Nalt)

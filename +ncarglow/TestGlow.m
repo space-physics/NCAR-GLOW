@@ -58,7 +58,7 @@ Phitop = ncarglow.monoenergetic_flux(Ebins, E0);
 Phitop = Phitop * 3000;
 %Phitop(:)=0;
 %% glow model
-% Axxxx wavelength in angstrom, intensity in Rayleigh 10^6 photons cm-2
+% Axxxx wavelength in angstrom, intensity in photons cm-3 s-1
 % density cgs cm-3
 iono = ncarglow.glowenergy(time, glat, glon, f107a, f107, f107p, Ap, Ebins, Phitop);
 

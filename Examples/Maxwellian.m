@@ -13,7 +13,7 @@ Echar = 100e3;
 %% Number of energy bins
 Nbins = 250;
 %% glow model
-% Axxxx wavelength in angstrom, intensity in Rayleigh 10^6 photons cm-2
+% Axxxx wavelength in angstrom, intensity in photons cm-3 s-1
 % density cgs cm-3
 cwd = fullfile(fileparts(mfilename("fullpath")), "..");
 addpath(cwd)
