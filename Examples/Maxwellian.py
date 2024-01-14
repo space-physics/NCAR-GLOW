@@ -20,10 +20,11 @@ Nbins = 250
 
 iono = glow.maxwellian(time, glat, glon, Q, Echar, Nbins)
 # %% plots
-plot.altitude(iono.alt_km)
-plot.precip(iono["precip"])
-plot.ver(iono)
-plot.density(iono)
-plot.temperature(iono)
+# plot.altitude(iono.alt_km)
+# plot.precip(iono["precip"])
+# plot.ver(iono)
+plot.vcb(iono)
+# plot.density(iono)
+# plot.temperature(iono)
 
 show()

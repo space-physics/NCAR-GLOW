@@ -26,7 +26,7 @@ endif()
 add_library(cglow)
 target_compile_options(cglow PRIVATE ${old})
 
-add_executable(glow.bin)
+add_executable(glow.bin fortran/glowpython.f90 fortran/utils.f90 fortran/fsutils.f90)
 target_link_libraries(glow.bin cglow)
 target_compile_options(glow.bin PRIVATE ${new})
 

@@ -32,7 +32,7 @@ use cglow,only: idate,utsec=>ut,glat,glong,f107a,f107,f107p,ap,ef,ec
 use cglow,only: iscale,jlocal,kchem,xuvfac
 use cglow,only: zz,zo,zn2,zo2,zns,znd,zno,ztn,ze,zti,zte
 use cglow,only: ener,del,phitop
-use cglow,only: tir,ecalc,zxden,zeta
+use cglow,only: tir,ecalc,zxden,zeta, vcb
 use cglow,only: cglow_init
 use cglow,only: data_dir, &
   production, loss
@@ -166,21 +166,21 @@ stl = modulo(stl, 24.)
 
 ! Call MZGRID to use MSIS/NOEM/IRI inputs
 
-!z =[80.,  81.,  82.,  83.,  84.,  85.,  86.,  87.,  88.,  89., &
-!    90.,  91.,  92.,  93.,  94.,  95.,  96.,  97.,  98.,  99., &
-!   100., 101., 102., 103., 104., 105., 106., 107., 108., 109., &
-!   110.,111.5, 113.,114.5, 116., 118., 120., 122., 124., 126., &
-!   128., 130., 132., 134., 137., 140., 144., 148., 153., 158., &
-!   164., 170., 176., 183., 190., 197., 205., 213., 221., 229., &
-!   237., 245., 254., 263., 272., 281., 290., 300., 310., 320., &
-!   330., 340., 350., 360., 370., 380., 390., 400., 410., 420., &
-!   430., 440., 450., 460., 470., 480., 490., 500., 510., 520., &
-!   530., 540., 550., 560., 570., 580., 590., 600., 610., 620., &
-!   630., 640. ]
+z =[80.,  81.,  82.,  83.,  84.,  85.,  86.,  87.,  88.,  89., &
+   90.,  91.,  92.,  93.,  94.,  95.,  96.,  97.,  98.,  99., &
+  100., 101., 102., 103., 104., 105., 106., 107., 108., 109., &
+  110.,111.5, 113.,114.5, 116., 118., 120., 122., 124., 126., &
+  128., 130., 132., 134., 137., 140., 144., 148., 153., 158., &
+  164., 170., 176., 183., 190., 197., 205., 213., 221., 229., &
+  237., 245., 254., 263., 272., 281., 290., 300., 310., 320., &
+  330., 340., 350., 360., 370., 380., 390., 400., 410., 420., &
+  430., 440., 450., 460., 470., 480., 490., 500., 510., 520., &
+  530., 540., 550., 560., 570., 580., 590., 600., 610., 620., &
+  630., 640. ]
 
 
 !> altitude grid creation
-z = alt_grid(Nalt=Nalt, minalt=60., dmin=0.5, dmax=4.)
+! z = alt_grid(Nalt=Nalt, minalt=60., dmin=0.5, dmax=4.)
 !! Nalt: number of altitude bins
 !! minalt: lowest altitude in grid [km]
 !! dmin: grid spacing at minimum altitude [km]
@@ -214,16 +214,22 @@ enddo
 
 !! Output
 
-write(stdout,"(1x,i7,9f8.1)") idate,utsec,glat,glong,f107a,f107,f107p,ap,ef,ec
+write(stdout,"(1x, i7, 9f8.1, 1x, i0)") idate,utsec,glat,glong,f107a,f107,f107p,ap,ef,ec,Nalt
 write(stdout,"('   Z     Tn       O        N2        O2        NO      Ne(in)    Ne(out)  Ionrate" //&
   "      O+       O2+      NO+       N(2D)    Pederson   Hall')")
 write(stdout,"(1x,0p,f5.1,f6.0,1p,13e10.2)") (z(j),ztn(j),zo(j),zn2(j),zo2(j),zno(j),ze(j), &
   ecalc(j),tir(j),zxden(3,j),zxden(6,j),zxden(7,j),zxden(10,j),pedcond(j),hallcond(j),j=1,Nalt)
 
+! NW      number of airglow emission wavelengths
 !> ZETA    array of volume emission rates at each altitude; cm-3 s-1:
 write(stdout,'(A)') "   Z      3371    4278    5200    5577    6300    7320   10400    " //&
   "3644    7774    8446    3726    LBH     1356    1493    1304"
-write(stdout,"(1x,f5.1,15f8.2)") (z(j),(zeta(ii,j),ii=1,nw),j=1,Nalt)
+write(stdout,"(1x,f5.1,15f8.2)") (z(j),(zeta(ii,j),ii=1,NW), j=1,Nalt)
+
+!> VCB     array of vertical column brightnesses; Rayleighs
+write(stdout,'(A)') "   3371    4278    5200    5577    6300    7320   10400    " //&
+  "3644    7774    8446    3726    LBH     1356    1493    1304"
+write(stdout,"(1x,15f8.2)") (vcb(ii), ii=1,NW)
 
 !> production, loss
 write(stdout, "(f5.1, 12f12.2)") (z(j),(production(ii,j), ii=1,nex), j=1,Nalt)

@@ -6,8 +6,6 @@ set(utils_src mzgrid.f90 conduct.f90 nrlmsise00.f iri90.f)
 
 target_sources(cglow PRIVATE ${cglow_src} ${snoem_src} ${utils_src})
 
-target_sources(glow.bin PRIVATE glowpython.f90 utils.f90 fsutils.f90)
-
 # ------ MPI driver ------------
 if(mpiglow)
   find_package(MPI COMPONENTS Fortran)

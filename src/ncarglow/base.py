@@ -14,7 +14,6 @@ import functools
 import geomagindices as gi
 from .build import build
 
-NALT = 250
 var = [
     "Tn",
     "O",
@@ -126,7 +125,7 @@ def no_source(
         str(Thot),
     ]
 
-    dat = subprocess.check_output(cmd, timeout=15, stderr=subprocess.DEVNULL, text=True)
+    dat = subprocess.check_output(cmd, timeout=15, text=True)
 
     return glowread(dat, time, ip, glat, glon)
 
@@ -195,7 +194,11 @@ def glowread(
 def glowparse(raw: str) -> xarray.Dataset:
     table = io.StringIO(raw)
 
-    dat = np.genfromtxt(table, skip_header=2, max_rows=NALT)
+    header = np.genfromtxt(table, max_rows=1)
+    assert header.size == 11
+    Nalt = header[-1]
+
+    dat = np.genfromtxt(table, skip_header=1, max_rows=Nalt)
     alt_km = dat[:, 0]
 
     if len(var) != dat.shape[1] - 1:
@@ -204,7 +207,7 @@ def glowparse(raw: str) -> xarray.Dataset:
     d: dict = {k: ("alt_km", v) for (k, v) in zip(var, dat[:, 1:].T)}
     iono = xarray.Dataset(d, coords={"alt_km": alt_km})
     # %% VER
-    dat = np.genfromtxt(table, skip_header=1, max_rows=NALT)
+    dat = np.genfromtxt(table, skip_header=1, max_rows=Nalt)
     assert dat[0, 0] == alt_km[0]
     wavelen = [
         3371,
@@ -230,13 +233,17 @@ def glowparse(raw: str) -> xarray.Dataset:
         dims=["alt_km", "wavelength"],
         name="ver",
     )
+    # %% VCB vertical column brightness
+    dat = np.genfromtxt(table, skip_header=1, max_rows=1)
+    vcb = xarray.DataArray(dat, coords={"wavelength": wavelen}, dims=["wavelength"], name="vcb")
+
     # %% production & loss
     d = {
         "production": (
             ("alt_km", "state"),
-            np.genfromtxt(table, skip_header=0, max_rows=NALT)[:, 1:],
+            np.genfromtxt(table, skip_header=0, max_rows=Nalt)[:, 1:],
         ),
-        "loss": (("alt_km", "state"), np.genfromtxt(table, max_rows=NALT)[:, 1:]),
+        "loss": (("alt_km", "state"), np.genfromtxt(table, max_rows=Nalt)[:, 1:]),
     }
 
     state = [
@@ -263,17 +270,17 @@ def glowparse(raw: str) -> xarray.Dataset:
 
     assert E.size == Nbins
     # %% excited / ionized densities
-    dat = np.genfromtxt(table, skip_header=1, max_rows=NALT)
+    dat = np.genfromtxt(table, skip_header=1, max_rows=Nalt)
     assert dat[0, 0] == alt_km[0]
     d = {"excitedDensity": (("alt_km", "state"), dat[:, 1:])}
     excite = xarray.Dataset(d, coords=prodloss.coords)  # type: ignore
     # %% Te, Ti
-    dat = np.genfromtxt(table, skip_header=1, max_rows=NALT)
+    dat = np.genfromtxt(table, skip_header=1, max_rows=Nalt)
     assert dat[0, 0] == alt_km[0]
     iono["Te"] = ("alt_km", dat[:, 1])
     iono["Ti"] = ("alt_km", dat[:, 2])
     # %% assemble output
-    iono = xarray.merge((iono, ver, prodloss, precip, excite))
+    iono = xarray.merge((iono, ver, prodloss, precip, excite, vcb))
 
     return iono
 

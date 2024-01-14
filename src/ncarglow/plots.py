@@ -103,6 +103,23 @@ def ver(iono: xarray.Dataset) -> None:
     _tick_extrema(ax, iono.alt_km)
 
 
+def vcb(iono: xarray.Dataset) -> None:
+    time = iono.time
+    location = iono.glatlon
+    tail = f"\n{time} {location}"
+
+    fig = figure(constrained_layout=True)
+    ax = fig.gca()
+
+    ax.set_title(tail)
+
+    print(iono["vcb"])
+
+    ax.scatter(iono.wavelength, iono["vcb"])
+    ax.set_ylabel("vertical column brightness [Rayleighs]")
+    ax.set_xlabel("wavelength [nm]")
+
+
 def ver_group(iono: xarray.DataArray, ttxt: str, ax) -> None:
     nm = np.nanmax(iono)
     if nm == 0 or np.isnan(nm):
